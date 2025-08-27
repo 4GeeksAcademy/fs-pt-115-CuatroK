@@ -1,0 +1,17 @@
+.logo-area {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar {
+  width: 0;
+  opacity: 0;
+  transition: width 0.4s ease, opacity 0.4s ease;
+  margin-left: 10px;
+}
+
+.logo-area:hover .search-bar {
+  width: 150px;
+  opacity: 1;
+}
