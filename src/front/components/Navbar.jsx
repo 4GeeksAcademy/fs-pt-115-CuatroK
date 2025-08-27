@@ -1,19 +1,31 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export const Navbar = () => {
 
+	const [showSearch, setShowSearch] = useState(false);
 	return (
-		<nav className="navbar navbar-light bg-light">
-			<div className="container">
-				<Link to="/">
-					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
-				</Link>
-				<div className="ml-auto">
-					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
-					</Link>
+		<div>
+			<nav className="navbar" style={{ backgroundColor: '#F8E8E8' }}>
+				<div className="container">
+					<ul class="nav nav-tabs">
+						<li class="nav-item">
+							<a class="nav-link active text-dark" aria-current="page" href="#">Productos</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" href="#">Contactanos</a>
+						</li>
+					</ul>
+					<a className="navbar-brand mx-auto" href="#">
+						<img 
+							src="https://images.genius.com/a71bb5846af63d55c41ad0951667af6f.1000x1000x1.png"
+							alt="Bootstrap"
+							style={{ width: 30, height: 24 }}
+						/>
+					</a>
+					
 				</div>
-			</div>
-		</nav>
+			</nav>
+		</div>
 	);
 };
