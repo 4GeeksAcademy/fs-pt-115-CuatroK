@@ -8,12 +8,12 @@ export const Navbar = () => {
 		<div>
 			<nav className="navbar" style={{ backgroundColor: '#F8E8E8' }}>
 				<div className="container">
-					<ul class="nav nav-tabs">
-						<li class="nav-item">
-							<a class="nav-link active text-dark" aria-current="page" href="#">Productos</a>
+					<ul className="nav nav-tabs">
+						<li className="nav-item">
+							<a className="nav-link active text-dark" aria-current="page" href="#">Productos</a>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" href="#">Contactanos</a>
+						<li className="nav-item">
+							<a className="nav-link text-dark" href="#">Contactanos</a>
 						</li>
 					</ul>
 					<a className="navbar-brand mx-auto" href="#">
