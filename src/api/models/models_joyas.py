@@ -1,15 +1,12 @@
 
-from flask_sqlalchemy import SQLAlchemy
+from . import db
 from sqlalchemy import String, ForeignKey, Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import Optional, List, Any, Dict
 from decimal import Decimal, ROUND_HALF_UP
 
-
-db = SQLAlchemy()
-
-
 _TWO = Decimal("0.01")
+
 
 def redondeo(v: Optional[Decimal]) -> Optional[str]:
     if v is None:
@@ -24,7 +21,6 @@ def _ref(obj: Any) -> Optional[Dict[str, Any]]:
     return {"id": obj.id, "name": obj.name} if obj else None
 
 
-
 class Jewell(db.Model):
     __tablename__ = "jewells"
 
@@ -33,7 +29,7 @@ class Jewell(db.Model):
     description: Mapped[str] = mapped_column(String(500))
     price: Mapped[Decimal] = mapped_column(Numeric(10, 2))
     url_image: Mapped[Optional[str]] = mapped_column(String(500))
-    
+
     category: Mapped[Optional[str]] = mapped_column(String(30))
     coating: Mapped[Optional[str]] = mapped_column(String(30))
     brand: Mapped[Optional[str]] = mapped_column(String(30))
@@ -49,40 +45,62 @@ class Jewell(db.Model):
     watch: Mapped[Optional[str]] = mapped_column(String(30))
     watch_bracelet_material: Mapped[Optional[str]] = mapped_column(String(30))
 
-   
-    category_id: Mapped[Optional[int]] = mapped_column( ForeignKey("categories.id"), index=True)
-    coating_id: Mapped[Optional[int]] = mapped_column(ForeignKey("coatings.id"), index=True)
-    brand_id: Mapped[Optional[int]] = mapped_column( ForeignKey("brands.id"), index=True)
-    gender_id: Mapped[Optional[int]] = mapped_column( ForeignKey("genders.id"), index=True)
-    clasp_id: Mapped[Optional[int]] = mapped_column( ForeignKey("clasps.id"), index=True)
-    water_resistance_id: Mapped[Optional[int]] = mapped_column(ForeignKey("water_resistances.id"), index=True )
-    caja_type_id: Mapped[Optional[int]] = mapped_column( ForeignKey("caja_types.id"), index=True)
-    metal_id: Mapped[Optional[int]] = mapped_column(ForeignKey("metals.id"), index=True)
-    gem_id: Mapped[Optional[int]] = mapped_column( ForeignKey("gems.id"), index=True)
-    ring_type_id: Mapped[Optional[int]] = mapped_column(ForeignKey("ring_types.id"), index=True )
-    earring_type_id: Mapped[Optional[int]] = mapped_column(ForeignKey("earring_types.id"), index=True)
-    bracelet_type_id: Mapped[Optional[int]] = mapped_column(ForeignKey("bracelet_types.id"), index=True)
-    watch_type_id: Mapped[Optional[int]] = mapped_column(ForeignKey("watch_types.id"), index=True )
-    watch_bracelet_material_id: Mapped[Optional[int]] = mapped_column(ForeignKey("watch_bracelet_materials.id"), index=True)
+    category_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("categories.id"), index=True)
+    coating_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("coatings.id"), index=True)
+    brand_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("brands.id"), index=True)
+    gender_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("genders.id"), index=True)
+    clasp_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("clasps.id"), index=True)
+    water_resistance_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("water_resistances.id"), index=True)
+    caja_type_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("caja_types.id"), index=True)
+    metal_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("metals.id"), index=True)
+    gem_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("gems.id"), index=True)
+    ring_type_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("ring_types.id"), index=True)
+    earring_type_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("earring_types.id"), index=True)
+    bracelet_type_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("bracelet_types.id"), index=True)
+    watch_type_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("watch_types.id"), index=True)
+    watch_bracelet_material_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("watch_bracelet_materials.id"), index=True)
 
-
-
-    category_ref: Mapped[Optional["Category"]] = relationship(back_populates="jewells")
-    coating_ref: Mapped[Optional["Coating"]] = relationship(back_populates="jewells")
-    brand_ref: Mapped[Optional["Brand"]] = relationship(back_populates="jewells")
-    gender_ref: Mapped[Optional["Gender"]] = relationship(back_populates="jewells")
-    clasp_ref: Mapped[Optional["Clasp"]] = relationship(back_populates="jewells")
-    water_resistance_ref: Mapped[Optional["WaterResistance"]] = relationship(back_populates="jewells")
-    caja_type_ref: Mapped[Optional["CajaType"]] = relationship(back_populates="jewells")
-    metal_ref: Mapped[Optional["Metal"]] = relationship(back_populates="jewells")
+    category_ref: Mapped[Optional["Category"]
+                         ] = relationship(back_populates="jewells")
+    coating_ref: Mapped[Optional["Coating"]
+                        ] = relationship(back_populates="jewells")
+    brand_ref: Mapped[Optional["Brand"]] = relationship(
+        back_populates="jewells")
+    gender_ref: Mapped[Optional["Gender"]] = relationship(
+        back_populates="jewells")
+    clasp_ref: Mapped[Optional["Clasp"]] = relationship(
+        back_populates="jewells")
+    water_resistance_ref: Mapped[Optional["WaterResistance"]] = relationship(
+        back_populates="jewells")
+    caja_type_ref: Mapped[Optional["CajaType"]
+                          ] = relationship(back_populates="jewells")
+    metal_ref: Mapped[Optional["Metal"]] = relationship(
+        back_populates="jewells")
     gem_ref: Mapped[Optional["Gem"]] = relationship(back_populates="jewells")
-    ring_type_ref: Mapped[Optional["RingType"]] = relationship(back_populates="jewells")
-    earring_type_ref: Mapped[Optional["EarringType"]] = relationship(back_populates="jewells")
-    bracelet_type_ref: Mapped[Optional["BraceletType"]] = relationship(back_populates="jewells")
-    watch_type_ref: Mapped[Optional["WatchType"]] = relationship(back_populates="jewells")
-    watch_bracelet_material_ref: Mapped[Optional["WatchBraceletMaterial"]] = relationship(back_populates="jewells")
-
-
+    ring_type_ref: Mapped[Optional["RingType"]
+                          ] = relationship(back_populates="jewells")
+    earring_type_ref: Mapped[Optional["EarringType"]
+                             ] = relationship(back_populates="jewells")
+    bracelet_type_ref: Mapped[Optional["BraceletType"]
+                              ] = relationship(back_populates="jewells")
+    watch_type_ref: Mapped[Optional["WatchType"]
+                           ] = relationship(back_populates="jewells")
+    watch_bracelet_material_ref: Mapped[Optional["WatchBraceletMaterial"]] = relationship(
+        back_populates="jewells")
 
     def serialize(self, *, include_fk: bool = True, include_relations: bool = False) -> dict:
         data = {
@@ -152,14 +170,14 @@ class Jewell(db.Model):
 
     @staticmethod
     def serialize_list(items, **kwargs) -> list[dict]:
-        
+
         try:
             items = items.all()
         except Exception:
             pass
         return [obj.serialize(**kwargs) for obj in items]
 
-    def __repr__(self) -> str:  
+    def __repr__(self) -> str:
         return f"<Jewell id={self.id!r} name={self.name!r}>"
 
 
@@ -223,7 +241,8 @@ class WaterResistance(db.Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(60), unique=True)
-    jewells: Mapped[List[Jewell]] = relationship(back_populates="water_resistance_ref")
+    jewells: Mapped[List[Jewell]] = relationship(
+        back_populates="water_resistance_ref")
 
     def serialize(self) -> dict:
         return {"id": self.id, "name": self.name}
@@ -234,7 +253,8 @@ class CajaType(db.Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(60), unique=True)
-    jewells: Mapped[List[Jewell]] = relationship(back_populates="caja_type_ref")
+    jewells: Mapped[List[Jewell]] = relationship(
+        back_populates="caja_type_ref")
 
     def serialize(self) -> dict:
         return {"id": self.id, "name": self.name}
@@ -267,7 +287,8 @@ class RingType(db.Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(60), unique=True)
-    jewells: Mapped[List[Jewell]] = relationship(back_populates="ring_type_ref")
+    jewells: Mapped[List[Jewell]] = relationship(
+        back_populates="ring_type_ref")
 
     def serialize(self) -> dict:
         return {"id": self.id, "name": self.name}
@@ -278,7 +299,8 @@ class EarringType(db.Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(60), unique=True)
-    jewells: Mapped[List[Jewell]] = relationship(back_populates="earring_type_ref")
+    jewells: Mapped[List[Jewell]] = relationship(
+        back_populates="earring_type_ref")
 
     def serialize(self) -> dict:
         return {"id": self.id, "name": self.name}
@@ -289,7 +311,8 @@ class BraceletType(db.Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(60), unique=True)
-    jewells: Mapped[List[Jewell]] = relationship(back_populates="bracelet_type_ref")
+    jewells: Mapped[List[Jewell]] = relationship(
+        back_populates="bracelet_type_ref")
 
     def serialize(self) -> dict:
         return {"id": self.id, "name": self.name}
@@ -300,7 +323,8 @@ class WatchType(db.Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(60), unique=True)
-    jewells: Mapped[List[Jewell]] = relationship(back_populates="watch_type_ref")
+    jewells: Mapped[List[Jewell]] = relationship(
+        back_populates="watch_type_ref")
 
     def serialize(self) -> dict:
         return {"id": self.id, "name": self.name}
@@ -311,10 +335,8 @@ class WatchBraceletMaterial(db.Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(60), unique=True)
-    jewells: Mapped[List[Jewell]] = relationship(back_populates="watch_bracelet_material_ref")
+    jewells: Mapped[List[Jewell]] = relationship(
+        back_populates="watch_bracelet_material_ref")
 
     def serialize(self) -> dict:
         return {"id": self.id, "name": self.name}
-
-
-    
