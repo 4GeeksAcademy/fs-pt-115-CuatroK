@@ -1,11 +1,11 @@
 from flask import Blueprint, request, jsonify
+from api.model_config import db
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import selectinload
 from decimal import Decimal
 from typing import Any, Optional
 
-from models_joyas import (
-    db,
+from api.models.models_joyas import (
     Jewell,
     Category,
     Coating,
@@ -26,18 +26,20 @@ from models_joyas import (
 api = Blueprint('api_jewells', __name__)
 
 Jewell = {
-    "id": 1 , 
-  "name": "Anillo Luna",
-  "description": "Plata 925 con circonita",
-  "price": "49.90"
+    "id": 1,
+    "name": "Anillo Luna",
+    "description": "Plata 925 con circonita",
+    "price": "49.90"
 
 }
+
 
 def json_error(msg: str, status: int = 400, **extra):
     payload = {"ok": False, "error": msg}
     if extra:
         payload.update(extra)
     return jsonify(payload), status
+
 
 def parse_decimal(value: Any) -> Optional[Decimal]:
     if value is None:
@@ -49,19 +51,20 @@ def parse_decimal(value: Any) -> Optional[Decimal]:
     except Exception:
         raise ValueError("'price' debe ser un decimal válido")
 
+
 @api.route('/jewells', methods=["GET"])
 def list_jewells():
-    include_rel = request.args.get('include_relations', '0') in {'1', 'true', 'True'}
+    include_rel = request.args.get('include_relations', '0') in {
+        '1', 'true', 'True'}
     page = max(int(request.args.get('page', 1)), 1)
     per_page = min(max(int(request.args.get('per_page', 20)), 1), 200)
 
     q = Jewell.query
 
-    
     for key in (
-        'category_id','coating_id','brand_id','gender_id','clasp_id','water_resistance_id',
-        'caja_type_id','metal_id','gem_id','ring_type_id','earring_type_id',
-        'bracelet_type_id','watch_type_id','watch_bracelet_material_id'
+        'category_id', 'coating_id', 'brand_id', 'gender_id', 'clasp_id', 'water_resistance_id',
+        'caja_type_id', 'metal_id', 'gem_id', 'ring_type_id', 'earring_type_id',
+        'bracelet_type_id', 'watch_type_id', 'watch_bracelet_material_id'
     ):
         raw = request.args.get(key)
         if raw is not None and raw != "":
@@ -89,7 +92,8 @@ def list_jewells():
         )
 
     page_obj = q.paginate(page=page, per_page=per_page, error_out=False)
-    data = Jewell.serialize_list(page_obj.items, include_fk=True, include_relations=include_rel)
+    data = Jewell.serialize_list(
+        page_obj.items, include_fk=True, include_relations=include_rel)
 
     return jsonify({
         "ok": True,
@@ -99,9 +103,11 @@ def list_jewells():
         "items": data,
     })
 
+
 @api.route('/jewells/<int:jewell_id>', methods=["GET"])
 def get_jewell(jewell_id: int):
-    include_rel = request.args.get('include_relations', '0') in {'1', 'true', 'True'}
+    include_rel = request.args.get('include_relations', '0') in {
+        '1', 'true', 'True'}
     q = Jewell.query
     if include_rel:
         q = q.options(
@@ -123,11 +129,12 @@ def get_jewell(jewell_id: int):
     obj = q.get_or_404(jewell_id)
     return jsonify({"ok": True, "item": obj.serialize(include_fk=True, include_relations=include_rel)})
 
+
 @api.route('/jewells', methods=["POST"])
 def create_jewell():
     payload = request.get_json(silent=True) or {}
 
-    missing = [k for k in ("name","description","price") if k not in payload]
+    missing = [k for k in ("name", "description", "price") if k not in payload]
     if missing:
         return json_error(f"Faltan campos requeridos: {', '.join(missing)}", 400)
 
@@ -164,7 +171,8 @@ def create_jewell():
             earring_type_id=payload.get('earring_type_id'),
             bracelet_type_id=payload.get('bracelet_type_id'),
             watch_type_id=payload.get('watch_type_id'),
-            watch_bracelet_material_id=payload.get('watch_bracelet_material_id'),
+            watch_bracelet_material_id=payload.get(
+                'watch_bracelet_material_id'),
         )
         db.session.add(obj)
         db.session.commit()
@@ -173,7 +181,8 @@ def create_jewell():
         db.session.rollback()
         return json_error(str(e), 400)
 
-@api.route('/jewells/<int:jewell_id>',methods=["PUT"])
+
+@api.route('/jewells/<int:jewell_id>', methods=["PUT"])
 def update_jewell(jewell_id: int):
     obj = Jewell.query.get_or_404(jewell_id)
     payload = request.get_json(silent=True) or {}
@@ -211,6 +220,7 @@ def update_jewell(jewell_id: int):
         db.session.rollback()
         return json_error(str(e), 400)
 
+
 def _create_name(model):
     payload = request.get_json(silent=True) or {}
     name = (payload.get("name") or "").strip()
@@ -227,10 +237,11 @@ def _create_name(model):
         db.session.rollback()
         return json_error("Nombre duplicado o inválido", 400, detail=str(e))
 
+
 @api.route('/jewells/<int:jewell_id>', methods=["DELETE"])
 def delete_jewell(jewell_id: int):
     obj = Jewell.query.get_or_404(jewell_id)
-   
+
     try:
         db.session.delete(obj)
         db.session.commit()
@@ -239,57 +250,71 @@ def delete_jewell(jewell_id: int):
         db.session.rollback()
         return json_error("No se pudo borrar la joya", 400, detail=str(e))
 
+
 @api.route("/categories", methods=["POST"])
 def create_category():
     return _create_name(Category)
+
 
 @api.route("/coatings", methods=["POST"])
 def create_coating():
     return _create_name(Coating)
 
+
 @api.route("/brands", methods=["POST"])
 def create_brand():
     return _create_name(Brand)
+
 
 @api.route("/genders", methods=["POST"])
 def create_gender():
     return _create_name(Gender)
 
+
 @api.route("/clasps", methods=["POST"])
 def create_clasp():
     return _create_name(Clasp)
+
 
 @api.route("/water_resistances", methods=["POST"])
 def create_water_resistance():
     return _create_name(WaterResistance)
 
+
 @api.route("/caja_types", methods=["POST"])
 def create_caja_type():
     return _create_name(CajaType)
+
 
 @api.route("/metals", methods=["POST"])
 def create_metal():
     return _create_name(Metal)
 
+
 @api.route("/gems", methods=["POST"])
 def create_gem():
     return _create_name(Gem)
+
 
 @api.route("/ring_types", methods=["POST"])
 def create_ring_type():
     return _create_name(RingType)
 
+
 @api.route("/earring_types", methods=["POST"])
 def create_earring_type():
     return _create_name(EarringType)
+
 
 @api.route("/bracelet_types", methods=["POST"])
 def create_bracelet_type():
     return _create_name(BraceletType)
 
+
 @api.route("/watch_types", methods=["POST"])
 def create_watch_type():
     return _create_name(WatchType)
+
 
 @api.route("/watch_bracelet_materials", methods=["POST"])
 def create_watch_bracelet_material():
