@@ -14,6 +14,8 @@ import { ContactUs } from "./components/NavbarComponentes/ContactUs";
 import { AboutUs } from "./components/NavbarComponentes/AboutUs";
 import { CreateAccount } from "./components/NavbarComponentes/User/CreateAccount";
 import { Login } from "./components/NavbarComponentes/User/Login";
+import { RootLayout } from "./layout/Root.layout";
+import { PublicLayout } from "./layout/Public.layout";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,16 +26,21 @@ export const router = createBrowserRouter(
     // Note: The child paths of the Layout element replace the Outlet component with the elements contained in the "element" attribute of these child paths.
 
     // Root Route: All navigation will start from here.
-    <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
+    <Route element={<RootLayout />} errorElement={<h1>Not found!</h1>} >
 
+      <Route path="/" element={<PublicLayout />}>
+        <Route index element={<Home />} />
+        <Route path="about" element={<AboutUs />} />
+
+      </Route>
       {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
-      <Route path="/" element={<Home />} />
       <Route path="/single/:theId" element={<Single />} />  {/* Dynamic route for single items */}
       <Route path="/products" element={<Products />} />
       <Route path="/contact" element={<ContactUs />} />
-      <Route path="/about" element={<AboutUs />} />
+
       <Route path="/user" element={<CreateAccount />} />
       <Route path="/login" element={<Login />} />
+
     </Route>
   )
 );
