@@ -23,9 +23,9 @@ from api.models.models_joyas import (
     WatchBraceletMaterial,
 )
 
-api = Blueprint('api_jewells', __name__)
+jewells_bp = Blueprint('jewells_bp', __name__)
 
-Jewell = {
+Jewell_prueba = {
     "id": 1,
     "name": "Anillo Luna",
     "description": "Plata 925 con circonita",
@@ -52,7 +52,7 @@ def parse_decimal(value: Any) -> Optional[Decimal]:
         raise ValueError("'price' debe ser un decimal válido")
 
 
-@api.route('/jewells', methods=["GET"])
+@jewells_bp.route('/jewells', methods=["GET"])
 def list_jewells():
     include_rel = request.args.get('include_relations', '0') in {
         '1', 'true', 'True'}
@@ -104,7 +104,7 @@ def list_jewells():
     })
 
 
-@api.route('/jewells/<int:jewell_id>', methods=["GET"])
+@jewells_bp.route('/jewells/<int:jewell_id>', methods=["GET"])
 def get_jewell(jewell_id: int):
     include_rel = request.args.get('include_relations', '0') in {
         '1', 'true', 'True'}
@@ -130,7 +130,7 @@ def get_jewell(jewell_id: int):
     return jsonify({"ok": True, "item": obj.serialize(include_fk=True, include_relations=include_rel)})
 
 
-@api.route('/jewells', methods=["POST"])
+@jewells_bp.route('/jewells', methods=["POST"])
 def create_jewell():
     payload = request.get_json(silent=True) or {}
 
@@ -182,7 +182,7 @@ def create_jewell():
         return json_error(str(e), 400)
 
 
-@api.route('/jewells/<int:jewell_id>', methods=["PUT"])
+@jewells_bp.route('/jewells/<int:jewell_id>', methods=["PUT"])
 def update_jewell(jewell_id: int):
     obj = Jewell.query.get_or_404(jewell_id)
     payload = request.get_json(silent=True) or {}
@@ -238,7 +238,7 @@ def _create_name(model):
         return json_error("Nombre duplicado o inválido", 400, detail=str(e))
 
 
-@api.route('/jewells/<int:jewell_id>', methods=["DELETE"])
+@jewells_bp.route('/jewells/<int:jewell_id>', methods=["DELETE"])
 def delete_jewell(jewell_id: int):
     obj = Jewell.query.get_or_404(jewell_id)
 
@@ -251,71 +251,71 @@ def delete_jewell(jewell_id: int):
         return json_error("No se pudo borrar la joya", 400, detail=str(e))
 
 
-@api.route("/categories", methods=["POST"])
+@jewells_bp.route("/categories", methods=["POST"])
 def create_category():
     return _create_name(Category)
 
 
-@api.route("/coatings", methods=["POST"])
+@jewells_bp.route("/coatings", methods=["POST"])
 def create_coating():
     return _create_name(Coating)
 
 
-@api.route("/brands", methods=["POST"])
+@jewells_bp.route("/brands", methods=["POST"])
 def create_brand():
     return _create_name(Brand)
 
 
-@api.route("/genders", methods=["POST"])
+@jewells_bp.route("/genders", methods=["POST"])
 def create_gender():
     return _create_name(Gender)
 
 
-@api.route("/clasps", methods=["POST"])
+@jewells_bp.route("/clasps", methods=["POST"])
 def create_clasp():
     return _create_name(Clasp)
 
 
-@api.route("/water_resistances", methods=["POST"])
+@jewells_bp.route("/water_resistances", methods=["POST"])
 def create_water_resistance():
     return _create_name(WaterResistance)
 
 
-@api.route("/caja_types", methods=["POST"])
+@jewells_bp.route("/caja_types", methods=["POST"])
 def create_caja_type():
     return _create_name(CajaType)
 
 
-@api.route("/metals", methods=["POST"])
+@jewells_bp.route("/metals", methods=["POST"])
 def create_metal():
     return _create_name(Metal)
 
 
-@api.route("/gems", methods=["POST"])
+@jewells_bp.route("/gems", methods=["POST"])
 def create_gem():
     return _create_name(Gem)
 
 
-@api.route("/ring_types", methods=["POST"])
+@jewells_bp.route("/ring_types", methods=["POST"])
 def create_ring_type():
     return _create_name(RingType)
 
 
-@api.route("/earring_types", methods=["POST"])
+@jewells_bp.route("/earring_types", methods=["POST"])
 def create_earring_type():
     return _create_name(EarringType)
 
 
-@api.route("/bracelet_types", methods=["POST"])
+@jewells_bp.route("/bracelet_types", methods=["POST"])
 def create_bracelet_type():
     return _create_name(BraceletType)
 
 
-@api.route("/watch_types", methods=["POST"])
+@jewells_bp.route("/watch_types", methods=["POST"])
 def create_watch_type():
     return _create_name(WatchType)
 
 
-@api.route("/watch_bracelet_materials", methods=["POST"])
+@jewells_bp.route("/watch_bracelet_materials", methods=["POST"])
 def create_watch_bracelet_material():
     return _create_name(WatchBraceletMaterial)
