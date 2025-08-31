@@ -1,0 +1,42 @@
+import { Link } from "react-router-dom"
+
+export const CreateAccount = () => {
+
+    
+
+    return (
+        <div className="container products-card">
+
+            <div className="row">
+                <div className="col-md-12 text-center mt-5">
+                    <h1>Crear una cuenta</h1>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-md-12 text-center">
+                    <h5>¿Ya tienes una cuenta? <Link to="/login">Inicial sesión</Link></h5>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-md-4"></div>
+                <div className="col-md-4">
+                    <form>
+                        <div className="mb-3">
+                            <label htmlFor="exampleInputEmail1" className="form-label">Correo Electrinico</label>
+                            <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
+                            <div id="emailHelp" className="form-text">Nunca compartiremos tu correo electrónico con nadie más.</div>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="exampleInputPassword1" className="form-label">Contraseña</label>
+                            <input type="password" className="form-control" id="exampleInputPassword1" />
+                        </div>
+                        <div className="text-center mb-5">
+                            <button type="submit" className="btn btn-warning color-buttons">Crear</button>
+                        </div>
+                        <div className="col-md-4"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    )
+}
