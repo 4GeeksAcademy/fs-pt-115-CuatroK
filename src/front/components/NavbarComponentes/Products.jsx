@@ -1,7 +1,7 @@
 export const Products = () => {
     return (
         <div>
-            <div className="card-group col-md-12">
+            <div className="card-group col-md-12" >
                 <div className="card rounded-3">
                     <img src="https://i.pinimg.com/1200x/27/e8/21/27e8213686298acdd9789bce0f94db50.jpg" className="card-img-top img-fluid" alt="Relojes"
                     style={{ width: "300px", height: "300px" }}/>
