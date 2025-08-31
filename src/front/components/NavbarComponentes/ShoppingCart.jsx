@@ -1,4 +1,4 @@
-export const CarritoCompra = () => {
+export const ShoppingCart = () => {
     return (
         <div>
 

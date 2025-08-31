@@ -1,30 +1,35 @@
-import { NavLink } from "react-router-dom";
+import { useState } from "react";
+import { ContactUs } from "./ContactUs";
+import { Products } from "./Products";
 
 export const NavAndTabs = () => {
+  const [activeTab, setActiveTab] = useState(null);
+
   return (
     <div>
-      <ul className="nav nav-tabs">
+      <ul className="nav nav-tabs border-bottom-0">
         <li className="nav-item">
-          <NavLink
-            to="/productos"
-            className={({ isActive }) =>
-              `nav-link text-warning ${isActive ? "active" : ""}`
-            }
+          <button
+            className={`nav-link text-warning ${activeTab === "productos" ? "active" : ""}`}
+            onClick={() => setActiveTab("productos")}
           >
             Productos
-          </NavLink>
+          </button>
         </li>
         <li className="nav-item">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              `nav-link text-warning ${isActive ? "active" : ""}`
-            }
+          <button
+            className={`nav-link text-warning ${activeTab === "contacto" ? "active" : ""}`}
+            onClick={() => setActiveTab("contacto")}
           >
             Contáctanos
-          </NavLink>
+          </button>
         </li>
       </ul>
+
+      <div className="mt-3">
+        {activeTab === "productos" && <Products />}
+        {activeTab === "contacto" && <ContactUs />}
+      </div>
     </div>
   );
 };

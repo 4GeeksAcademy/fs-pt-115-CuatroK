@@ -1,4 +1,6 @@
-export const Perfil = () => {
+import { Link } from "react-router-dom"
+
+export const Profile = () => {
     return (
 
         <div>
@@ -17,7 +19,7 @@ export const Perfil = () => {
                 </button>
 
                 <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfile">
-                    <li><a className="dropdown-item" href="#"> Perfil</a></li>
+                    <li><Link className="dropdown-item" to="/user"> Perfil</Link></li>
                     <li><a className="dropdown-item" href="#"> Configuración</a></li>
                     <li><hr className="dropdown-divider" /></li>
                     <li><a className="dropdown-item" href="#"> Cerrar sesión</a></li>

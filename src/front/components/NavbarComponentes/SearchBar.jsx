@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const Buscador = () => {
+export const SearchBar = () => {
 
     const [showSearch, setShowSearch] = useState(false);
 

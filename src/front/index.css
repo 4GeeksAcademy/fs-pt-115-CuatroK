@@ -22,3 +22,37 @@
   left: 50%;
   transform: translateX(-50%);
 }
+.fixed-nav-tools {
+  position: absolute; 
+  top: 0;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 1000;
+}
+.navbar-logo {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+
+
+.color-buttons{
+  background-color:  #D4AF37;
+}
+
+.page-background-color{
+  background-color: #FBE8E7;
+}
+
+.products-card{
+  background-color: #EED9C4;
+}
+
+.main-text{
+  color:  #2F2F2F;
+}

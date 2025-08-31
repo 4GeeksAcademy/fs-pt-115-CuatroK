@@ -1,8 +1,8 @@
 
 import { Link } from "react-router-dom";
-import { Perfil } from "./NavbarComponentes/Perfil";
-import { Buscador } from "./NavbarComponentes/Buscador";
-import { CarritoCompra } from "./NavbarComponentes/CarritoCompra";
+import { Profile } from "./NavbarComponentes/Profile";
+import { SearchBar } from "./NavbarComponentes/SearchBar";
+import { ShoppingCart } from "./NavbarComponentes/ShoppingCart";
 import { NavAndTabs } from "./NavbarComponentes/NavAndTabs";
 
 export const Navbar = () => {
@@ -10,8 +10,12 @@ export const Navbar = () => {
 
 	return (
 		<div>
+
 			<nav className="navbar" style={{ backgroundColor: ' #5C3D2E' }}>
+
 				<div className="container d-flex justify-content-between align-items-center">
+
+
 					{/* Menú de navegación */}
 					<NavAndTabs />
 
@@ -25,16 +29,19 @@ export const Navbar = () => {
 							/>
 						</Link>
 					</div>
-					{/* Ícono de búsqueda con hover */}
-					<div className="d-flex align-items-center gap-2">
 
-						<Buscador />
-						<CarritoCompra />
-						<Perfil />
+
+
+					{/* Ícono de búsqueda con hover */}
+					<div className="d-flex align-items-center gap-2 fixed-nav-tools">
+
+						<SearchBar />
+						<ShoppingCart />
+						<Profile />
 
 					</div>
 				</div>
-			</nav>
+             </nav>
 		</div>
 	);
 };
