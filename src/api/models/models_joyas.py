@@ -5,6 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import Optional, List, Any, Dict
 from decimal import Decimal, ROUND_HALF_UP
 
+
 _TWO = Decimal("0.01")
 
 
@@ -123,7 +124,7 @@ class Jewell(db.Model):
             "earring_type": self.earring_type,
             "bracelet": self.bracelet,
             "watch": self.watch,
-            "watch_bracelet_material": self.Watch_bracelet_material,
+            "watch_bracelet_material": self.watch_bracelet_material,
         }
 
         if include_fk:
