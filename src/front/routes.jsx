@@ -20,6 +20,7 @@ import { RootLayout } from "./layout/Root.layout";
 import { PublicLayout } from "./layout/Public.layout";
 import CalculadoraMetales from "./components/public/Calculadora";
 
+
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<RootLayout />} errorElement={<h1>Not found!</h1>}>
@@ -39,6 +40,7 @@ export const router = createBrowserRouter(
       <Route path="login" element={<Login />} />
 
       <Route path="calculadora" element={<CalculadoraMetales />} />
+
 
 
       <Route path="*" element={<h1>404</h1>} />
