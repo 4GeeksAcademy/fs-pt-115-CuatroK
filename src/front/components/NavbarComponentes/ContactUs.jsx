@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 
 export const ContactUs = () => {
     return (
-        <div style={{ width: "90vw" }}>
+        <div style={{ width: "100vw" }}>
                   
                 <ul className="nav justify-content-center" style={{ backgroundColor: ' #5C3D2E' }}>
                     <li className="nav-item">
@@ -17,7 +17,7 @@ export const ContactUs = () => {
                     <li className="nav-item">
                         <Link className="nav-link text-warning" aria-disabled="true">Contactanos</Link>
                     </li>
-                    <button className="btn btn-warning mb-3 color-buttons">Venta de Metales</button>
+                    
                 </ul>
             
         </div>

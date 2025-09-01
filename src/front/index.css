@@ -17,11 +17,7 @@
   width: 180px;
   opacity: 1;
 }
-.navbar-logo {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
+
 .fixed-nav-tools {
   position: absolute; 
   top: 0;

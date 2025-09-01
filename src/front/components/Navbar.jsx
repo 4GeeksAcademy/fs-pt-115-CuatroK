@@ -5,34 +5,28 @@ import { SearchBar } from "./NavbarComponentes/SearchBar";
 import { ShoppingCart } from "./NavbarComponentes/ShoppingCart";
 import { NavAndTabs } from "./NavbarComponentes/NavAndTabs";
 
-export const Navbar = () => {
+export const Navbar = () => { 
 
 
 	return (
-		<div>
+		<div >   
 
 			<nav className="navbar" style={{ backgroundColor: ' #5C3D2E' }}>
 
-				<div className="container d-flex justify-content-between align-items-center">
+				<div className="d-flex justify-content-between align-items-center">
 
-
-					{/* Menú de navegación */}
 					<NavAndTabs />
-
-					{/* Logo centrado */}
+ 
 					<div className="navbar-logo">
 						<Link to="/">
 							<img
-								src="https://media.discordapp.net/attachments/1409165086697848872/1410329949633642556/LogoEntero.PNG?ex=68b1485e&is=68aff6de&hm=ac81bd38ba8f653cd93c7faabb712c27ffce1e41533e16870d2410bdb8a8b825&=&format=webp&quality=lossless&width=360&height=334"
+								src="https://media.discordapp.net/attachments/1409165086697848872/1410329949633642556/LogoEntero.PNG?ex=68b68e5e&is=68b53cde&hm=ff73ccf8bfef9e0e99242e20a380d812cd8a38ba672c3daa85877141bed33574&=&format=webp&quality=lossless&width=360&height=334"
 								alt="Logo"
 								style={{ width: 50, height: 44 }}
 							/>
 						</Link>
 					</div>
 
-
-
-					{/* Ícono de búsqueda con hover */}
 					<div className="d-flex align-items-center gap-2 fixed-nav-tools">
 
 						<SearchBar />
