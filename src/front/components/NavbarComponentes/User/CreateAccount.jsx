@@ -9,6 +9,8 @@ export const CreateAccount = () => {
         email: "",
         password: ""
     });
+    const [alertError, setAlertError] = useState(false)
+    const [alertMsg, setAlertMsg] = useState()
     const navigate = useNavigate()
 
     const handleOnChange = (e) => {
@@ -22,7 +24,7 @@ export const CreateAccount = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(inputValue)
-        registerUser(inputValue, navigate)
+        registerUser(inputValue, navigate, setAlertError, setAlertMsg)
     };
 
     return (
@@ -79,6 +81,12 @@ export const CreateAccount = () => {
                                 onChange={handleOnChange}
                             />
                         </div>
+
+                        {alertError &&
+                            <div className="alert alert-danger text-center" role="alert">
+                                {alertMsg}
+                            </div>
+                        }
 
                         <button type="submit" className="btn btn-primary">Registrarse</button>
                     </form>

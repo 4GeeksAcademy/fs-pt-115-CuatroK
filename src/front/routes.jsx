@@ -29,11 +29,11 @@ export const router = createBrowserRouter(
         <Route path="demo" element={<Demo />} />
       </Route>
       <Route path="single/:theId" element={<Single />} />
- 
+
 
       <Route path="products" element={<Products />} />
       <Route path="contact" element={<ContactUs />} />
-      <Route path="about" element={<AboutUs />} /> 
+      <Route path="about" element={<AboutUs />} />
 
 
       <Route path="user/createAccount" element={<CreateAccount />} />

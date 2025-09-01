@@ -15,13 +15,13 @@ def create_user():
     data = request.get_json()
 
     if not data.get("email") or not data.get("password") or not data.get("username"):
-        return jsonify({'msg': 'some data is missing'}), 400
+        return jsonify({'msg': 'Faltan espacios por rellenar'}), 400
 
     user_exists = db.session.execute(db.select(User).where(
         User.email == data.get("email"))).scalar_one_or_none()
 
     if user_exists:
-        return jsonify({'msg': 'User already exists'}), 400
+        return jsonify({'msg': 'Ya existe una cuenta con éste email'}), 400
 
     new_user = User(
         email=data.get("email"),
@@ -41,20 +41,20 @@ def login_user():
     data = request.get_json()
 
     if not data.get("email") or not data.get("password"):
-        return jsonify({'msg': 'some data is missing'}), 400
+        return jsonify({'msg': 'Faltan espacios por rellenar'}), 400
 
     user = db.session.execute(db.select(User).where(
         User.email == data.get("email"))).scalar_one_or_none()
 
     if user is None:
-        return jsonify({'msg': 'user not found'}), 400
+        return jsonify({'msg': 'No existe una cuenta con los datos otorgados'}), 400
 
     if user.check_password(data.get("password")):
         token = create_access_token(str(user.id))
         return jsonify({'msg': 'ok,', "token": token}), 200
 
     else:
-        return jsonify({'msg': 'some data is missing'}), 400
+        return jsonify({'msg': 'No existe una cuenta con los datos otorgados'}), 400
 
 
 @user_bp.route("/", methods=["GET"])
