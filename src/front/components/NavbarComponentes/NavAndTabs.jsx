@@ -6,30 +6,30 @@ export const NavAndTabs = () => {
   const [activeTab, setActiveTab] = useState(null);
 
   return (
-    <div>
-      <ul className="nav nav-tabs border-bottom-0">
-        <li className="nav-item">
-          <button
-            className={`nav-link text-warning ${activeTab === "productos" ? "active" : ""}`}
-            onClick={() => setActiveTab("productos")}
-          >
-            Productos
-          </button>
-        </li>
-        <li className="nav-item">
-          <button
-            className={`nav-link text-warning ${activeTab === "contacto" ? "active" : ""}`}
-            onClick={() => setActiveTab("contacto")}
-          >
-            Contáctanos
-          </button>
-        </li>
-      </ul>
 
+    <div>
+      <button
+        className={`btn btn-warning me-2 text-warning ${activeTab === "productos" ? "active" : ""}`}
+        onClick={() => setActiveTab("productos")} 
+        style={{ backgroundColor: ' #5C3D2E' }}
+      >
+        Productos
+      </button>
+      <button
+        className={`btn btn-warning text-warning ${activeTab === "contacto" ? "active" : ""}`}
+        onClick={() => setActiveTab("contacto")}
+        style={{ backgroundColor: ' #5C3D2E' }}
+      >
+        Contactanos
+      </button>
       <div className="mt-3">
         {activeTab === "productos" && <Products />}
         {activeTab === "contacto" && <ContactUs />}
       </div>
     </div>
+
+
+
+    
   );
 };

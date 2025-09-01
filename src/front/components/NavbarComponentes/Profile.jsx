@@ -6,7 +6,8 @@ export const Profile = () => {
         <div>
 
             <div className="dropdown text-end">
-                <button
+                <Link>Iniciar Sesión</Link>
+                {/*<button
                     className="btn btn-outline-dark dropdown"
                     type="button"
                     id="dropdownProfile"
@@ -16,7 +17,7 @@ export const Profile = () => {
                 >
                     <i className="fa-sharp fa-regular fa-circle-user text-warning"
                     ></i>
-                </button>
+                </button>*/}
 
                 <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfile">
                     <li><Link className="dropdown-item" to="/user"> Perfil</Link></li>
