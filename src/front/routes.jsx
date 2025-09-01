@@ -15,11 +15,10 @@ import { AboutUs } from "./components/NavbarComponentes/AboutUs";
 import { CreateAccount } from "./components/NavbarComponentes/User/CreateAccount";
 import { Login } from "./components/NavbarComponentes/User/Login";
 
-
-import CalculadoraMetales from "./components/public/Calculadora.jsx";
-import { RootLayout } from "./layout/Root.layout.jsx";
-import { PublicLayout } from "./layout/Public.layout.jsx";
-
+=======
+import { RootLayout } from "./layout/Root.layout";
+import { PublicLayout } from "./layout/Public.layout";
+import CalculadoraMetales from "./components/public/Calculadora";
 
 
 export const router = createBrowserRouter(
@@ -28,22 +27,23 @@ export const router = createBrowserRouter(
       <Route element={<PublicLayout/>}>
         <Route index element={<Home />} />
         <Route path="demo" element={<Demo />} />
-        <Route path="single/:theId" element={<Single />} />
-
-
-        <Route path="products" element={<Products />} />
-        <Route path="contact" element={<ContactUs />} />
-        <Route path="about" element={<AboutUs />} />
-
-
-        <Route path="user/createAccount" element={<CreateAccount />} />
-        <Route path="login" element={<Login />} />
-
-        <Route path="calculadora" element={ <CalculadoraMetales/>} />
-
-       
-        <Route path="*" element={<h1>404</h1>} />
       </Route>
+      <Route path="single/:theId" element={<Single />} />
+
+
+      <Route path="products" element={<Products />} />
+      <Route path="contact" element={<ContactUs />} />
+      <Route path="about" element={<AboutUs />} />
+
+
+      <Route path="user/createAccount" element={<CreateAccount />} />
+      <Route path="login" element={<Login />} />
+
+      <Route path="calculadora" element={<CalculadoraMetales />} />
+
+
+
+      <Route path="*" element={<h1>404</h1>} />
     </Route>
   )
 );
