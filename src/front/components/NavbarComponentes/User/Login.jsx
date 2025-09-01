@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { loginUser } from "../../../services/serviceApi"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export const Login = () => {
     const [inputValue, setInputValue] = useState({
@@ -37,6 +37,9 @@ export const Login = () => {
                 <div className="row">
                     <div className="col-md-12 text-center mt-5">
                         <h1>Iniciar Sesión</h1>
+                    </div>
+                    <div className="col-md-12 text-center">
+                        <h5>¿No te has creado una cuenta? <br /> <Link to="/user/createAccount">Registrate</Link></h5>
                     </div>
                 </div>
 
