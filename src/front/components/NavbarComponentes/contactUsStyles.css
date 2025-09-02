@@ -1,0 +1,36 @@
+.scroll-container {
+  width: 100vw;
+  overflow: hidden;
+  background-color: #FBE8E7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scroll-track {
+  display: flex;
+  animation: scroll-horizontal 30s linear infinite;
+}
+
+.scroll-container:hover .scroll-track {
+  animation-play-state: paused;
+  justify-content: center;
+}
+
+.scroll-item {
+  padding: 1rem 2rem;
+  color: #ffc107;
+  white-space: nowrap;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+/* Animación horizontal más lenta */
+@keyframes scroll-horizontal {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
