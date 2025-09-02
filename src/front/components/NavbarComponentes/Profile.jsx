@@ -6,7 +6,7 @@ export const Profile = () => {
         <div>
 
             <div className="dropdown text-end">
-                <Link to="/login">Iniciar Sesión</Link>
+                <Link to="/login" className="text-white">Iniciar Sesión</Link>
                 {/*<button
                     className="btn btn-outline-dark dropdown"
                     type="button"
