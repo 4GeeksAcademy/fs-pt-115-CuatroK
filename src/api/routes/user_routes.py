@@ -15,13 +15,13 @@ def create_user():
     data = request.get_json()
 
     if not data.get("email") or not data.get("password") or not data.get("username"):
-        return jsonify({'msg': 'some data is missing'}), 400
+        return jsonify({'msg': 'Faltan espacios por rellenar'}), 400
 
     user_exists = db.session.execute(db.select(User).where(
         User.email == data.get("email"))).scalar_one_or_none()
 
     if user_exists:
-        return jsonify({'msg': 'User already exists'})
+        return jsonify({'msg': 'Ya existe una cuenta con éste email'}), 400
 
     new_user = User(
         email=data.get("email"),
@@ -41,20 +41,20 @@ def login_user():
     data = request.get_json()
 
     if not data.get("email") or not data.get("password"):
-        return jsonify({'msg': 'some data is missing'}), 400
+        return jsonify({'msg': 'Faltan espacios por rellenar'}), 400
 
     user = db.session.execute(db.select(User).where(
         User.email == data.get("email"))).scalar_one_or_none()
 
     if user is None:
-        return jsonify({'msg': 'user not found'}), 400
+        return jsonify({'msg': 'No existe una cuenta con los datos otorgados'}), 400
 
     if user.check_password(data.get("password")):
         token = create_access_token(str(user.id))
         return jsonify({'msg': 'ok,', "token": token}), 200
 
     else:
-        return jsonify({'msg': 'some data is missing'}), 400
+        return jsonify({'msg': 'No existe una cuenta con los datos otorgados'}), 400
 
 
 @user_bp.route("/", methods=["GET"])
@@ -79,13 +79,13 @@ def get_MEGAUSERS():
 def convert_client_to_admin():
     user_id = -5  # CAMBIAR ÉSTE NÚMERO EL CUAL ES UN ID AL NUMERO ID DEL USUARIO QUE SE QUIERE CONVERTIR EN ADMIN
     if not user_id:
-        return jsonify({'MSG': 'LEAVE RAT'})
+        return jsonify({'MSG': 'LEAVE RAT'}), 400
     user = db.session.get(User, user_id)
     if user is None:
-        return jsonify({'msg': 'user not found'})
+        return jsonify({'msg': 'user not found'}), 400
     user.is_admin = True
     db.session.commit()
-    return jsonify({'new admin': user.serialize()})
+    return jsonify({'new admin': user.serialize()}), 200
 
 
 @user_bp.route("/address", methods=["POST"])
@@ -113,7 +113,7 @@ def create_address():
     )
     db.session.add(new_address)
     db.session.commit()
-    return jsonify({'msg': 'address added', 'address': new_address.serialize()})
+    return jsonify({'msg': 'address added', 'address': new_address.serialize()}), 200
 
 
 @user_bp.route("/profile/update", methods=["PATCH"])
@@ -122,21 +122,21 @@ def upgrade_user_data():
     data = request.get_json()
 
     if not data:
-        return jsonify({'msg': 'No data received'})
+        return jsonify({'msg': 'No data received'}), 400
     user_id = get_jwt_identity()
     user = db.session.get(User, user_id)
     if user is None:
-        return jsonify({'msg': 'User not found'})
+        return jsonify({'msg': 'User not found'}), 400
 
     keys_included = {"username", "gender", "birth_date", "full_name"}
 
     keys_denied = set(data.keys() - keys_included)
     if keys_denied:
-        return jsonify({'msg': 'invalid data'})
+        return jsonify({'msg': 'invalid data'}), 400
 
     user.username = data.get("username", user.username)
     user.gender = data.get("gender", user.gender)
     user.birth_date = data.get("birth_date", user.birth_date)
     user.full_name = data.get("full_name", user.full_name)
     db.session.commit()
-    return jsonify({'msg': 'user data updated', 'user:': user.serialize()})
+    return jsonify({'msg': 'user data updated', 'user:': user.serialize()}), 200

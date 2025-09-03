@@ -1,47 +1,62 @@
 
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Profile } from "./NavbarComponentes/Profile";
 import { SearchBar } from "./NavbarComponentes/SearchBar";
 import { ShoppingCart } from "./NavbarComponentes/ShoppingCart";
 import { NavAndTabs } from "./NavbarComponentes/NavAndTabs";
+import "./navbarStyles.css";
 
 export const Navbar = () => {
+  const [menuAbierto, setMenuAbierto] = useState(false);
+  
 
+  return (
+    <div>
+      <nav className="navbar" style={{ backgroundColor: "#5C3D2E" }}>
+        <div className="d-flex justify-content-between align-items-center w-100 px-3">
 
-	return (
-		<div>
+          {/* Botón hamburguesa visible solo en pantallas pequeñas */}
+          <button
+            className="navbar-toggler d-lg-none"
+            type="button"
+            onClick={() => setMenuAbierto(!menuAbierto)}
+            aria-label="Toggle navigation"
+          >
+            <span >☰</span>
+          </button>
 
-			<nav className="navbar" style={{ backgroundColor: ' #5C3D2E' }}>
+          {/* Logo centrado */}
+          <div className="navbar-logo d-none d-lg-block">
+            <Link to="/">
+              <img
+                src="https://media.discordapp.net/attachments/1409165086697848872/1410329949633642556/LogoEntero.PNG?ex=68b68e5e&is=68b53cde&hm=ff73ccf8bfef9e0e99242e20a380d812cd8a38ba672c3daa85877141bed33574&=&format=webp&quality=lossless&width=360&height=334"
+                alt="Logo"
+                style={{ width: 50, height: 44 }}
+              />
+            </Link>
+          </div>
 
-				<div className="container d-flex justify-content-between align-items-center">
+          {/* Herramientas fijas */}
+          <div className="d-flex align-items-center gap-2 fixed-nav-tools">
+            <SearchBar />
+            <ShoppingCart />
+            <Profile />
+          </div>
+        </div>
 
+        {/* Menú desplegable en pantallas pequeñas */}
+        {menuAbierto && (
+          <div className="d-lg-none px-3 py-2">
+            <NavAndTabs />
+          </div>
+        )}
 
-					{/* Menú de navegación */}
-					<NavAndTabs />
-
-					{/* Logo centrado */}
-					<div className="navbar-logo">
-						<Link to="/">
-							<img
-								src="https://media.discordapp.net/attachments/1409165086697848872/1410329949633642556/LogoEntero.PNG?ex=68b1485e&is=68aff6de&hm=ac81bd38ba8f653cd93c7faabb712c27ffce1e41533e16870d2410bdb8a8b825&=&format=webp&quality=lossless&width=360&height=334"
-								alt="Logo"
-								style={{ width: 50, height: 44 }}
-							/>
-						</Link>
-					</div>
-
-
-
-					{/* Ícono de búsqueda con hover */}
-					<div className="d-flex align-items-center gap-2 fixed-nav-tools">
-
-						<SearchBar />
-						<ShoppingCart />
-						<Profile />
-
-					</div>
-				</div>
-             </nav>
-		</div>
-	);
+        {/* Menú visible directamente en pantallas grandes */}
+        <div className="d-none d-lg-flex justify-content-between align-items-center">
+          <NavAndTabs />
+        </div>
+      </nav>
+    </div>
+  );
 };
