@@ -9,12 +9,13 @@ import "./navbarStyles.css";
 
 export const Navbar = () => {
   const [menuAbierto, setMenuAbierto] = useState(false);
+  
 
   return (
     <div>
       <nav className="navbar" style={{ backgroundColor: "#5C3D2E" }}>
         <div className="d-flex justify-content-between align-items-center w-100 px-3">
-          
+
           {/* Botón hamburguesa visible solo en pantallas pequeñas */}
           <button
             className="navbar-toggler d-lg-none"

@@ -19,6 +19,8 @@ import { Login } from "./components/NavbarComponentes/User/Login";
 import { RootLayout } from "./layout/Root.layout";
 import { PublicLayout } from "./layout/Public.layout";
 import CalculadoraMetales from "./components/public/Calculadora";
+import { ProfileLayout } from "./layout/Profile.layout";
+import { Profile } from "./pages/admin/Profile";
 
 
 export const router = createBrowserRouter(
@@ -29,6 +31,11 @@ export const router = createBrowserRouter(
         <Route path="demo" element={<Demo />} />
       </Route>
       <Route path="single/:theId" element={<Single />} />
+
+      <Route element={<ProfileLayout />}>
+        <Route path="user" element={<Profile />} />
+
+      </Route>
 
 
       <Route path="products" element={<Products />} />
