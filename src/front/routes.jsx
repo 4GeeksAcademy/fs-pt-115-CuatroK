@@ -14,8 +14,6 @@ import { ContactUs } from "./components/NavbarComponentes/ContactUs";
 import { AboutUs } from "./components/NavbarComponentes/AboutUs";
 import { CreateAccount } from "./components/NavbarComponentes/User/CreateAccount";
 import { Login } from "./components/NavbarComponentes/User/Login";
-
-=======
 import { RootLayout } from "./layout/Root.layout";
 import { PublicLayout } from "./layout/Public.layout";
 import CalculadoraMetales from "./components/public/Calculadora";
