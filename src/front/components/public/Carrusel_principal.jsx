@@ -3,26 +3,19 @@ import React from 'react';
 export const Carrusel_principal = () => {
     return (
         <>
-            {/* //div del carrusel */}
-            <style>{`
-        @media (min-width: 992px) {
-          .col-lg-30 { flex: 0 0 30%; max-width: 30%; }
-          .col-lg-35 { flex: 0 0 35%; max-width: 35%; }
-        }
-      `}</style>
+         
             <div className="container-fluid w-100" style={{ backgroundColor: 'red' }}>
                 {/* //DIV DEL FONDO DEL CARRUSEL */}
                 <div className="container py-4">
                     <div className="row align-items-center g-4">
 
                         {/* // DIV DEL LADO IZQUIERDO CON EL LEMA DEL CARRUSEL  */}
-                        <div className="col-12 col-lg-30 text-white">
-                            <h1 className="display-5 fw-bold"></h1>
-                            <p className="lead mb-0">Sube la nota con 4K y deja que la luz haga su trabajo</p>
+                        <div className="col-12 col-lg-4 text-white">
+                            <h3 className="mb-0">Sube la nota con 4K y deja que la luz haga su trabajo</h3>
                         </div>
 
                         {/* //div del carrusel */}
-                        <div className="col-12 col-lg-35">
+                        <div className="col-12 col-lg-4">
                             <div id="myCarousel1" className="carousel slide" data-bs-ride="carousel">
                                 <div className="carousel-indicators">
                                     <button type="button" data-bs-target="#myCarousel1" data-bs-slide-to="0" aria-label="Slide 1"></button>
@@ -70,7 +63,7 @@ export const Carrusel_principal = () => {
                             </div>
                         </div>
 
-                        <div className="col-12 col-lg-35">
+                        <div className="col-12 col-lg-4">
                             <div id="myCarousel2" className="carousel slide" data-bs-ride="carousel">
                                 <div className="carousel-indicators">
                                     <button type="button" data-bs-target="#myCarousel2" data-bs-slide-to="0" aria-label="Slide 1"></button>
