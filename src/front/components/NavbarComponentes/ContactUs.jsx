@@ -1,26 +1,37 @@
 import { Link } from "react-router-dom"
-import "./contactUsStyles.css"
 
 export const ContactUs = () => {
-    
     return (
-        <div className="scroll-container " id="scrollContainer">
-            <div className="scroll-track" id="scrollTrack">
-                <ul className="nav">
-                    <li className="nav-item">
-                        <Link className="nav-link scroll-item" to="/about">Sobre Nosotros</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link scroll-item">Galería</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link scroll-item">Agendar Cita</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link scroll-item">Contáctanos</Link>
-                    </li>
-                </ul>
-            </div>
+        <div style={{ width: "100vw" }}>
+            
+            <ul className="nav justify-content-center page-background-color"
+            style={{height: "90px"}}
+                >
+                <li className="nav-item pt-4">
+                    <Link className="nav-link active fs-5" aria-current="page" to="/about"
+                    style={{color: "#5C3D2E"}} 
+                    >Sobre Nosotros
+                    </Link>
+                </li>
+                <li className="nav-item pt-4">
+                    <Link className="nav-link fs-5" 
+                    style={{color: "#5C3D2E"}}
+                    >Galeria
+                    </Link>
+                </li>
+                <li className="nav-item pt-4 ">
+                    <Link className="nav-link fs-5" 
+                    style={{color: "#5C3D2E"}}>Agendar Cita
+                    </Link>
+                </li>
+                <li className="nav-item pt-4">
+                    <Link className="nav-link fs-5" aria-disabled="true"
+                    style={{color: "#5C3D2E"}}
+                    >Contactanos
+                    </Link>
+                </li>
+            </ul>
+            
         </div>
     )
 }
