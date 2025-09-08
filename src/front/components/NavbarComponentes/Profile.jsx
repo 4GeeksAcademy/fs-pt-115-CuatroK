@@ -18,7 +18,7 @@ export const Profile = () => {
 
     return (
 
-        <div>
+        <div >
 
             <div className="dropdown text-end">
                 {

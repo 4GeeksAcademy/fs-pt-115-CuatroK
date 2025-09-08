@@ -21,6 +21,7 @@ import { PublicLayout } from "./layout/Public.layout";
 import CalculadoraMetales from "./components/public/Calculadora";
 import { ProfileLayout } from "./layout/Profile.layout";
 import { Profile } from "./pages/admin/Profile";
+import { Gallery } from "./components/NavbarComponentes/Gallery";
 
 
 export const router = createBrowserRouter(
@@ -29,6 +30,7 @@ export const router = createBrowserRouter(
       <Route element={<PublicLayout />}>
         <Route index element={<Home />} />
         <Route path="demo" element={<Demo />} />
+        <Route path="gallery" element={<Gallery />} />
       </Route>
       <Route path="single/:theId" element={<Single />} />
 
@@ -41,12 +43,13 @@ export const router = createBrowserRouter(
       <Route path="products" element={<Products />} />
       <Route path="contact" element={<ContactUs />} />
       <Route path="about" element={<AboutUs />} />
+      
 
 
       <Route path="user/createAccount" element={<CreateAccount />} />
       <Route path="login" element={<Login />} />
 
-      <Route path="calculadora" element={<CalculadoraMetales />} />
+      <Route path="calculadora" element={<CalculadoraMetales />} /> 
 
 
 
