@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from api.model_config import db
+from api.extentions import db
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import selectinload
 from decimal import Decimal

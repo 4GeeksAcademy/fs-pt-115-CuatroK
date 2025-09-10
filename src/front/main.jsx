@@ -6,22 +6,31 @@ import { router } from "./routes";  // Import the router configuration
 import { StoreProvider } from './hooks/useGlobalReducer';  // Import the StoreProvider for global state management
 import { BackendURL } from './components/BackendURL';
 
+import "bootstrap/dist/css/bootstrap-utilities.min.css"
+import "bootstrap/dist/js/bootstrap.bundle.min.js"
+import { AuthProvider } from './hooks/useAuth';
+
+
+
 const Main = () => {
-    
-    if(! import.meta.env.VITE_BACKEND_URL ||  import.meta.env.VITE_BACKEND_URL == "") return (
+
+    if (! import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_BACKEND_URL == "") return (
         <React.StrictMode>
-              <BackendURL/ >
+            <BackendURL />
         </React.StrictMode>
-        );
+    );
     return (
-        <React.StrictMode>  
+        <React.StrictMode>
             {/* Provide global state to all components */}
-            <StoreProvider> 
-                {/* Set up routing for the application */} 
-                <RouterProvider router={router}>
-                </RouterProvider>
+            <StoreProvider>
+                {/* Set up routing for the application */}
+                <AuthProvider>
+                    <RouterProvider router={router}>
+                    </RouterProvider>
+                </AuthProvider>
             </StoreProvider>
-        </React.StrictMode>
+
+        </React.StrictMode >
     );
 }
 

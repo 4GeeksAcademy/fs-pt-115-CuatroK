@@ -1,11 +1,14 @@
-from flask import Flask, request, jsonify, Blueprint
+from flask import Flask, request, jsonify, Blueprint, render_template
 from flask_cors import CORS
 from api.models.user_model import User, UserDirection
-from api.model_config import db
+from api.extentions import db, mail
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_mail import Message
+from datetime import date
 
 
-user_bp = Blueprint('user_bp', __name__, url_prefix="/user/client")
+user_bp = Blueprint('user_bp', __name__,
+                    url_prefix="/user/client", template_folder="../templates")
 
 CORS(user_bp)
 
@@ -32,6 +35,16 @@ def create_user():
     new_user.set_password(data.get("password"))
     db.session.add(new_user)
     db.session.commit()
+
+    body_message = render_template(
+        "welcome_message.html", username=new_user.username)
+    message = Message(
+        subject="bienvenido mamañema",
+        recipients=[data.get("email")],
+        html=body_message
+    )
+    mail.send(message)
+
     return jsonify({'msg': 'user created successfully',
                     'new user': new_user.serialize()}), 200
 
@@ -75,6 +88,16 @@ def get_MEGAUSERS():
     return jsonify([u.serialize() for u in users]), 200
 
 
+@user_bp.route("/user", methods=["GET"])
+@jwt_required()
+def get_user():
+    user_id = get_jwt_identity()
+    if not user_id:
+        return jsonify("Usuario no registrado"), 400
+    user = db.session.get(User, int(user_id))
+    return jsonify(user.serialize()), 200
+
+
 @user_bp.route("/convert_admin", methods=["POST"])
 def convert_client_to_admin():
     user_id = -5  # CAMBIAR ÉSTE NÚMERO EL CUAL ES UN ID AL NUMERO ID DEL USUARIO QUE SE QUIERE CONVERTIR EN ADMIN
@@ -95,12 +118,23 @@ def create_address():
     user_id = get_jwt_identity()
     user = db.session.get(User, int(user_id))
 
-    print(user_id)
     if user is None:
         return jsonify({'msg': 'user doesn`t exists'}), 400
 
-    if not data.get("first_address") or not data.get("second_address") or not data.get("postal_code") or not data.get("city") or not data.get("province") or not data.get("phone"):
-        return jsonify({"msg": 'some data is missing'}), 400
+    required_fields = {"first_address",
+                       "postal_code", "city", "province", "phone"}
+
+    optional_fields = {"second_address"}
+
+    allowed_fields = required_fields | optional_fields
+
+    for field in required_fields:
+        if not data.get(field):
+            return jsonify({"msg": f"{field} es obligatorio"}), 400
+
+    keys_denied = set(data.keys()) - allowed_fields
+    if keys_denied:
+        return jsonify({'msg': f'Campos inválidos: {list(keys_denied)}'}), 400
 
     new_address = UserDirection(
         first_address=data.get("first_address"),
@@ -113,10 +147,48 @@ def create_address():
     )
     db.session.add(new_address)
     db.session.commit()
+
     return jsonify({'msg': 'address added', 'address': new_address.serialize()}), 200
 
 
-@user_bp.route("/profile/update", methods=["PATCH"])
+@user_bp.route("/address/<int:address_id>", methods=["PATCH"])
+@jwt_required()
+def update_address(address_id):
+    data = request.get_json()
+    user_id = get_jwt_identity()
+    user = db.session.get(User, int(user_id))
+    current_address = user.address[address_id]
+
+    print(user_id)
+    if user is None:
+        return jsonify({'msg': 'user doesn`t exists'}), 400
+
+    required_fields = {"first_address",
+                       "postal_code", "city", "province", "phone"}
+
+    optional_fields = {"second_address"}
+
+    allowed_fields = required_fields | optional_fields
+
+    for field in required_fields:
+        if not data.get(field):
+            return jsonify({"msg": f"{field} es obligatorio"}), 400
+
+    keys_denied = set(data.keys()) - allowed_fields
+    if keys_denied:
+        return jsonify({'msg': f'Campos inválidos: {list(keys_denied)}'}), 400
+
+    current_address.first_address = data.get("first_address"),
+    current_address.second_address = data.get("second_address"),
+    current_address.postal_code = data.get("postal_code"),
+    current_address.city = data.get("city"),
+    current_address.province = data.get("province"),
+    current_address.phone = data.get("phone"),
+    db.session.commit()
+    return jsonify({'msg': 'address added', 'address': current_address.serialize()}), 200
+
+
+@user_bp.route("/user", methods=["PATCH"])
 @jwt_required()
 def upgrade_user_data():
     data = request.get_json()
@@ -130,13 +202,29 @@ def upgrade_user_data():
 
     keys_included = {"username", "gender", "birth_date", "full_name"}
 
-    keys_denied = set(data.keys() - keys_included)
+    print(data)
+    keys_denied = set(data.keys()) - keys_included
     if keys_denied:
         return jsonify({'msg': 'invalid data'}), 400
 
     user.username = data.get("username", user.username)
     user.gender = data.get("gender", user.gender)
-    user.birth_date = data.get("birth_date", user.birth_date)
+    if data["birth_date"]:
+        user.birth_date = date.fromisoformat(data["birth_date"])
     user.full_name = data.get("full_name", user.full_name)
     db.session.commit()
-    return jsonify({'msg': 'user data updated', 'user:': user.serialize()}), 200
+    return jsonify({'msg': 'user data updated', 'user': user.serialize()}), 200
+
+
+@user_bp.route("/address/<int:address_id>", methods=["Delete"])
+@jwt_required()
+def delete_address(address_id):
+    user_id = get_jwt_identity()
+    user = db.session.get(User, int(user_id))
+    current_address = user.address[address_id]
+    if not current_address:
+        return jsonify({'msg': 'Direccón no encontrada'}), 400
+
+    db.session.delete(current_address)
+    db.session.commit()
+    return jsonify({'msg': 'Dirección borrada', 'Dirección': current_address.serialize()}), 200
