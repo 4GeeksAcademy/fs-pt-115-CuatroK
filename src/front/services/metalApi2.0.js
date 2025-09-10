@@ -2,11 +2,11 @@ import { data } from "@remix-run/router";
 
 const API_KEY = import.meta.env.VITE_METALS_KEY || "";
 const API_URL = "https://api.metalpriceapi.com/v1/latest";
-const CURRENCY = import.meta.env.CURRENCY;
+const CURRENCY = import.meta.env.VITE_CURRENCY;
 const HOURS = import.meta.env.VITE_METALS_TTL_HOURS;
 
 const getCurrentTime = () => Date.now();
-const getTodayDate = () => new Date().toISOString.slice(0, 10);
+const getTodayDate = () => new Date().toISOString().slice(0, 10);
 
 const getFromCache = (key) => {
   try {
@@ -19,27 +19,28 @@ const getFromCache = (key) => {
 
 const saveToCache = (key, data) => {
   try {
-    localStorage.setItem(key , JSON.stringify(data));
+    localStorage.setItem(key, JSON.stringify(data));
   } catch {}
 };
 
-const isDataFresh = () => {
-    if (!data?.fetchedAt) return false;
-    const CACHE_HOURS = 24
-    const maxAge = CACHE_HOURS * 60*60*1000 
-    return (getCurrentTime()-data.fetchedAt) < maxAge;
-}
+const isDataFresh = (record) => {
+  if (!record?.fetchedAt) return false;
+  const CACHE_HOURS = 24;
+  const maxAge = CACHE_HOURS * 60 * 60 * 1000;
+  return getCurrentTime() - record.fetchedAt < maxAge;
+};
 
-export const getDailyMetal = async () => {
+export const getDailyMetal = async ({ force = false }) => {
   if (!API_KEY) throw new Error("falta la API KEY");
 
-    const goldCache = getFromCache("cuatrok:gold")
-    const silverCache = getFromCache("cuatrok:silver")
-   if (isDataFresh(goldCache) && isDataFresh(silverCache)){
-    return { gold: goldCache, silver: silverCache }
-   }
+  const goldKey = `cuatrok:gold:${CURRENCY}:daily`;
+  const silverKey = `cuatrok:silver:${CURRENCY}:daily`;
 
-
+  const goldCache = getFromCache(goldKey);
+  const silverCache = getFromCache(silverKey);
+  if (!force && isDataFresh(goldCache) && isDataFresh(silverCache)) {
+    return { gold: goldCache, silver: silverCache };
+  }
 
   const url = `${API_URL}?api_key=${API_KEY}&base=${CURRENCY}&currencies=XAG,XAU`;
   const response = await fetch(url);
@@ -60,33 +61,31 @@ export const getDailyMetal = async () => {
 
   const goldData = {
     date,
-    currency:CURRENCY,
-    priceOz:goldPrice,
-    priceGram:goldPrice/31.1034768,
-    fetchedAt:timestamp
-  }
+    currency: CURRENCY,
+    priceOz: goldPrice,
+    priceGram: goldPrice / 31.1034768,
+    fetchedAt: timestamp,
+  };
   const silverData = {
-
     date,
-    currency:CURRENCY,
-    priceOz:silverPrice,
-    priceGram:silverCache/31.1034768,
-    fetchedAt:timestamp
-  }
+    currency: CURRENCY,
+    priceOz: silverPrice,
+    priceGram: silverPrice / 31.1034768,
+    fetchedAt: timestamp,
+  };
 
-
-  saveToCache("cuatrok:gold", goldData);
-  saveToCache("cuatrok:silver", silverData);
+  saveToCache(goldKey, goldData);
+  saveToCache(silverKey, silverData);
 
   return { gold: goldData, silver: silverData };
 };
 
-export const getDailyGold = async () => {
-    const data = await getDailyMetal()
-    return data.gold
-}
+export const getDailyGold = async ({force = false}) => {
+  const data = await getDailyMetal({force});
+  return data.gold;
+};
 
-export const getDailySilver = async () => {
-    const data = await getDailyMetal()
-    return data.silver
-} 
+export const getDailySilver = async ({force = false}) => {
+  const data = await getDailyMetal({force});
+  return data.silver;
+};
