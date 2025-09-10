@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./ProductsStyles.css"; 
+import { Link } from "react-router-dom";
 
 export const Products = () => { 
 
@@ -33,10 +34,12 @@ export const Products = () => {
                     </div>
                     
                 ))}
+                <Link to="calculadora">
                 <button className="btn btn-warning mb-3 color-buttons" 
                 style={{borderRadius: "50px"}}
                 >Venta de Metales
                 </button>
+                </Link>
             </div>
             
         </div>

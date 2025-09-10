@@ -28,6 +28,7 @@ export const Login = () => {
 
         loginUser(inputValue, navigate, handleToken, setAlertError, setAlertMsg)
         console.log(inputValue)
+        
     }
 
     return (

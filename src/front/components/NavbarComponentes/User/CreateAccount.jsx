@@ -25,6 +25,7 @@ export const CreateAccount = () => {
         e.preventDefault();
         console.log(inputValue)
         registerUser(inputValue, navigate, setAlertError, setAlertMsg)
+        
     };
 
     return (
@@ -88,7 +89,7 @@ export const CreateAccount = () => {
                             </div>
                         }
 
-                        <button type="submit" className="btn btn-primary">Registrarse</button>
+                        <button type="submit" className="btn btn-primary mb-5">Registrarse</button>
                     </form>
                 </div>
             </div>
