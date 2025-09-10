@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react"
 import { Link, Navigate, useNavigate } from "react-router-dom"
-import { registerUser } from "../../../services/serviceApi"
+import { useAuth } from "../../../hooks/useAuth"
+import "../../../index.css"
 
 export const CreateAccount = () => {
-
+    const { registerUser, loading, error, setError } = useAuth()
     const [inputValue, setInputValue] = useState({
         username: "",
         email: "",
         password: ""
     });
-    const [alertError, setAlertError] = useState(false)
-    const [alertMsg, setAlertMsg] = useState()
     const navigate = useNavigate()
 
     const handleOnChange = (e) => {
@@ -23,10 +22,14 @@ export const CreateAccount = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(inputValue)
-        registerUser(inputValue, navigate, setAlertError, setAlertMsg)
-        
+        await registerUser(inputValue, navigate)
     };
+
+    useEffect(() => {
+        setError("")
+    }, [])
+
+    console.log(error)
 
     return (
         <div className="container products-card">
@@ -48,10 +51,10 @@ export const CreateAccount = () => {
                     <form onSubmit={handleSubmit}>
 
                         <div className="mb-3">
-                            <label htmlFor="username" className="form-label">Username</label>
+                            <label htmlFor="username" className="form-label">Nombre de usuario</label>
                             <input
                                 type="text"
-                                className="form-control"
+                                className={`form-control ${!inputValue.username && error ? "input-data-missing" : ""}`}
                                 id="username"
                                 name="username"
                                 value={inputValue.username}
@@ -63,7 +66,7 @@ export const CreateAccount = () => {
                             <label htmlFor="email" className="form-label">Email</label>
                             <input
                                 type="email"
-                                className="form-control"
+                                className={`form-control ${!inputValue.email && error ? "input-data-missing" : ""}`}
                                 id="email"
                                 name="email"
                                 value={inputValue.email}
@@ -72,10 +75,10 @@ export const CreateAccount = () => {
                         </div>
 
                         <div className="mb-3">
-                            <label htmlFor="password" className="form-label">Password</label>
+                            <label htmlFor="password" className="form-label">Contraseña</label>
                             <input
                                 type="password"
-                                className="form-control"
+                                className={`form-control ${!inputValue.password && error ? "input-data-missing" : ""}`}
                                 id="password"
                                 name="password"
                                 value={inputValue.password}
@@ -83,13 +86,13 @@ export const CreateAccount = () => {
                             />
                         </div>
 
-                        {alertError &&
+                        {error &&
                             <div className="alert alert-danger text-center" role="alert">
-                                {alertMsg}
+                                {error}
                             </div>
                         }
 
-                        <button type="submit" className="btn btn-primary mb-5">Registrarse</button>
+                        <button type="submit" className="btn btn-primary">{loading ? "Cargando..." : "Registrarse"}</button>
                     </form>
                 </div>
             </div>

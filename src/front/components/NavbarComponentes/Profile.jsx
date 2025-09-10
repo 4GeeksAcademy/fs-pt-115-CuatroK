@@ -1,52 +1,36 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Link } from "react-router-dom"
+import { useAuth } from "../../hooks/useAuth"
 
 export const Profile = () => {
-    const [logouted, setLogouted] = useState(!!localStorage.getItem("token"))
+    const { token, logoutUser } = useAuth()
+    const [open, setOpen] = useState(false)
 
-
-    const SignOut = () => {
-        localStorage.removeItem("token")
-        setLogouted(!!localStorage.getItem("token"))
-        console.log(logouted)
-    }
-
-    useEffect(() => {
-        setLogouted(!!localStorage.getItem("token"))
-        console.log(logouted)
-    }, [])
+    if (!token) return <Link to="/login" className="text-white">Iniciar Sesión</Link>
 
     return (
+        <div className="position-relative text-end">
+            <button
+                className="btn btn-outline-dark"
+                onClick={() => setOpen(!open)}
+                style={{ width: 50, height: 50 }}
+            >
+                <i className="fa-sharp fa-regular fa-circle-user text-warning"></i>
+            </button>
 
-        <div >
-
-            <div className="dropdown text-end">
-                {
-                    !logouted ?
-                        <Link to="/login" className="text-white">Iniciar Sesión</Link>
-                        :
-                        <>
-                            <button
-                                className="btn btn-outline-dark dropdown"
-                                type="button"
-                                id="dropdownProfile"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                                style={{ width: "50px", height: "50px" }}
-                            >
-                                <i className="fa-sharp fa-regular fa-circle-user text-warning"
-                                ></i>
-                            </button>
-
-                            <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfile">
-                                <li><Link className="dropdown-item" to="/user"> Perfil</Link></li>
-                                <li><a className="dropdown-item" href="#"> Configuración</a></li>
-                                <li><hr className="dropdown-divider" /></li>
-                                <li><a className="dropdown-item" href="#" onClick={SignOut}> Cerrar sesión</a></li>
-                            </ul>
-                        </>
-                }
-            </div>
+            {open && (
+                <ul
+                    className="dropdown-menu dropdown-menu-end show"
+                    style={{ position: "absolute", right: 0 }}
+                >
+                    <li><Link className="dropdown-item" to="/user">Perfil</Link></li>
+                    <li><a className="dropdown-item" href="#">Configuración</a></li>
+                    <li><hr className="dropdown-divider" /></li>
+                    <Link to={"/login"}>
+                        <li><button className="dropdown-item" onClick={logoutUser}>Cerrar sesión</button></li>
+                    </Link>
+                </ul>
+            )}
         </div>
     )
 }
