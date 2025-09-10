@@ -14,3 +14,7 @@
 .main-text{
   color:  #2F2F2F;
 }
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1); 
+}
