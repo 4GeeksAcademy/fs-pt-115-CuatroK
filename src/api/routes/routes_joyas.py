@@ -1,10 +1,10 @@
 from flask import Blueprint, request, jsonify
-from api.model_config import db
+from api.extentions import db
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import selectinload
 from decimal import Decimal
 from typing import Any, Optional
-
+from flask_cors import CORS
 
 from api.models.models_joyas import (
     Jewell,
@@ -25,6 +25,8 @@ from api.models.models_joyas import (
 )
 
 Jewell_bp = Blueprint('jewells_bp', __name__)
+
+CORS(Jewell_bp)
 
 Ejemplo = {
     "id": 1,

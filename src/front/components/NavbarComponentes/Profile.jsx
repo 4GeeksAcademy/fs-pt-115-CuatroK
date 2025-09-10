@@ -1,30 +1,36 @@
+import { useState } from "react"
 import { Link } from "react-router-dom"
+import { useAuth } from "../../hooks/useAuth"
 
 export const Profile = () => {
+    const { token, logoutUser } = useAuth()
+    const [open, setOpen] = useState(false)
+
+    if (!token) return <Link to="/login" className="text-white">Iniciar Sesión</Link>
+
     return (
+        <div className="position-relative text-end">
+            <button
+                className="btn btn-outline-dark"
+                onClick={() => setOpen(!open)}
+                style={{ width: 50, height: 50 }}
+            >
+                <i className="fa-sharp fa-regular fa-circle-user text-warning"></i>
+            </button>
 
-        <div>
-
-            <div className="dropdown text-end">
-                <button
-                    className="btn btn-outline-dark dropdown"
-                    type="button"
-                    id="dropdownProfile"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    style={{ width: "50px", height: "50px" }}
+            {open && (
+                <ul
+                    className="dropdown-menu dropdown-menu-end show"
+                    style={{ position: "absolute", right: 0 }}
                 >
-                    <i className="fa-sharp fa-regular fa-circle-user text-warning"
-                    ></i>
-                </button>
-
-                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfile">
-                    <li><Link className="dropdown-item" to="/user"> Perfil</Link></li>
-                    <li><a className="dropdown-item" href="#"> Configuración</a></li>
+                    <li><Link className="dropdown-item" to="/user">Perfil</Link></li>
+                    <li><a className="dropdown-item" href="#">Configuración</a></li>
                     <li><hr className="dropdown-divider" /></li>
-                    <li><a className="dropdown-item" href="#"> Cerrar sesión</a></li>
+                    <Link to={"/login"}>
+                        <li><button className="dropdown-item" onClick={logoutUser}>Cerrar sesión</button></li>
+                    </Link>
                 </ul>
-            </div>
+            )}
         </div>
     )
 }

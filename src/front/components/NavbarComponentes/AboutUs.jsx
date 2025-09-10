@@ -1,11 +1,25 @@
+import { Link, useNavigate } from "react-router-dom"
+
+
 export const AboutUs = () => {
+    const navigate = useNavigate();
+
     return (
         <div>
-            <div className="card mb-3 "
+
+            <div className="card mb-3 row"
                 style={{
                     backgroundImage: "url('https://i.pinimg.com/1200x/44/ed/4c/44ed4cc167dd353c68002ceb10b89270.jpg')",
-                    
+
                 }}>
+                <div className="col-md-12 text-start">
+                    
+                    <button className="btn btn-link border-0 w-25 h-50 text-warning"
+                    onClick={() => navigate(-1)}>
+                        <i class="fa-solid fa-circle-arrow-left fa-3x"></i>
+                    </button>
+                    
+                </div>
                 <img src="https://media.discordapp.net/attachments/1409165086697848872/1410329949277130782/Logo_grande.PNG?ex=68b299de&is=68b1485e&hm=4945f877b171f7fa47fbec6a11a033bb3907e1e0a17a548df805daf785033793&=&format=webp&quality=lossless&width=1063&height=576"
                     className="card-img-top" alt="CuatroK" style={{ width: "80em", height: "600px" }} />
                 <div className="card-body">

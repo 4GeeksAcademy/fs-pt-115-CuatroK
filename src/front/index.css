@@ -1,58 +1,47 @@
-.search-trigger {
-  position: relative;
-  display: flex;
-  align-items: center;
+.color-buttons {
+  background-color: #d4af37;
 }
 
-.search-bar {
-  width: 0;
-  opacity: 0;
-  transition: width 0.4s ease, opacity 0.4s ease;
-  margin-left: 10px;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
+.page-background-color {
+  background-color: #fbe8e7;
 }
 
-.search-bar.visible {
-  width: 180px;
-  opacity: 1;
-}
-.navbar-logo {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.fixed-nav-tools {
-  position: absolute; 
-  top: 0;
-  right: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  z-index: 1000;
-}
-.navbar-logo {
-  position: absolute;
-  top: 0.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
+.products-card {
+  background-color: #eed9c4;
 }
 
-
-
-.color-buttons{
-  background-color:  #D4AF37;
+.profile-options-background {
+  background-color: #ffe0ff;
+}
+.list-group-item.profile-options-background {
+  background-color: #ffe0ff !important;
+  color: #000 !important;
 }
 
-.page-background-color{
-  background-color: #FBE8E7;
+.list-group-item.profile-options-background:hover {
+  background-color: #a495b6 !important;
+  color: #fff !important;
 }
 
-.products-card{
-  background-color: #EED9C4;
+.list-group-item.profile-options-background:active {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+.list-group-item.profile-options-background.active {
+  background-color: #6f42c1 !important; /* morado Bootstrap, por ejemplo */
+  color: #fff !important;
 }
 
-.main-text{
-  color:  #2F2F2F;
+.main-text {
+  color: #2f2f2f;
+}
+
+.disabled-section {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.input-data-missing {
+  border: 1px solid red !important;
+  box-shadow: 0 0 5px red;
 }

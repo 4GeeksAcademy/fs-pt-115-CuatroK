@@ -1,6 +1,7 @@
 from typing import List, Optional
 from . import db
-from sqlalchemy import String, Boolean, ForeignKey
+from sqlalchemy import String, Boolean, ForeignKey, Date
+from datetime import date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from flask_bcrypt import generate_password_hash, check_password_hash
 
@@ -17,7 +18,7 @@ class User(db.Model):
     is_admin: Mapped[bool] = mapped_column(Boolean(), nullable=False)
 
     gender: Mapped[Optional[str]] = mapped_column(String(10))
-    birth_date: Mapped[Optional[str]] = mapped_column(String(20))
+    birth_date: Mapped[Optional[date]] = mapped_column(Date)
     full_name: Mapped[Optional[str]] = mapped_column(String(120))
 
     address: Mapped[List["UserDirection"]] = relationship(
@@ -36,7 +37,7 @@ class User(db.Model):
             "username": self.username if self.username else None,
             "address": [a.serialize() for a in self.address] if self.address else None,
             "gender": self.gender,
-            "birth_date": self.birth_date,
+            "birth_date": self.birth_date.isoformat() if self.birth_date else None,
             "full_name": self.full_name,
             "is_admin": self.is_admin
             # do not serialize the password, its a security breach

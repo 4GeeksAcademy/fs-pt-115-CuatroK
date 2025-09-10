@@ -1,2 +1,2 @@
-from api.model_config import db
+from api.extentions import db
 

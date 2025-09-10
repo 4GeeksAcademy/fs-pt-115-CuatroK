@@ -105,9 +105,6 @@ export default function CalculadoraMetales() {
                 <input
                   id="gramsGold"
                   type="number"
-                  inputMode="decimal"
-                  min="0"
-                  step="0.01"
                   className="form-control bg-dark text-light border-secondary"
                   placeholder="Ej: 7.5"
                   value={gramsGold}
@@ -163,9 +160,6 @@ export default function CalculadoraMetales() {
                   <input
                     id="gramsSilver"
                     type="number"
-                    inputMode="decimal"
-                    min="0"
-                    step="0.01"
                     className="form-control bg-dark text-light border-secondary"
                     placeholder="Ej: 12.3"
                     value={gramsSilver}
