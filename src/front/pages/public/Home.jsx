@@ -1,5 +1,6 @@
 import React, { useEffect } from "react"
 import useGlobalReducer from "../../hooks/useGlobalReducer.jsx";
+import { Carrusel_principal } from "../../components/public/Carrusel_principal.jsx";
 
 export const Home = () => {
 
@@ -28,23 +29,12 @@ export const Home = () => {
 	}
 
 	// useEffect(() => {
-	// loadMessage()
+	// 	loadMessage()
 	// }, [])
 
 	return (
-		<div className="text-center mt-5">
-			<h1 className="display-4">Hello Rigo!!</h1>
-			<p className="lead">
-			</p>
-			<div className="alert alert-info">
-				{store.message ? (
-					<span>{store.message}</span>
-				) : (
-					<span className="text-danger">
-						Loading message from the backend (make sure your python 🐍 backend is running)...
-					</span>
-				)}
-			</div>
-		</div>
+		<>
+		< Carrusel_principal/>
+		</>
 	);
 }; 

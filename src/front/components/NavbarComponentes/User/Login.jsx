@@ -23,6 +23,7 @@ export const Login = () => {
         e.preventDefault()
         loginUser(inputValue, navigate)
         console.log(inputValue)
+        
     }
 
     useEffect(() => {
