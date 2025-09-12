@@ -9,6 +9,7 @@ from api.models.models_joyas import (
     WatchType, WatchBraceletMaterial
 )
 
+
 Jewell_bp = Blueprint("jewells_bp", __name__)
 
 
