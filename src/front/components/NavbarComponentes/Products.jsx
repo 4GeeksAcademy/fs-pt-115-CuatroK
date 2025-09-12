@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./ProductsStyles.css"; 
+import { Link } from "react-router-dom";
 
 export const Products = () => { 
 
@@ -15,7 +16,7 @@ export const Products = () => {
     const [hovered, setHovered] = useState(null);
  
     return (   
-        <div style={{ width: "100vw", margin: 0, padding: 0}}>
+        <div className="row" style={{ width: "100vw", margin: 0, padding: 0}}>
 
             <div className="d-flex justify-content-center align-items-center flex-nowrap overflow-auto gap-3 p-3 page-background-color">
                 {categories.map((cat, index) => (
@@ -33,10 +34,12 @@ export const Products = () => {
                     </div>
                     
                 ))}
+                <Link to="calculadora">
                 <button className="btn btn-warning mb-3 color-buttons" 
                 style={{borderRadius: "50px"}}
                 >Venta de Metales
                 </button>
+                </Link>
             </div>
             
         </div>

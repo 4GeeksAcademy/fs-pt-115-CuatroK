@@ -14,9 +14,9 @@ export const Navbar = () => {
   return (
     <div>
       <nav className="navbar" style={{ backgroundColor: "#5C3D2E" }}>
-        <div className="d-flex justify-content-between align-items-center w-100 px-3">
+        <div className="d-flex justify-content-between align-items-center w-100 px-3"> 
 
-          {/* Botón hamburguesa visible solo en pantallas pequeñas */}
+          
           <button
             className="navbar-toggler d-lg-none"
             type="button"
@@ -26,7 +26,7 @@ export const Navbar = () => {
             <span >☰</span>
           </button>
 
-          {/* Logo centrado */}
+          
           <div className="navbar-logo d-none d-lg-block">
             <Link to="/">
               <img
@@ -37,7 +37,7 @@ export const Navbar = () => {
             </Link>
           </div>
 
-          {/* Herramientas fijas */}
+          
           <div className="d-flex align-items-center gap-2 fixed-nav-tools">
             <SearchBar />
             <ShoppingCart />
@@ -45,7 +45,7 @@ export const Navbar = () => {
           </div>
         </div>
 
-        {/* Menú desplegable en pantallas pequeñas */}
+        
         {menuAbierto && (
           <div className="d-lg-none px-3 py-2">
             <NavAndTabs />
