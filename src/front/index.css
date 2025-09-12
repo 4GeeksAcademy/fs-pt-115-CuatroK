@@ -13,6 +13,7 @@
 .profile-options-background {
   background-color: #ffe0ff;
 }
+
 .list-group-item.profile-options-background {
   background-color: #ffe0ff !important;
   color: #000 !important;
@@ -27,8 +28,9 @@
   background-color: #000 !important;
   color: #fff !important;
 }
+
 .list-group-item.profile-options-background.active {
-  background-color: #6f42c1 !important; /* morado Bootstrap, por ejemplo */
+  background-color: #6f42c1 !important; 
   color: #fff !important;
 }
 
@@ -40,6 +42,12 @@
   pointer-events: none;
   opacity: 0.5;
 }
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1);
+}
+
 
 .input-data-missing {
   border: 1px solid red !important;
