@@ -1,4 +1,6 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, abort
+from sqlalchemy import func
+from sqlalchemy.orm import selectinload
 from api.model_config import db
 from api.models.models_joyas import (
     Jewell,
@@ -7,185 +9,228 @@ from api.models.models_joyas import (
     WatchType, WatchBraceletMaterial
 )
 
-Jewell_bp = Blueprint('jewells_bp', __name__)
+Jewell_bp = Blueprint("jewells_bp", __name__)
+
+def json_error(msg, status=400, **extra):
+    out = {"ok": False, "error": msg}
+    out.update(extra)
+    return jsonify(out), status
 
 
+CATALOGS = {
+    "category": Category,
+    "coating": Coating,
+    "brand": Brand,
+    "gender": Gender,
+    "clasp": Clasp,
+    "water_resistance": WaterResistance,
+    "caja": CajaType,
+    "metal": Metal,
+    "gem": Gem,
+    "ring_type": RingType,
+    "earring_type": EarringType,
+    "bracelet": BraceletType,
+    "watch": WatchType,
+    "watch_bracelet_material": WatchBraceletMaterial,
+}
 
-def json_error(message, status=400, **extra):
-    payload = {"ok": False, "error": message}
-    if extra:
-        payload.update(extra)
-    return jsonify(payload), status
+def norm(v):
+    if v is None: return None
+    v = str(v).strip()
+    return v or None
 
-@Jewell_bp.route('/jewells', methods=["GET"])
+def upsert_catalogs(payload: dict):
+    """Crea el valor en el catálogo si no existe (por nombre, case-insensitive)."""
+    for field, Model in CATALOGS.items():
+        val = norm(payload.get(field))
+        if not val: 
+            continue
+        exists = Model.query.filter(func.lower(Model.name) == func.lower(val)).first()
+        if not exists:
+            db.session.add(Model(name=val))
+
+
+@Jewell_bp.route("/jewells", methods=["GET"])
 def list_jewells():
-    query = Jewell.query
+    q = Jewell.query
+    for f in CATALOGS.keys():
+        val = request.args.get(f)
+        if val:
+            q = q.filter(getattr(Jewell, f) == val)
+    items = [j.serialize() for j in q.all()]
+    return jsonify({"ok": True, "total": len(items), "items": items})
 
-    filter_fields = [
-        'category', 'coating', 'brand', 'gender', 'clasp', 'water_resistance',
-        'caja', 'metal', 'gem', 'ring_type', 'earring_type', 'bracelet',
-        'watch', 'watch_bracelet_material'
-    ]
-    for filter_name in filter_fields:
-        filter_value = request.args.get(filter_name)
-        if filter_value:
-            query = query.filter(getattr(Jewell, filter_name) == filter_value)
-
-    jewells = query.all()
-    serialized_items = [jewell.serialize() for jewell in jewells]
-    return jsonify({"ok": True, "total": len(serialized_items), "items": serialized_items})
-
-
-@Jewell_bp.route('/jewells/<int:jewell_id>', methods=["GET"])
+@Jewell_bp.route("/jewells/<int:jewell_id>", methods=["GET"])
 def get_jewell(jewell_id: int):
-    jewell = Jewell.query.get_or_404(jewell_id)
-    return jsonify({"ok": True, "item": jewell.serialize()})
+    j = Jewell.query.get_or_404(jewell_id)
+    return jsonify({"ok": True, "item": j.serialize()})
 
-
-@Jewell_bp.route('/jewells', methods=["POST"])
+@Jewell_bp.route("/jewells", methods=["POST"])
 def create_jewell():
-    payload = request.get_json(silent=True) or {}
-    missing_fields = [key for key in ("name", "description", "price") if key not in payload]
-    if missing_fields:
-        return json_error(f"Faltan campos requeridos: {', '.join(missing_fields)}")
-
+    data = request.get_json(silent=True) or {}
+    need = [k for k in ("name","description","price") if k not in data]
+    if need: return json_error(f"Faltan campos: {', '.join(need)}")
     try:
-        price_value = float(payload["price"])
+        price = float(data["price"])
     except Exception:
-        return json_error("'price' debe ser un número")
+        return json_error("'price' debe ser número")
 
     try:
-        jewell = Jewell(
-            name=payload["name"],
-            description=payload["description"],
-            price=price_value,
-            url_image=payload.get("url_image"),
-            category=payload.get("category"),
-            coating=payload.get("coating"),
-            brand=payload.get("brand"),
-            gender=payload.get("gender"),
-            clasp=payload.get("clasp"),
-            water_resistance=payload.get("water_resistance"),
-            caja=payload.get("caja"),
-            metal=payload.get("metal"),
-            gem=payload.get("gem"),
-            ring_type=payload.get("ring_type"),
-            earring_type=payload.get("earring_type"),
-            bracelet=payload.get("bracelet"),
-            watch=payload.get("watch"),
-            watch_bracelet_material=payload.get("watch_bracelet_material"),
+        opts = {k: norm(data.get(k)) for k in CATALOGS.keys()}
+        j = Jewell(
+            name=norm(data["name"]),
+            description=norm(data["description"]),
+            price=price,
+            url_image=norm(data.get("url_image")),
+            **opts,
         )
-        db.session.add(jewell)
+        db.session.add(j)
+        upsert_catalogs(data)
         db.session.commit()
-        return jsonify({"ok": True, "item": jewell.serialize()}), 201
-    except Exception as err:
+        return jsonify({"ok": True, "item": j.serialize()}), 201
+    except Exception as e:
         db.session.rollback()
-        return json_error(f"No se pudo crear la joya: {err}")
+        return json_error(f"No se pudo crear: {e}")
 
-
-@Jewell_bp.route('/jewells/<int:jewell_id>', methods=["PUT"])
+@Jewell_bp.route("/jewells/<int:jewell_id>", methods=["PUT"])
 def update_jewell(jewell_id: int):
-    jewell = Jewell.query.get_or_404(jewell_id)
-    payload = request.get_json(silent=True) or {}
+    j = Jewell.query.get_or_404(jewell_id)
+    data = request.get_json(silent=True) or {}
+    need = [k for k in ("name","description","price") if k not in data]
+    if need: return json_error(f"Faltan campos para PUT: {', '.join(need)}")
 
-    required_fields = ["name", "description", "price"]
-    missing_fields = [key for key in required_fields if key not in payload]
-    if missing_fields:
-        return json_error(f"Faltan campos requeridos para PUT: {', '.join(missing_fields)}")
-
-    jewell.name = payload["name"]
-    jewell.description = payload["description"]
+    j.name = norm(data["name"])
+    j.description = norm(data["description"])
     try:
-        jewell.price = float(payload["price"])
+        j.price = float(data["price"])
     except Exception:
-        return json_error("'price' debe ser un número")
+        return json_error("'price' debe ser número")
 
-    optional_fields = [
-        "url_image", "category", "coating", "brand", "gender", "clasp",
-        "water_resistance", "caja", "metal", "gem", "ring_type",
-        "earring_type", "bracelet", "watch", "watch_bracelet_material",
-    ]
-    for field_name in optional_fields:
-        setattr(jewell, field_name, payload.get(field_name))
-
+    for f in ["url_image", *CATALOGS.keys()]:
+        setattr(j, f, norm(data.get(f)))
     try:
+        upsert_catalogs(data)
         db.session.commit()
-        return jsonify({"ok": True, "item": jewell.serialize()})
-    except Exception as err:
+        return jsonify({"ok": True, "item": j.serialize()})
+    except Exception as e:
         db.session.rollback()
-        return json_error(f"No se pudo actualizar: {err}")
+        return json_error(f"No se pudo actualizar: {e}")
 
-
-@Jewell_bp.route('/jewells/<int:jewell_id>', methods=["DELETE"])
+@Jewell_bp.route("/jewells/<int:jewell_id>", methods=["DELETE"])
 def delete_jewell(jewell_id: int):
-    jewell = Jewell.query.get_or_404(jewell_id)
+    j = Jewell.query.get_or_404(jewell_id)
     try:
-        db.session.delete(jewell)
+        db.session.delete(j)
         db.session.commit()
         return jsonify({"ok": True})
-    except Exception as err:
+    except Exception as e:
         db.session.rollback()
-        return json_error("No se pudo borrar la joya", 400, detail=str(err))
+        return json_error("No se pudo borrar", detail=str(e))
 
 
-def _list_all(model_class):
-    records = model_class.query.order_by(model_class.name.asc()).all()
-    return jsonify({"ok": True, "items": [record.serialize() for record in records]})
+
+def list_catalog(Model, include_items=False):
+    q = Model.query
+    if include_items:
+        q = q.options(selectinload(Model.jewells))
+    rows = q.order_by(Model.name.asc()).all()
+    out = []
+    for r in rows:
+        item = r.serialize()
+        if include_items:
+            item["jewells"] = [j.serialize() for j in r.jewells]
+        out.append(item)
+    return jsonify({"ok": True, "items": out})
+
+def get_catalog(Model, item_id: int):
+    r = Model.query.options(selectinload(Model.jewells)).get(item_id)
+    if not r: abort(404)
+    return jsonify({
+        "ok": True,
+        "item": {**r.serialize(), "jewells": [j.serialize() for j in r.jewells]}
+    })
 
 
 @Jewell_bp.route("/coatings", methods=["GET"])
-def list_coatings(): 
-    return _list_all(Coating)
+def coatings_list(): return list_catalog(Coating, request.args.get("include")=="jewells")
+
+@Jewell_bp.route("/coatings/<int:coating_id>", methods=["GET"])
+def coatings_get(coating_id:int): return get_catalog(Coating, coating_id)
 
 @Jewell_bp.route("/categories", methods=["GET"])
-def list_categories(): 
-    return _list_all(Category)
+def categories_list(): return list_catalog(Category, request.args.get("include")=="jewells")
+
+@Jewell_bp.route("/categories/<int:category_id>", methods=["GET"])
+def categories_get(category_id:int): return get_catalog(Category, category_id)
 
 @Jewell_bp.route("/brands", methods=["GET"])
-def list_brands(): 
-    return _list_all(Brand)
+def brands_list(): return list_catalog(Brand, request.args.get("include")=="jewells")
+
+@Jewell_bp.route("/brands/<int:brand_id>", methods=["GET"])
+def brands_get(brand_id:int): return get_catalog(Brand, brand_id)
 
 @Jewell_bp.route("/genders", methods=["GET"])
-def list_genders(): 
-    return _list_all(Gender)
+def genders_list(): return list_catalog(Gender, request.args.get("include")=="jewells")
+
+@Jewell_bp.route("/genders/<int:gender_id>", methods=["GET"])
+def genders_get(gender_id:int): return get_catalog(Gender, gender_id)
 
 @Jewell_bp.route("/clasps", methods=["GET"])
-def list_clasps(): 
-    return _list_all(Clasp)
+def clasps_list(): return list_catalog(Clasp, request.args.get("include")=="jewells")
+
+@Jewell_bp.route("/clasps/<int:clasp_id>", methods=["GET"])
+def clasps_get(clasp_id:int): return get_catalog(Clasp, clasp_id)
 
 @Jewell_bp.route("/water_resistances", methods=["GET"])
-def list_water_resistances(): 
-    return _list_all(WaterResistance)
+def wr_list(): return list_catalog(WaterResistance, request.args.get("include")=="jewells")
+
+@Jewell_bp.route("/water_resistances/<int:wr_id>", methods=["GET"])
+def wr_get(wr_id:int): return get_catalog(WaterResistance, wr_id)
 
 @Jewell_bp.route("/caja_types", methods=["GET"])
-def list_caja_types(): 
-    return _list_all(CajaType)
+def caja_list(): return list_catalog(CajaType, request.args.get("include")=="jewells")
+
+@Jewell_bp.route("/caja_types/<int:caja_id>", methods=["GET"])
+def caja_get(caja_id:int): return get_catalog(CajaType, caja_id)
 
 @Jewell_bp.route("/metals", methods=["GET"])
-def list_metals(): 
-    return _list_all(Metal)
+def metals_list(): return list_catalog(Metal, request.args.get("include")=="jewells")
+
+@Jewell_bp.route("/metals/<int:metal_id>", methods=["GET"])
+def metals_get(metal_id:int): return get_catalog(Metal, metal_id)
 
 @Jewell_bp.route("/gems", methods=["GET"])
-def list_gems(): 
-    return _list_all(Gem)
+def gems_list(): return list_catalog(Gem, request.args.get("include")=="jewells")
+
+@Jewell_bp.route("/gems/<int:gem_id>", methods=["GET"])
+def gems_get(gem_id:int): return get_catalog(Gem, gem_id)
 
 @Jewell_bp.route("/ring_types", methods=["GET"])
-def list_ring_types(): 
-    return _list_all(RingType)
+def ring_types_list(): return list_catalog(RingType, request.args.get("include")=="jewells")
+
+@Jewell_bp.route("/ring_types/<int:ring_type_id>", methods=["GET"])
+def ring_types_get(ring_type_id:int): return get_catalog(RingType, ring_type_id)
 
 @Jewell_bp.route("/earring_types", methods=["GET"])
-def list_earring_types(): 
-    return _list_all(EarringType)
+def earring_types_list(): return list_catalog(EarringType, request.args.get("include")=="jewells")
+
+@Jewell_bp.route("/earring_types/<int:earring_type_id>", methods=["GET"])
+def earring_types_get(earring_type_id:int): return get_catalog(EarringType, earring_type_id)
 
 @Jewell_bp.route("/bracelet_types", methods=["GET"])
-def list_bracelet_types(): 
-    return _list_all(BraceletType)
+def bracelet_types_list(): return list_catalog(BraceletType, request.args.get("include")=="jewells")
+
+@Jewell_bp.route("/bracelet_types/<int:bracelet_type_id>", methods=["GET"])
+def bracelet_types_get(bracelet_type_id:int): return get_catalog(BraceletType, bracelet_type_id)
 
 @Jewell_bp.route("/watch_types", methods=["GET"])
-def list_watch_types(): 
-    return _list_all(WatchType)
+def watch_types_list(): return list_catalog(WatchType, request.args.get("include")=="jewells")
+
+@Jewell_bp.route("/watch_types/<int:watch_type_id>", methods=["GET"])
+def watch_types_get(watch_type_id:int): return get_catalog(WatchType, watch_type_id)
 
 @Jewell_bp.route("/watch_bracelet_materials", methods=["GET"])
-def list_watch_bracelet_materials(): 
-    return _list_all(WatchBraceletMaterial)
+def wbm_list(): return list_catalog(WatchBraceletMaterial, request.args.get("include")=="jewells")
 
+@Jewell_bp.route("/watch_bracelet_materials/<int:wbm_id>", methods=["GET"])
+def wbm_get(wbm_id:int): return get_catalog(WatchBraceletMaterial, wbm_id)
