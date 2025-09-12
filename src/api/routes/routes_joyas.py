@@ -18,6 +18,7 @@ def json_error(message, status=400, **extra):
     return jsonify(response_payload), status
 
 
+
 CATALOGS_FIELD_TO_MODEL = {
     "category": Category,
     "coating": Coating,
