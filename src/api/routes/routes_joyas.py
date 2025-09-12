@@ -36,13 +36,11 @@ CATALOGS_FIELD_TO_MODEL = {
     "watch_bracelet_material": WatchBraceletMaterial,
 }
 
-
 def normalize_value(value):
     if value is None:
         return None
     text = str(value).strip()
     return text or None
-
 
 def upsert_catalogs_from_payload(request_payload: dict):
 
