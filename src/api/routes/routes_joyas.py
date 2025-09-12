@@ -77,6 +77,7 @@ def get_jewell(jewell_id: int):
     return jsonify({"ok": True, "item": jewell_entity.serialize()})
 
 
+
 @Jewell_bp.route("/jewells", methods=["POST"])
 def create_jewell():
     request_data = request.get_json(silent=True) or {}
@@ -89,7 +90,6 @@ def create_jewell():
         price_value = float(request_data["price"])
     except Exception:
         return json_error("'price' debe ser número")
-
     try:
         optional_catalog_values = {k: normalize_value(
             request_data.get(k)) for k in CATALOGS_FIELD_TO_MODEL.keys()}
