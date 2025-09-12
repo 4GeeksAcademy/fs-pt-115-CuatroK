@@ -68,6 +68,7 @@ export default function CalculadoraMetales() {
   const silverVal = fmt(gS * sFactor * pgSilver);
 
   return (
+
     <div className="container bg-dark mt-5 mb-5 py-4">
       <div className="row g-4">
         <div className="col-12">

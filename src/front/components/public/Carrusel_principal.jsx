@@ -1,20 +1,41 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import VariableProximity from "../effects/VariableProximity";
 
 export const Carrusel_principal = () => {
+    const containerRef = useRef(null);
+
     return (
         <>
-         
-            <div className="container-fluid w-100" style={{ backgroundColor: 'red' }}>
-                {/* //DIV DEL FONDO DEL CARRUSEL */}
+            <div className="container-fluid w-100" style={{ backgroundColor: 'brown' }}>
                 <div className="container py-4">
                     <div className="row align-items-center g-4">
-
-                        {/* // DIV DEL LADO IZQUIERDO CON EL LEMA DEL CARRUSEL  */}
-                        <div className="col-12 col-lg-4 text-white">
-                            <h3 className="mb-0">Sube la nota con 4K y deja que la luz haga su trabajo</h3>
+                        <div className="col-12 col-lg-4 text-white d-flex justify-content-center align-items-center">
+                            <div ref={containerRef} style={{ position: 'relative' }}>
+                                <h3 className="mb-0 text-center">
+                                    <VariableProximity
+                                        label="Sube la nota con 4K y deja que la luz haga"
+                                        className="display-6"
+                                        containerRef={containerRef}
+                                        radius={140}
+                                        falloff="linear"
+                                        fromFontVariationSettings='"wght" 400, "opsz" 12'
+                                        toFontVariationSettings='"wght" 900, "opsz" 36'
+                                    />
+                                </h3>
+                                 <h3 className="mb-0 text-center">
+                                    <VariableProximity
+                                        label="su trabajo"
+                                        className="display-6"
+                                        containerRef={containerRef}
+                                        radius={140}
+                                        falloff="linear"
+                                        fromFontVariationSettings='"wght" 400, "opsz" 12'
+                                        toFontVariationSettings='"wght" 900, "opsz" 36'
+                                    />
+                                </h3>
+                            </div>
                         </div>
 
-                        {/* //div del carrusel */}
                         <div className="col-12 col-lg-4">
                             <div id="myCarousel1" className="carousel slide" data-bs-ride="carousel">
                                 <div className="carousel-indicators">
@@ -26,7 +47,7 @@ export const Carrusel_principal = () => {
                                 <div className="carousel-inner rounded-3 overflow-hidden">
                                     <div className="carousel-item">
                                         <img
-                                            src="https://joyeriafinarte.com/wp-content/uploads/2023/11/Compra-y-Venta-Oro-Joyas-Madrid-Finarte.jpg"
+                                            src="https://cdn.shopify.com/s/files/1/0057/6657/8279/files/blog_tiles.jpg?v=1709775420"
                                             className="d-block w-100"
                                             alt="Slide 1"
                                             style={{ height: '220px', objectFit: 'cover' }}
@@ -35,7 +56,7 @@ export const Carrusel_principal = () => {
 
                                     <div className="carousel-item active">
                                         <img
-                                            src="https://i.ytimg.com/vi/qMbpSGzEE98/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-HYAC8BCKAgwIABABGEogSChlMA8=&rs=AOn4CLDL8jR23utYw9u_WLBexEUYTEAMgg"
+                                            src="https://www.juvetti.com/cdn/shop/collections/14K_Gold_Jewellery_UK_45a347ef-dcaa-44a1-a9e6-92843fc73b98.jpg?v=1744057124&width=2048"
                                             className="d-block w-100"
                                             alt="Slide 2"
                                             style={{ height: '220px', objectFit: 'cover' }}
@@ -44,7 +65,7 @@ export const Carrusel_principal = () => {
 
                                     <div className="carousel-item">
                                         <img
-                                            src="https://s3.abcstatics.com/Media/201301/09/jo-yas-oro--478x270.jpg"
+                                            src="https://i0.wp.com/roshanshahjewellers.com/wp-content/uploads/2024/06/il_fullxfull.2863886434_f4u2.jpg?resize=1024%2C684&ssl=1"
                                             className="d-block w-100"
                                             alt="Slide 3"
                                             style={{ height: '220px', objectFit: 'cover' }}
@@ -74,7 +95,7 @@ export const Carrusel_principal = () => {
                                 <div className="carousel-inner rounded-3 overflow-hidden">
                                     <div className="carousel-item">
                                         <img
-                                            src="https://s3.abcstatics.com/Media/201301/09/jo-yas-oro--478x270.jpg"
+                                            src="https://cdn.alromaizan.com/image/upload/f_webp,q_100/media/blog/what-makes-a-jewellery-exhibition-a-unique-experience.webp"
                                             className="d-block w-100"
                                             alt="Slide 1"
                                             style={{ height: '220px', objectFit: 'cover' }}
@@ -110,7 +131,6 @@ export const Carrusel_principal = () => {
                                 </button>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
