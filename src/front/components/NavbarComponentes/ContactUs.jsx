@@ -16,6 +16,7 @@ export const ContactUs = () => {
                 <li className="nav-item pt-4">
                     <Link className="nav-link fs-5" 
                     style={{color: "#5C3D2E"}}
+                    to="gallery"
                     >Galeria
                     </Link>
                 </li>

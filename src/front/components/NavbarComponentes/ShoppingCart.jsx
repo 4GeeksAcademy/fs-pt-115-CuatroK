@@ -1,6 +1,6 @@
 export const ShoppingCart = () => {
     return (
-        <div>
+        <div className="mt-2">
 
             <button
                 className="btn btn-outline-dark"

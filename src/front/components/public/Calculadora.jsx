@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getDailyMetals } from "../../services/metalApi";
+import { getDailyMetal } from "../../services/metalApi2.0";
 
 const KILATES = { "24k": 1.0, "22k": 0.9167, "18k": 0.75, "14k": 0.585 };
 const PORCENTAJE = { 999: 0.999, 950: 0.95, 925: 0.925, 900: 0.9 };
@@ -37,7 +37,7 @@ export default function CalculadoraMetales() {
   const load = async (force = false) => {
     setState((s) => ({ ...s, loading: true, error: "" }));
     try {
-      const { gold, silver } = await getDailyMetals({ force });
+      const { gold, silver } = await getDailyMetal({ force });
       setState({ loading: false, error: "", gold, silver });
     } catch (e) {
       setState({

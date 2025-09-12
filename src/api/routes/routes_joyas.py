@@ -1,7 +1,13 @@
+
 from flask import Blueprint, request, jsonify, abort
 from sqlalchemy import func
+
+
+from api.extentions import db
+from sqlalchemy.exc import IntegrityError
+
 from sqlalchemy.orm import selectinload
-from api.model_config import db
+
 from api.models.models_joyas import (
     Jewell,
     Category, Coating, Brand, Gender, Clasp, WaterResistance,
