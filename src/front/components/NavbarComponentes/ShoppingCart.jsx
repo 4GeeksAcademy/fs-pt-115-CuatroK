@@ -37,9 +37,9 @@ export const ShoppingCart = () => {
                         <p>Producto 1 - €19.99</p>
                         <p>Producto 2 - €9.99</p>
                     </div>
-                    
+                    <Link to="payment">
                     <button className="btn btn-warning w-100">Finalizar compra</button>
-                    
+                    </Link>
                 </div>
             </div>
         </div>
