@@ -1,3 +1,5 @@
+
+
 export async function getDailyMetals({ force = false } = {}) {
   if (!API_KEY) throw new Error("Falta VITE_METALS_KEY en .env");
   const goldCached = readDaily("gold");

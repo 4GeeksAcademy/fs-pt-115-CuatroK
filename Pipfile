@@ -23,6 +23,8 @@ stripe = "*"
 python-dotenv = "*"
 flask-cors = "*"
 flask-mail = "*"
+flask-mail = "*"
+alembic = "*"
 
 [requires]
 python_version = "3.13"
