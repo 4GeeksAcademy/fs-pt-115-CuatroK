@@ -22,6 +22,11 @@ import CalculadoraMetales from "./components/public/Calculadora";
 import { ProfileLayout } from "./layout/Profile.layout";
 import { Profile } from "./pages/admin/Profile";
 import { Gallery } from "./components/NavbarComponentes/Gallery";
+import { Payment } from "./pages/admin/Payment";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 
 export const router = createBrowserRouter(
@@ -36,20 +41,27 @@ export const router = createBrowserRouter(
 
       <Route element={<ProfileLayout />}>
         <Route path="user" element={<Profile />} />
-
+        <Route
+          path="payment"
+          element={
+            <Elements stripe={stripePromise}>
+              <Payment />
+            </Elements>
+          }
+        />
       </Route>
 
 
       <Route path="products" element={<Products />} />
       <Route path="contact" element={<ContactUs />} />
       <Route path="about" element={<AboutUs />} />
-      
+
 
 
       <Route path="user/createAccount" element={<CreateAccount />} />
       <Route path="login" element={<Login />} />
 
-      <Route path="calculadora" element={<CalculadoraMetales />} /> 
+      <Route path="calculadora" element={<CalculadoraMetales />} />
 
 
 

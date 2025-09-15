@@ -47,7 +47,7 @@ export const Gallery = () => {
 
 
     return (
-        <div className="container page-background-color">
+        <div className="container-fliud page-background-color">
             <div className="row">
                 <div className="col-md-12 d-flex flex-column align-items-center">
                     <img src="https://i.pinimg.com/736x/87/66/02/876602ad3dd4a0b612d5086c4daf2a7f.jpg" alt="El alfa"
