@@ -18,7 +18,7 @@ export const Navbar = () => {
 
           
           <button
-            className="navbar-toggler d-lg-none"
+            className="navbar-toggler d-lg-none mb-3"
             type="button"
             onClick={() => setMenuAbierto(!menuAbierto)}
             aria-label="Toggle navigation"

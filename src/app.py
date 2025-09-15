@@ -12,6 +12,8 @@ from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
+import stripe
 
 
 # from models import Person
@@ -19,12 +21,16 @@ from flask_jwt_extended import JWTManager
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../dist/')
+
+
 app = Flask(__name__)
+# CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 
 CORS(app, origins="https://musical-robot-g44jp7xjvrwj299vr-3000.app.github.dev",
      supports_credentials=True)
 app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
 jwt = JWTManager(app)
+
 
 app.url_map.strict_slashes = False
 
