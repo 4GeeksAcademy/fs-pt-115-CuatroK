@@ -5,6 +5,7 @@ import { Address } from "./datosPersonalesComponents/Address"
 import { AddressModal } from "./datosPersonalesComponents/AddressModal"
 import { button } from "framer-motion/client"
 import { Button } from "bootstrap"
+import { Link } from "react-router-dom"
 
 export const DatosPersonales = ({ user, setUserName, getUserApi }) => {
     const [userInfo, setUserInfo] = useState({
@@ -184,9 +185,18 @@ export const DatosPersonales = ({ user, setUserName, getUserApi }) => {
                     </div>
                     <div className="col-6 ms-auto">
                         <h3>Contraseña</h3>
-                        <div class="input-group input-group-sm mb-3">
-                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled value={"************"} />
                         </div>
+                        <Link to={"/reset-password"}>
+                            <small
+                                className="text-primary"
+                                style={{ cursor: "pointer" }}
+
+                            >
+                                ¿Quieres cambiar tu contraseña?
+                            </small>
+                        </Link>
                     </div>
                 </div>
                 {

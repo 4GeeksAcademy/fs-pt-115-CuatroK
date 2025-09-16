@@ -26,7 +26,7 @@ static_file_dir = os.path.join(os.path.dirname(
 app = Flask(__name__)
 # CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 
-CORS(app, origins="https://musical-robot-g44jp7xjvrwj299vr-3000.app.github.dev",
+CORS(app, origins=os.getenv("VITE_BACKEND_URL"),
      supports_credentials=True)
 app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
 jwt = JWTManager(app)

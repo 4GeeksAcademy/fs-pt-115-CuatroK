@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import { getUser } from "../services/serviceApi";
 
 const AuthContext = createContext();
 
@@ -66,6 +67,16 @@ export const AuthProvider = ({ children }) => {
         setToken(null)
         setUser(null)
     }
+
+    const getUserApi = async () => {
+        const data = await getUser()
+        setUser(data)
+    }
+    useEffect(() => {
+        if (token) {
+            getUserApi()
+        }
+    }, [token])
 
     return (
         <AuthContext.Provider value={{ user, error, setError, loading, token, registerUser, loginUser, logoutUser }}>

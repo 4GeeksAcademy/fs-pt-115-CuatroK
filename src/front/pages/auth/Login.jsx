@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import "../../../index.css"
-import { useAuth } from "../../../hooks/useAuth"
+import "../../index.css"
+import { useAuth } from "../../hooks/useAuth"
 
 export const Login = () => {
     const { loginUser, loading, error, setError } = useAuth()
@@ -23,7 +23,7 @@ export const Login = () => {
         e.preventDefault()
         loginUser(inputValue, navigate)
         console.log(inputValue)
-        
+
     }
 
     useEffect(() => {
@@ -49,7 +49,7 @@ export const Login = () => {
                     <div className="col-md-4">
                         <form onSubmit={handleOnSubmit}>
                             <div className="mb-3">
-                                <label htmlFor="email" className="form-label">Correo Electrinico</label>
+                                <label htmlFor="email" className="form-label">Correo Electronico</label>
                                 <input type="email" className={`form-control ${!inputValue.email && error ? "input-data-missing" : ""}`} id="email" aria-describedby="emailHelp" name="email" value={inputValue.email} onChange={handleOnChange} />
                                 <div id="emailHelp" className="form-text">Nunca compartiremos tu correo electrónico con nadie más.</div>
                             </div>
