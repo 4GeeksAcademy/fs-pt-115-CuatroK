@@ -22,11 +22,8 @@ flask-bcrypt = "*"
 stripe = "*"
 python-dotenv = "*"
 flask-cors = "*"
-<<<<<<< HEAD
-=======
 flask-mail = "*"
 flask-mail = "*"
->>>>>>> b4d27db6413636005bec7673dcc28f6de0b5aaa2
 alembic = "*"
 flask-mail = "*"
 
