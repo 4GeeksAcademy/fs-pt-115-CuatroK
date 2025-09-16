@@ -58,16 +58,10 @@
     "@fortawesome/fontawesome-svg-core": "^7.0.1",
     "@fortawesome/free-solid-svg-icons": "^7.0.1",
     "@fortawesome/react-fontawesome": "^3.0.2",
-<<<<<<< HEAD
-    "bootstrap": "^5.3.8",
-    "date-fns": "^4.1.0",
-    "framer-motion": "^12.23.12",
-=======
     "bootstrap": "5.3.8",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.12",
     "gsap": "^3.13.0",
->>>>>>> b4d27db6413636005bec7673dcc28f6de0b5aaa2
     "motion": "^12.23.12",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
