@@ -1,0 +1,10 @@
+.icon-hover {
+  font-size: 28px; /* tamaño normal */
+  cursor: pointer; /* cambia el cursor a "mano" */
+  transition: transform 0.2s ease; /* animación suave */
+}
+
+.icon-hover:hover {
+  transform: scale(1.3); /* lo agranda al pasar el mouse */
+  color: #0d6efd; /* opcional: cambia de color (Bootstrap primary) */
+}
