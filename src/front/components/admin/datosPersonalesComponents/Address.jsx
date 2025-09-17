@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { deleteAddress, updateAddressData } from "../../../services/serviceApi"
 import DeleteButton from "./DeleteButton"
 
-import { DeleteText } from "../../animated/DeleteText";
+import { DeleteText } from "../../effects/DeleteText";
 
 export const Address = ({ id, user, getUserApi }) => {
     const [addressInfo, setAddressInfo] = useState({

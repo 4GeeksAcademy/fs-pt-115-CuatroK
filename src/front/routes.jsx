@@ -12,8 +12,8 @@ import { Demo } from "./pages/Demo";
 import { Products } from "./components/NavbarComponentes/Products";
 import { ContactUs } from "./components/NavbarComponentes/ContactUs";
 import { AboutUs } from "./components/NavbarComponentes/AboutUs";
-import { CreateAccount } from "./components/NavbarComponentes/User/CreateAccount";
-import { Login } from "./components/NavbarComponentes/User/Login";
+import { CreateAccount } from "./pages/auth/CreateAccount";
+import { Login } from "./pages/auth/Login";
 
 import { RootLayout } from "./layout/Root.layout";
 import { PublicLayout } from "./layout/Public.layout";
@@ -24,6 +24,9 @@ import { Gallery } from "./components/NavbarComponentes/Gallery";
 import { Payment } from "./pages/admin/Payment";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { ResetPassword } from "./pages/auth/ResetPassword";
+import { ProccessToResetPassword } from "./pages/admin/ProcessToResetPassword";
+import { ForgotPassword } from "./pages/auth/ForgotPassword";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
@@ -49,21 +52,20 @@ export const router = createBrowserRouter(
             </Elements>
           }
         />
+        <Route path="reset-password" element={<ProccessToResetPassword />} />
       </Route>
+      <Route path="forgot-password" element={<ForgotPassword />} />
 
+      <Route path="reset-password-form" element={<ResetPassword />} />
 
       <Route path="products" element={<Products />} />
       <Route path="contact" element={<ContactUs />} />
       <Route path="about" element={<AboutUs />} />
 
-
-
       <Route path="user/createAccount" element={<CreateAccount />} />
-      <Route path="login" element={<Login />} />
+      <Route path="user/createAccount" element={<Login />} />
 
      
-
-
 
       <Route path="*" element={<h1>404</h1>} />
     </Route>
