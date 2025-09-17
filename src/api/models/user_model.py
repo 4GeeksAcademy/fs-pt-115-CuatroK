@@ -1,9 +1,16 @@
 from typing import List, Optional
 from . import db
-from sqlalchemy import String, Boolean, ForeignKey, Date
+from sqlalchemy import String, Boolean, ForeignKey, Date, Table, Column, Integer
 from datetime import date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from flask_bcrypt import generate_password_hash, check_password_hash
+
+favorites = Table(
+    "favorites",
+    db.metadata,
+    Column("user_id", Integer, ForeignKey("user.id"), primary_key=True),
+    Column("jewell_id", Integer, ForeignKey("jewells.id"), primary_key=True),
+)
 
 
 class User(db.Model):
@@ -23,6 +30,13 @@ class User(db.Model):
 
     address: Mapped[List["UserDirection"]] = relationship(
         "UserDirection", back_populates="user", cascade="all, delete-orphan")
+    sales = relationship("Sale", back_populates="user",
+                         cascade="all, delete-orphan")
+    favorites = relationship(
+        "Jewell",
+        secondary="favorites",
+        backref="favorited_by"
+    )
 
     def set_password(self, password):
         self.password = generate_password_hash(password).decode('UTF-8')
@@ -39,7 +53,8 @@ class User(db.Model):
             "gender": self.gender,
             "birth_date": self.birth_date.isoformat() if self.birth_date else None,
             "full_name": self.full_name,
-            "is_admin": self.is_admin
+            "is_admin": self.is_admin,
+            "favorites": [favorite.serialize() for favorite in self.favorites] if self.favorites else []
             # do not serialize the password, its a security breach
         }
 

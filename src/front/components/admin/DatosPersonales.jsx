@@ -64,22 +64,19 @@ export const DatosPersonales = ({ user, setUserName, getUserApi }) => {
         const { name, value } = e.target;
         let updatedUser = { ...userInfo, [name]: value };
 
-        // Si cambió día, mes o año → reconstruir birth_date
         if (["day", "month", "year"].includes(name)) {
             const { day, month, year } = updatedUser;
 
-            // Si todos los campos están completos, crear birth_date
             if (day && month && year) {
                 updatedUser.birth_date = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
                 setDataMissingError(false);
-                SendDataUpdated(updatedUser);  // Solo enviamos si está completo
+                SendDataUpdated(updatedUser);
             } else {
-                updatedUser.birth_date = "";  // placeholder temporal
-                setDataMissingError(true);      // mostrar error visual
+                updatedUser.birth_date = "";
+                setDataMissingError(true);
             }
         }
 
-        // Actualizamos siempre el estado local
         setUserInfo(updatedUser);
     }
 
