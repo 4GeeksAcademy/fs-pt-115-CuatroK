@@ -103,6 +103,7 @@ def create_jewell():
             description=normalize_value(request_data["description"]),
             price=price_value,
             url_image=normalize_value(request_data.get("url_image")),
+            quantity =normalize_value(request_data.get("quantity")),
             **optional_catalog_values,
         )
         db.session.add(jewell_entity)
