@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react"
 import { Link, Navigate, useNavigate } from "react-router-dom"
-import { useAuth } from "../../../hooks/useAuth"
-import "../../../index.css"
+import { useAuth } from "../../hooks/useAuth"
+import "../../index.css"
 
 export const CreateAccount = () => {
     const { registerUser, loading, error, setError } = useAuth()
     const [inputValue, setInputValue] = useState({
         username: "",
         email: "",
-        password: ""
+        password: "",
+        confPassword: ""
     });
     const navigate = useNavigate()
 
@@ -29,7 +30,7 @@ export const CreateAccount = () => {
         setError("")
     }, [])
 
-    console.log(error)
+    console.log(inputValue)
 
     return (
         <div className="container products-card">
@@ -63,7 +64,7 @@ export const CreateAccount = () => {
                         </div>
 
                         <div className="mb-3">
-                            <label htmlFor="email" className="form-label">Email</label>
+                            <label htmlFor="email" className="form-label">Correo electronico</label>
                             <input
                                 type="email"
                                 className={`form-control ${!inputValue.email && error ? "input-data-missing" : ""}`}
@@ -84,6 +85,27 @@ export const CreateAccount = () => {
                                 value={inputValue.password}
                                 onChange={handleOnChange}
                             />
+
+                        </div>
+
+                        <div className="mb-3">
+                            <label htmlFor="confPassword" className="form-label">Confirmar contraseña</label>
+                            <input
+                                type="password"
+                                className={`form-control ${!inputValue.confPassword && error ? "input-data-missing" : ""}`}
+                                id="confPassword"
+                                name="confPassword"
+                                value={inputValue.confPassword}
+                                onChange={handleOnChange}
+                            />
+                            <div className="text-center mt-2">
+                                <Link to="/forgot-password">
+                                    <small className="text-primary" style={{ cursor: "pointer" }}>
+                                        ¿Has olvidado tu contraseña?
+                                    </small>
+                                </Link>
+                            </div>
+
                         </div>
 
                         {error &&
@@ -92,7 +114,12 @@ export const CreateAccount = () => {
                             </div>
                         }
 
-                        <button type="submit" className="btn btn-primary">{loading ? "Cargando..." : "Registrarse"}</button>
+                        <div className="text-center">
+                            <button type="submit" className="btn btn-primary">
+                                {loading ? "Cargando..." : "Registrarse"}
+                            </button>
+                        </div>
+
                     </form>
                 </div>
             </div>

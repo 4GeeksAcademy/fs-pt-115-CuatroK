@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Style_Catalogo.css"; // estilos muy sencillos
+import "./Style_Catalogo.css"; 
 
 
 const DATA = [
@@ -41,7 +41,7 @@ const DATA = [
   },
 ];
 
-// Formatear euros (opcional, para que se vea bonito)
+
 const EUR = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" });
 
 function ProductCard({ item, favs, setFavs }) {
@@ -64,17 +64,17 @@ function ProductCard({ item, favs, setFavs }) {
           <span className="badge bg-danger badge-corner end-0">-{item.descuento}%</span>
         )}
 
-        {/* Imagen cuadrada */}
+        
         <div className="ratio ratio-1x1 bg-white">
           <img src={item.imagen} alt={item.titulo} className="p-3 img-fluid object-fit-contain" />
         </div>
 
-        {/* Botón corazoncito (muy simple) */}
+        
         <button type="button" className="btn btn-light btn-like" onClick={toggleFav} title="Favorito">
           {esFavorito ? "♥" : "♡"}
         </button>
 
-        {/* Texto: título + precios */}
+        
         <div className="card-body">
           <div className="small text-muted">Pulseras</div>
           <div className="card-title fw-semibold title-2lines">{item.titulo}</div>
@@ -94,13 +94,13 @@ function ProductCard({ item, favs, setFavs }) {
 }
 
 export default function Catalogo() {
-  // Estados sencillos para filtros
+  
   const [busqueda, setBusqueda] = useState("");
   const [orden, setOrden] = useState("relevancia");
   const [soloNuevos, setSoloNuevos] = useState(false);
   const [favoritos, setFavoritos] = useState([]); // ids
 
-  // Filtrar y ordenar de forma directa (mantenerlo simple)
+  
   let lista = DATA.filter((p) =>
     p.titulo.toLowerCase().includes(busqueda.toLowerCase())
   );
@@ -111,7 +111,6 @@ export default function Catalogo() {
 
   return (
     <div className="container py-4">
-      {/* Header + filtros (muy básico) */}
       <div className="d-flex flex-column flex-md-row gap-3 align-items-md-end justify-content-between mb-3">
         <div>
           <h2 className="mb-1">Catálogo (versión estudiante)</h2>
@@ -152,7 +151,7 @@ export default function Catalogo() {
         </div>
       </div>
 
-      {/* Grid de productos */}
+      
       <div className="row">
         {lista.map((item) => (
           <ProductCard key={item.id} item={item} favs={favoritos} setFavs={setFavoritos} />

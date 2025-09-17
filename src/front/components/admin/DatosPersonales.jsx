@@ -5,6 +5,7 @@ import { Address } from "./datosPersonalesComponents/Address"
 import { AddressModal } from "./datosPersonalesComponents/AddressModal"
 import { button } from "framer-motion/client"
 import { Button } from "bootstrap"
+import { Link } from "react-router-dom"
 
 export const DatosPersonales = ({ user, setUserName, getUserApi }) => {
     const [userInfo, setUserInfo] = useState({
@@ -63,22 +64,19 @@ export const DatosPersonales = ({ user, setUserName, getUserApi }) => {
         const { name, value } = e.target;
         let updatedUser = { ...userInfo, [name]: value };
 
-        // Si cambió día, mes o año → reconstruir birth_date
         if (["day", "month", "year"].includes(name)) {
             const { day, month, year } = updatedUser;
 
-            // Si todos los campos están completos, crear birth_date
             if (day && month && year) {
                 updatedUser.birth_date = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
                 setDataMissingError(false);
-                SendDataUpdated(updatedUser);  // Solo enviamos si está completo
+                SendDataUpdated(updatedUser);
             } else {
-                updatedUser.birth_date = "";  // placeholder temporal
-                setDataMissingError(true);      // mostrar error visual
+                updatedUser.birth_date = "";
+                setDataMissingError(true);
             }
         }
 
-        // Actualizamos siempre el estado local
         setUserInfo(updatedUser);
     }
 
@@ -184,9 +182,18 @@ export const DatosPersonales = ({ user, setUserName, getUserApi }) => {
                     </div>
                     <div className="col-6 ms-auto">
                         <h3>Contraseña</h3>
-                        <div class="input-group input-group-sm mb-3">
-                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled value={"************"} />
                         </div>
+                        <Link to={"/reset-password"}>
+                            <small
+                                className="text-primary"
+                                style={{ cursor: "pointer" }}
+
+                            >
+                                ¿Quieres cambiar tu contraseña?
+                            </small>
+                        </Link>
                     </div>
                 </div>
                 {

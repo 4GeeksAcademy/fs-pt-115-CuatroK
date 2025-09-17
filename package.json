@@ -58,8 +58,14 @@
     "@fortawesome/fontawesome-svg-core": "^7.0.1",
     "@fortawesome/free-solid-svg-icons": "^7.0.1",
     "@fortawesome/react-fontawesome": "^3.0.2",
+<<<<<<< HEAD
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
+=======
+    "@stripe/react-stripe-js": "^4.0.2",
+    "@stripe/stripe-js": "^7.9.0",
+    "bootstrap": "5.3.8",
+>>>>>>> 6e766cc9d7d9184d012c2e59ea88f7b600f95353
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.12",
     "gsap": "^3.13.0",

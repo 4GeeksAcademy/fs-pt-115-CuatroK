@@ -1,11 +1,10 @@
-from flask import Flask, request, jsonify, Blueprint, render_template
+from flask import Flask, request, jsonify, Blueprint, render_template, url_for
 from flask_cors import CORS
 from api.models.user_model import User, UserDirection
 from api.extentions import db, mail
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt
 from flask_mail import Message
-from datetime import date
-
+from datetime import date, timedelta
 
 user_bp = Blueprint('user_bp', __name__,
                     url_prefix="/user/client", template_folder="../templates")
@@ -17,7 +16,7 @@ CORS(user_bp)
 def create_user():
     data = request.get_json()
 
-    if not data.get("email") or not data.get("password") or not data.get("username"):
+    if not data.get("email") or not data.get("password") or not data.get("username") or not data.get("confPassword"):
         return jsonify({'msg': 'Faltan espacios por rellenar'}), 400
 
     user_exists = db.session.execute(db.select(User).where(
@@ -25,6 +24,9 @@ def create_user():
 
     if user_exists:
         return jsonify({'msg': 'Ya existe una cuenta con éste email'}), 400
+
+    if data.get("password") != data.get("confPassword"):
+        return jsonify({'msg': 'Contraseñas no coinciden'}), 400
 
     new_user = User(
         email=data.get("email"),
@@ -63,7 +65,8 @@ def login_user():
         return jsonify({'msg': 'No existe una cuenta con los datos otorgados'}), 400
 
     if user.check_password(data.get("password")):
-        token = create_access_token(str(user.id))
+        token = create_access_token(str(user.id),
+                                    additional_claims={"type": "access"})
         return jsonify({'msg': 'ok,', "token": token}), 200
 
     else:
@@ -114,6 +117,9 @@ def convert_client_to_admin():
 @user_bp.route("/address", methods=["POST"])
 @jwt_required()
 def create_address():
+    claims = get_jwt()
+    if claims.get("type") != "access":
+        return jsonify({"msg": "Token inválido para esta acción"}), 400
     data = request.get_json()
     user_id = get_jwt_identity()
     user = db.session.get(User, int(user_id))
@@ -154,6 +160,9 @@ def create_address():
 @user_bp.route("/address/<int:address_id>", methods=["PATCH"])
 @jwt_required()
 def update_address(address_id):
+    claims = get_jwt()
+    if claims.get("type") != "access":
+        return jsonify({"msg": "Token inválido para esta acción"}), 400
     data = request.get_json()
     user_id = get_jwt_identity()
     user = db.session.get(User, int(user_id))
@@ -191,6 +200,9 @@ def update_address(address_id):
 @user_bp.route("/user", methods=["PATCH"])
 @jwt_required()
 def upgrade_user_data():
+    claims = get_jwt()
+    if claims.get("type") != "access":
+        return jsonify({"msg": "Token inválido para esta acción"}), 400
     data = request.get_json()
 
     if not data:
@@ -202,7 +214,6 @@ def upgrade_user_data():
 
     keys_included = {"username", "gender", "birth_date", "full_name"}
 
-    print(data)
     keys_denied = set(data.keys()) - keys_included
     if keys_denied:
         return jsonify({'msg': 'invalid data'}), 400
@@ -219,6 +230,9 @@ def upgrade_user_data():
 @user_bp.route("/address/<int:address_id>", methods=["Delete"])
 @jwt_required()
 def delete_address(address_id):
+    claims = get_jwt()
+    if claims.get("type") != "access":
+        return jsonify({"msg": "Token inválido para esta acción"}), 400
     user_id = get_jwt_identity()
     user = db.session.get(User, int(user_id))
     current_address = user.address[address_id]
@@ -228,3 +242,57 @@ def delete_address(address_id):
     db.session.delete(current_address)
     db.session.commit()
     return jsonify({'msg': 'Dirección borrada', 'Dirección': current_address.serialize()}), 200
+
+
+@user_bp.route("/email-change-password", methods=["POST"])
+def email_change_password():
+    data = request.get_json()
+    email = data.get("email")
+    if not email:
+        return jsonify({'msg': 'Email no encontrado'}), 400
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        reset_token = create_access_token(
+            identity=str(user.id),
+            expires_delta=timedelta(minutes=15),
+            additional_claims={'type': "pw_reset"}
+        )
+        frontend_url = f'https://musical-robot-g44jp7xjvrwj299vr-3000.app.github.dev/reset-password-form?token={reset_token}'
+        body_message = render_template(
+            "email_change_password.html",
+            username=user.username,
+            reset_link=frontend_url
+        )
+        message = Message(
+            subject="Restablece tu contraseña — CuatroK",
+            recipients=[user.email],
+            html=body_message
+        )
+        mail.send(message)
+        return jsonify(msg='se ha enviado un correo con instrucciones'), 200
+
+    return jsonify(msg='Hubo un error al enviar el correo'), 200
+
+
+@user_bp.route("/reset-password", methods=["POST"])
+@jwt_required()
+def reset_password():
+    claims = get_jwt()
+    if claims.get("type") != "pw_reset":
+        return jsonify({"msg": "Token inválido para este propósito"}), 403
+
+    user_id = get_jwt_identity()
+    user = db.session.get(User, int(user_id))
+    if not user:
+        return jsonify({"msg": "Usuario no encontrado"}), 404
+
+    data = request.get_json()
+    new_password = data.get("password")
+    if not new_password:
+        return jsonify({"msg": "La contraseña es requerida"}), 400
+
+    user.set_password(new_password)  # tu función de hashing
+    db.session.commit()
+
+    return jsonify({"msg": "Contraseña actualizada exitosamente"}), 200
