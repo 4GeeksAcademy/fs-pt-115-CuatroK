@@ -1,7 +1,8 @@
 from typing import Optional, List
-from sqlalchemy import String, Numeric , Boolean
+from sqlalchemy import String, Numeric, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship, foreign
 from . import db
+
 
 class Jewell(db.Model):
     __tablename__ = "jewells"
@@ -27,8 +28,10 @@ class Jewell(db.Model):
     watch: Mapped[Optional[str]] = mapped_column(String(30))
     watch_bracelet_material: Mapped[Optional[str]] = mapped_column(String(30))
     highlighted = mapped_column(Boolean, default=False)
-    quantity: Mapped [int] = mapped_column(nullable=False)
+    quantity: Mapped[int] = mapped_column(nullable=False)
 
+    sales = relationship("Sale", back_populates="jewell",
+                         cascade="all, delete-orphan")
     category_rel = relationship(
         "Category",
         primaryjoin=lambda: foreign(Jewell.category) == Category.name,

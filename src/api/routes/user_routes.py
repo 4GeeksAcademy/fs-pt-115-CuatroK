@@ -214,7 +214,6 @@ def upgrade_user_data():
 
     keys_included = {"username", "gender", "birth_date", "full_name"}
 
-    print(data)
     keys_denied = set(data.keys()) - keys_included
     if keys_denied:
         return jsonify({'msg': 'invalid data'}), 400
