@@ -34,6 +34,7 @@ export const router = createBrowserRouter(
       <Route element={<PublicLayout />}>
         <Route index element={<Home />} />
         <Route path="demo" element={<Demo />} />
+        <Route path="calculadora" element={<CalculadoraMetales />} />
         <Route path="gallery" element={<Gallery />} />
       </Route>
       <Route path="single/:theId" element={<Single />} />
@@ -60,7 +61,7 @@ export const router = createBrowserRouter(
       <Route path="user/createAccount" element={<CreateAccount />} />
       <Route path="login" element={<Login />} />
 
-      <Route path="calculadora" element={<CalculadoraMetales />} />
+     
 
 
 
