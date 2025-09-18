@@ -30,8 +30,9 @@ class Jewell(db.Model):
     highlighted = mapped_column(Boolean, default=False)
     quantity: Mapped[int] = mapped_column(nullable=False)
 
-    sales = relationship("Sale", back_populates="jewell",
-                         cascade="all, delete-orphan")
+    cart_items = relationship(
+        "ShoppingCart", back_populates="jewell")
+
     category_rel = relationship(
         "Category",
         primaryjoin=lambda: foreign(Jewell.category) == Category.name,

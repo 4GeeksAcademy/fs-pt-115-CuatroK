@@ -27,6 +27,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { ResetPassword } from "./pages/auth/ResetPassword";
 import { ProccessToResetPassword } from "./pages/admin/ProcessToResetPassword";
 import { ForgotPassword } from "./pages/auth/ForgotPassword";
+import { AuthLayout } from "./layout/Auth.layout";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
@@ -36,11 +37,14 @@ export const router = createBrowserRouter(
     <Route element={<RootLayout />} errorElement={<h1>Not found!</h1>}>
       <Route element={<PublicLayout />}>
         <Route index element={<Home />} />
+        <Route path="products" element={<Products />} />
+        <Route path="contact" element={<ContactUs />} />
+        <Route path="about" element={<AboutUs />} />
         <Route path="demo" element={<Demo />} />
         <Route path="calculadora" element={<CalculadoraMetales />} />
         <Route path="gallery" element={<Gallery />} />
+        <Route path="*" element={<h1>404</h1>} />
       </Route>
-      <Route path="single/:theId" element={<Single />} />
 
       <Route element={<ProfileLayout />}>
         <Route path="user" element={<Profile />} />
@@ -53,21 +57,17 @@ export const router = createBrowserRouter(
           }
         />
         <Route path="reset-password" element={<ProccessToResetPassword />} />
+        <Route path="reset-password-form" element={<ResetPassword />} />
       </Route>
-      <Route path="forgot-password" element={<ForgotPassword />} />
 
-      <Route path="reset-password-form" element={<ResetPassword />} />
+      <Route element={<AuthLayout></AuthLayout>} >
 
-      <Route path="products" element={<Products />} />
-      <Route path="contact" element={<ContactUs />} />
-      <Route path="about" element={<AboutUs />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="register" element={<CreateAccount />} />
+        <Route path="login" element={<Login />} />
 
-      <Route path="user/createAccount" element={<CreateAccount />} />
-      <Route path="user/createAccount" element={<Login />} />
+      </Route>
 
-     
-
-      <Route path="*" element={<h1>404</h1>} />
     </Route>
   )
 );

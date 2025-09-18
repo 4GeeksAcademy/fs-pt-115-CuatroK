@@ -8,23 +8,45 @@ class Sale(db.Model):
     __tablename__ = "sales"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
-    jewell_id: Mapped[int] = mapped_column(
-        ForeignKey("jewells.id"), nullable=False)
-
-    quantity: Mapped[int] = mapped_column(default=1, nullable=False)
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("user.id"), nullable=False)
+    discount_id: Mapped[int] = mapped_column(
+        ForeignKey("discount.id"), nullable=True)
+    total: Mapped[int] = mapped_column(nullable=False)
     date: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
-    user = relationship("User", back_populates="sales")
-    jewell = relationship("Jewell", back_populates="sales")
+    user = relationship("User")
+    discount = relationship("Discount")
+    items = relationship("SaleItem", back_populates="sale",
+                         cascade="all, delete-orphan")
 
     def serialize(self):
         return {
             "id": self.id,
             "user_id": self.user_id,
-            "jewell_id": self.jewell_id,
-            "quantity": self.quantity,
+            "discount": self.discount.serialize() if self.discount else None,
+            "total": self.total,
             "date": self.date.isoformat(),
-            "user": self.user.serialize() if self.user else None,
+            "items": [item.serialize() for item in self.items]
+        }
+
+
+class SaleItem(db.Model):
+    __tablename__ = "sale_items"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    sale_id: Mapped[int] = mapped_column(
+        ForeignKey("sales.id"), nullable=False)
+    jewell_id: Mapped[int] = mapped_column(
+        ForeignKey("jewells.id"), nullable=False)
+    quantity: Mapped[int] = mapped_column(nullable=False)
+
+    sale = relationship("Sale", back_populates="items")
+    jewell = relationship("Jewell")
+
+    def serialize(self):
+        return {
+            "id": self.id,
             "jewell": self.jewell.serialize() if self.jewell else None,
+            "quantity": self.quantity
         }
