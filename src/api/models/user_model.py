@@ -30,8 +30,7 @@ class User(db.Model):
 
     address: Mapped[List["UserDirection"]] = relationship(
         "UserDirection", back_populates="user", cascade="all, delete-orphan")
-    sales = relationship("Sale", back_populates="user",
-                         cascade="all, delete-orphan")
+    cart_items = relationship("ShoppingCart")
     favorites = relationship(
         "Jewell",
         secondary="favorites",

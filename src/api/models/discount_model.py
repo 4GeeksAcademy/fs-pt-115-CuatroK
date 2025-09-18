@@ -4,6 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class Discount(db.Model):
+    __tablename__ = "discount"
     id: Mapped[int] = mapped_column(primary_key=True)
     discount_code: Mapped[str] = mapped_column(String(10), nullable=False)
     total: Mapped[int] = mapped_column(nullable=False)
