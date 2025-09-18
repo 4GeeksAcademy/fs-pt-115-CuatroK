@@ -4,6 +4,7 @@ import { getUser } from "../services/serviceApi";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+    const url = import.meta.env.VITE_BACKEND_URL + "/api";
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -13,7 +14,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         try {
             const response = await fetch(
-                "https://musical-robot-g44jp7xjvrwj299vr-3001.app.github.dev/api/user/client/register",
+                `${url}/user/client/register`,
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -39,7 +40,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(true)
         try {
             const response = await fetch(
-                "https://musical-robot-g44jp7xjvrwj299vr-3001.app.github.dev/api/user/client/login",
+                `${url}/user/client/login`,
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },

@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react"
-import { createAddress, updateAddressData, updateUserData } from "../../services/serviceApi"
+import { updateAddressData, updateUserData } from "../../services/serviceApi"
 import "../../index.css"
 import { Address } from "./datosPersonalesComponents/Address"
 import { AddressModal } from "./datosPersonalesComponents/AddressModal"
-import { button } from "framer-motion/client"
-import { Button } from "bootstrap"
 import { Link } from "react-router-dom"
 
 export const DatosPersonales = ({ user, setUserName, getUserApi }) => {
@@ -149,7 +147,7 @@ export const DatosPersonales = ({ user, setUserName, getUserApi }) => {
                             <select className={`form-control ${dataMissingError && !userInfo.day ? "input-data-missing" : ""}`} name="day" onChange={HandleBirthDate} value={userInfo.day ?? ""}>
                                 <option value="" disabled hidden>Día</option>
                                 {[...Array(31)].map((_, i) => {
-                                    const val = String(i + 1).padStart(2, "0"); // "01", "02", ..., "31"
+                                    const val = String(i + 1).padStart(2, "0");
                                     return <option key={val} value={val}>{i + 1}</option>;
                                 })}
                             </select>
@@ -158,14 +156,14 @@ export const DatosPersonales = ({ user, setUserName, getUserApi }) => {
                                 <option value="" disabled hidden>Mes</option>
                                 {["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
                                     .map((m, i) => {
-                                        const val = String(i + 1).padStart(2, "0"); // "01", "02", ..., "12"
+                                        const val = String(i + 1).padStart(2, "0");
                                         return <option key={val} value={val}>{m}</option>;
                                     })}
                             </select>
 
                             <select className={`form-control ${dataMissingError && !userInfo.year ? "input-data-missing" : ""}`} name="year" onChange={HandleBirthDate} value={userInfo.year ?? ""}>
                                 <option value="" disabled hidden>Año</option>
-                                {Array.from({ length: 100 }, (_, i) => String(new Date().getFullYear() - i)) // 👈 convertir a string
+                                {Array.from({ length: 100 }, (_, i) => String(new Date().getFullYear() - i))
                                     .map(y => (
                                         <option key={y} value={y}>{y}</option>
                                     ))}

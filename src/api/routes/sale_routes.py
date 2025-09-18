@@ -1,10 +1,11 @@
-from flask import Flask, Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify
 from flask_cors import CORS
-from api.models.sale_model import Sale
-from api.models.user_model import User
-from api.models.models_joyas import Jewell
-from api.extentions import db, mail
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt
+from api.models.sale_model import Sale, SaleItem
+from api.models.shopping_cart import ShoppingCart
+from api.models.discount_model import Discount
+from api.extentions import db
+from flask_jwt_extended import get_jwt_identity, jwt_required
+from datetime import datetime
 
 sale_bp = Blueprint('sale_bp', __name__,
                     url_prefix="/sale", template_folder="../templates")
@@ -12,39 +13,52 @@ sale_bp = Blueprint('sale_bp', __name__,
 CORS(sale_bp)
 
 
+def apply_discount(discount_code):
+    if not discount_code:
+        return None
+    discount = Discount.query.filter_by(
+        discount_code=discount_code, active=True).first()
+    if discount and discount.start_date <= datetime.utcnow() <= discount.expiration_date:
+        return discount
+    return None
+
+
 @sale_bp.route("/", methods=["POST"])
-def create_sale():
+@jwt_required()
+def create_sale_route():
+    user_id = get_jwt_identity()
+
+    cart_items = ShoppingCart.query.filter_by(user_id=user_id).all()
+    if not cart_items:
+        return jsonify({'msg': 'Tu carrito está vacío'}), 400
+
     data = request.get_json()
-    user = db.session.execute(db.select(User).where(
-        User.id == data.get("user"))).scalar_one_or_none()
-    if not user:
-        return jsonify({'msg': 'Hubo error en el usuario'}), 400
-    jewell = db.session.execute(db.select(Jewell).where(
-        Jewell.id == data.get("jewell"))).scalar_one_or_none()
-    if not jewell:
-        return jsonify({'msg': 'Hubo error en la joya'}), 400
-    quantity = data.get("quantity")
-    if not isinstance(quantity, int) or quantity <= 0:
-        return jsonify({'msg': 'Cantidad inválida'}), 400
+    discount_code = data.get("discount_code")
 
-    required_fields = {"user", "jewell", "quantity"}
+    discount = apply_discount(discount_code)
 
-    for field in required_fields:
-        if not data.get(field):
-            return jsonify({"msg": f"{field} es obligatorio"}), 400
+    total = sum(item.jewell.price * item.quantity for item in cart_items)
+    if discount:
+        total -= min(discount.total, total)
 
-    keys_denied = set(data.keys()) - required_fields
-    if keys_denied:
-        return jsonify({'msg': f'Campos inválidos: {list(keys_denied)}'}), 400
+    sale = Sale(user_id=user_id, discount=discount, total=total)
+    db.session.add(sale)
+    db.session.flush()
 
-    transaction = Sale(
-        user_id=user.id,
-        jewell_id=jewell.id,
-        quantity=quantity
-    )
-    db.session.add(transaction)
+    for item in cart_items:
+        sale_item = SaleItem(
+            sale_id=sale.id,
+            jewell_id=item.jewell_id,
+            quantity=item.quantity
+        )
+        db.session.add(sale_item)
+
+    for item in cart_items:
+        db.session.delete(item)
+
     db.session.commit()
-    return jsonify({'new_transaction': transaction.serialize()}), 201
+
+    return jsonify(sale.serialize()), 201
 
 
 @sale_bp.route("/", methods=["GET"])

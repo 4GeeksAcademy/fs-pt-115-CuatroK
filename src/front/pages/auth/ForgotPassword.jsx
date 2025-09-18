@@ -18,7 +18,7 @@ export const ForgotPassword = () => {
             <div className="card shadow p-4" style={{ maxWidth: "400px", width: "100%", position: "relative" }}>
 
                 {/* Botón arriba a la izquierda */}
-                <Link to="/user/createAccount" className="btn btn-link position-absolute top-0 start-0 mb-3 mt-2">
+                <Link to="/register" className="btn btn-link position-absolute top-0 start-0 mb-3 mt-2">
                     <i className="fa-regular fa-circle-left fa-2x text-black icon-hover"></i>
                 </Link>
 

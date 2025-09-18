@@ -39,7 +39,7 @@ export const Login = () => {
                         <h1>Iniciar Sesión</h1>
                     </div>
                     <div className="col-md-12 text-center">
-                        <h5>¿No te has creado una cuenta? <br /> <Link to="/user/createAccount">Registrate</Link></h5>
+                        <h5>¿No te has creado una cuenta? <br /> <Link to="/register">Registrate</Link></h5>
                     </div>
                 </div>
 
