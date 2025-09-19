@@ -314,7 +314,7 @@ products = [
             "name": "SmartWatch metal nylon",
             "price": 129.0,
             "ring_type": None,
-            "url_image": "https://i.pinimg.com/1200x/63/22/af/6322af0ab15a2bc811acd068e0d2bde6.jpg",
+            "url_image": "https://i.pinimg.com/736x/56/da/c8/56dac81dad15667931e6fd69719435ce.jpg",
             "watch": "SmartWatch",
             "watch_bracelet_material": "Nylon",
             "water_resistance": "3ATM",
