@@ -142,3 +142,17 @@ export const resetPassword = async (token, password) => {
     console.error(error);
   }
 };
+export const getJoyasSearch = async () => {
+  try {
+    const res = await fetch(`${url}/jewells`, {
+      method: "GET" 
+    })
+    const data = await res.json();
+    console.log(data);
+    
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
