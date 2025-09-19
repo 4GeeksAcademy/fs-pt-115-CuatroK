@@ -64,6 +64,7 @@ def delete_cart(cart_id):
 
 
 @shopping_cart_bp.route("/<int:item_id>/add", methods=["POST"])
+@jwt_required()
 def sum_item(item_id):
     cart_item = ShoppingCart.query.get(item_id)
     cart_item.add_quantity()
@@ -72,6 +73,7 @@ def sum_item(item_id):
 
 
 @shopping_cart_bp.route("/<int:item_id>/substract", methods=["POST"])
+@jwt_required()
 def remove_item(item_id):
     cart_item = ShoppingCart.query.get(item_id)
     cart_item.remove_quantity()
