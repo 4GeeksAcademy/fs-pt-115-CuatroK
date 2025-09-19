@@ -144,7 +144,7 @@ export const resetPassword = async (token, password) => {
 };
 export const getJoyasSearch = async () => {
   try {
-    const res = await fetch("https://urban-computing-machine-5gwj946rvqp2p44v-3001.app.github.dev/api/jewells", {
+    const res = await fetch(`${url}/jewells`, {
       method: "GET" 
     })
     const data = await res.json();
