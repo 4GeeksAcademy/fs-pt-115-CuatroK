@@ -10,7 +10,13 @@ export const ForgotPassword = () => {
     console.log(emailInput)
     const SendEmail = async (e) => {
         e.preventDefault()
-        await ChangePassword(emailInput, setAlert)
+        setAlert("")
+        if (emailInput.trim().length > 1) {
+            await ChangePassword(emailInput, setAlert)
+            return
+        }
+        setAlert(" ")
+
     }
 
     return (
@@ -29,12 +35,12 @@ export const ForgotPassword = () => {
                 <form onSubmit={SendEmail}>
                     <input type="email" className={`form-control ${!emailInput && alert ? "input-data-missing" : ""} mb-3`} placeholder="Email" onChange={e => setEmailInput(e.target.value)} />
                     {
-                        alert && emailInput &&
+                        alert.trim().length > 1 &&
                         <div className="alert alert-warning text-center" role="alert">
                             {alert}
                         </div>
                     }
-                    <button type="submit" className="btn btn-primary w-100">Enviar</button>
+                    <button type="submit" className="btn btn-warning w-100">Enviar</button>
                 </form>
             </div>
         </div>

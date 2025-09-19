@@ -23,7 +23,10 @@ export const CreateAccount = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await registerUser(inputValue, navigate)
+        if (inputValue.email.trim().length < 6 || !inputValue.email.includes("@") || !inputValue.email.includes(".com")) {
+            await registerUser(inputValue, navigate)
+
+        }
     };
 
     useEffect(() => {
@@ -51,61 +54,94 @@ export const CreateAccount = () => {
                 <div className="col-md-4">
                     <form onSubmit={handleSubmit}>
 
-                        <div className="mb-3">
+                        <div className="mb-3 position-relative">
                             <label htmlFor="username" className="form-label">Nombre de usuario</label>
                             <input
                                 type="text"
-                                className={`form-control ${!inputValue.username && error ? "input-data-missing" : ""}`}
+                                className={`form-control ${error && inputValue.username.trim().length < 3 ? "input-data-missing" : ""}`}
                                 id="username"
                                 name="username"
                                 value={inputValue.username}
                                 onChange={handleOnChange}
                             />
+                            {error && inputValue.username.trim().length < 3 && (
+                                <div
+                                    className="bg-danger  text-white p-2 rounded"
+                                    style={{
+                                        position: "absolute",
+                                        top: "100%", // justo debajo del input
+                                        left: 0,
+                                        zIndex: 10,
+                                        whiteSpace: "nowrap",
+                                    }}
+                                >
+                                    <i className="fa-solid fa-circle-exclamation me-1"></i>
+                                    Tu nombre de usuario debe tener al menos 3 caracteres
+                                </div>
+                            )}
                         </div>
 
-                        <div className="mb-3">
-                            <label htmlFor="email" className="form-label">Correo electronico</label>
+                        <div className="mb-3 position-relative">
+                            <label htmlFor="email" className="form-label">Correo electrónico</label>
                             <input
-                                type="email"
-                                className={`form-control ${!inputValue.email && error ? "input-data-missing" : ""}`}
+                                type="text"
+                                className={`form-control ${error && (inputValue.email.trim().length < 6 || !inputValue.email.includes("@")) ? "input-data-missing" : ""}`}
                                 id="email"
                                 name="email"
                                 value={inputValue.email}
                                 onChange={handleOnChange}
                             />
+                            {error && (inputValue.email.trim().length < 6 || !inputValue.email.includes("@")) || !inputValue.email.includes(".com") && (
+                                <div
+                                    className="bg-danger text-white p-2 rounded"
+                                    style={{ position: "absolute", top: "100%", left: 0, zIndex: 10, whiteSpace: "nowrap" }}
+                                >
+                                    <i className="fa-solid fa-circle-exclamation me-1"></i>
+                                    Ingresa un correo válido con @ y .com
+                                </div>
+                            )}
                         </div>
 
-                        <div className="mb-3">
+                        <div className="mb-3 position-relative">
                             <label htmlFor="password" className="form-label">Contraseña</label>
                             <input
                                 type="password"
-                                className={`form-control ${!inputValue.password && error ? "input-data-missing" : ""}`}
+                                className={`form-control ${error && inputValue.password.trim().length < 5 ? "input-data-missing" : ""}`}
                                 id="password"
                                 name="password"
                                 value={inputValue.password}
                                 onChange={handleOnChange}
                             />
-
+                            {error && inputValue.password.trim().length < 5 && (
+                                <div
+                                    className="bg-danger text-white p-2 rounded"
+                                    style={{ position: "absolute", top: "100%", left: 0, zIndex: 10, whiteSpace: "nowrap" }}
+                                >
+                                    <i className="fa-solid fa-circle-exclamation me-1"></i>
+                                    Tu contraseña debe tener al menos 5 caracteres
+                                </div>
+                            )}
                         </div>
 
-                        <div className="mb-3">
+                        <div className="mb-3 position-relative">
                             <label htmlFor="confPassword" className="form-label">Confirmar contraseña</label>
                             <input
                                 type="password"
-                                className={`form-control ${!inputValue.confPassword && error ? "input-data-missing" : ""}`}
+                                className={`form-control ${error && inputValue.confPassword !== inputValue.password ? "input-data-missing" : ""}`}
                                 id="confPassword"
                                 name="confPassword"
                                 value={inputValue.confPassword}
                                 onChange={handleOnChange}
                             />
-                            <div className="text-center mt-2">
-                                <Link to="/forgot-password">
-                                    <small className="text-primary" style={{ cursor: "pointer" }}>
-                                        ¿Has olvidado tu contraseña?
-                                    </small>
-                                </Link>
-                            </div>
-
+                            {error && inputValue.confPassword !== inputValue.password && (
+                                <div
+                                    className="bg-danger text-white p-2 rounded"
+                                    style={{ position: "absolute", top: "100%", left: 0, zIndex: 10, whiteSpace: "nowrap" }}
+                                >
+                                    <i className="fa-solid fa-circle-exclamation me-1"></i>
+                                    Las contraseñas no coinciden
+                                </div>
+                            )}
                         </div>
 
                         {error &&
