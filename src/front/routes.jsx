@@ -68,7 +68,7 @@ export const router = createBrowserRouter(
         <Route path="reset-password-form" element={<ResetPassword />} />
       </Route>
 
-      <Route element={<AuthLayout></AuthLayout>} >
+      <Route element={<AuthLayout />} >
 
         <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="register" element={<CreateAccount />} />

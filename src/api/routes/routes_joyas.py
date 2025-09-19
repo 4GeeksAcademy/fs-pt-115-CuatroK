@@ -1,6 +1,7 @@
 
 from flask import Blueprint, request, jsonify, abort
 from sqlalchemy import func
+from flask_cors import CORS
 
 
 from api.extentions import db
@@ -15,15 +16,14 @@ from api.models.models_joyas import (
     WatchType, WatchBraceletMaterial
 )
 
-
 Jewell_bp = Blueprint("jewells_bp", __name__)
 
+CORS(Jewell_bp)
 
 def json_error(message, status=400, **extra):
     response_payload = {"ok": False, "error": message}
     response_payload.update(extra)
     return jsonify(response_payload), status
-
 
 
 CATALOGS_FIELD_TO_MODEL = {
@@ -43,11 +43,13 @@ CATALOGS_FIELD_TO_MODEL = {
     "watch_bracelet_material": WatchBraceletMaterial,
 }
 
+
 def normalize_value(value):
     if value is None:
         return None
     text = str(value).strip()
     return text or None
+
 
 def upsert_catalogs_from_payload(request_payload: dict):
 
@@ -82,7 +84,6 @@ def get_jewell(jewell_id: int):
     return jsonify({"ok": True, "item": jewell_entity.serialize()})
 
 
-
 @Jewell_bp.route("/jewells", methods=["POST"])
 def create_jewell():
     request_data = request.get_json(silent=True) or {}
@@ -103,7 +104,7 @@ def create_jewell():
             description=normalize_value(request_data["description"]),
             price=price_value,
             url_image=normalize_value(request_data.get("url_image")),
-            quantity =normalize_value(request_data.get("quantity")),
+            quantity=normalize_value(request_data.get("quantity")),
             **optional_catalog_values,
         )
         db.session.add(jewell_entity)
@@ -185,7 +186,6 @@ def get_catalog_entry(CatalogModel, item_id: int):
             "jewells": [jewell_entity.serialize() for jewell_entity in catalog_entry.jewells],
         },
     })
-
 
 
 @Jewell_bp.route("/coatings", methods=["GET"])

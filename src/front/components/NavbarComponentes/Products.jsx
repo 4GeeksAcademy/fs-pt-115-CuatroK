@@ -49,4 +49,36 @@ export const Products = () => {
       </div>
     </div>
   );
+     
+    const [hovered, setHovered] = useState(null);
+ 
+    return (   
+        <div className="row" style={{ width: "100vw", margin: 0, padding: 0}}>
+
+            <div className="d-flex justify-content-center align-items-center flex-nowrap overflow-auto gap-3 p-3 page-background-color">
+                {categories.map((cat, index) => (
+                    <div  
+                        key={index}
+                        className="category-button"
+                        onMouseEnter={() => setHovered(index)}
+                        onMouseLeave={() => setHovered(null)}
+                    >
+                        {hovered === index ? (
+                            <img src={cat.img} alt={cat.name} className="category-image" /> 
+                        ) : (
+                            <span>{cat.name}</span> 
+                        )}
+                    </div>
+                    
+                ))}
+                <Link to="calculadora">
+                <button className="btn btn-warning mb-3 color-buttons" 
+                style={{borderRadius: "50px"}}
+                >Venta de Metales
+                </button>
+                </Link>
+            </div>
+            
+        </div>
+    );
 };

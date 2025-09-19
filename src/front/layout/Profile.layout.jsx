@@ -1,13 +1,8 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
-import { useAuth } from "../hooks/useAuth";
 
 export function ProfileLayout() {
-    const { user } = useAuth()
 
-    if (!user) {
-        return <Navigate to={"/login"}></Navigate>
-    }
     return (
         <>
 

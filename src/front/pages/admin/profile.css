@@ -1,0 +1,23 @@
+.profile-options-background {
+  background-color: #ffe0ff;
+}
+
+.list-group-item.profile-options-background {
+  background-color: #ffe0ff !important;
+  color: #000 !important;
+}
+
+.list-group-item.profile-options-background:hover {
+  background-color: #a495b6 !important;
+  color: #fff !important;
+}
+
+.list-group-item.profile-options-background:active {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+.list-group-item.profile-options-background.active {
+  background-color: #6f42c1 !important;
+  color: #fff !important;
+}

@@ -7,6 +7,8 @@
 }
 
 .category-button {
+  width: 150px;
+  height: 150px;
   transition: all 0.3s ease;
   border-radius: 12px;
   overflow: hidden;
@@ -16,6 +18,8 @@
   background-color: #D4AF37;
   color: white;
   cursor: pointer;
+  font-size: 18px;
+  position: relative;
 }
 
 .compact {
