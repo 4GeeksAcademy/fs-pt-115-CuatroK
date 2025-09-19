@@ -60,7 +60,7 @@ export const ResetPassword = () => {
 
             </div>
 
-            <button type="submit" className="btn btn-primary">Cambiar contraseña</button>
+            <button type="submit" className="btn btn-warning">Cambiar contraseña</button>
         </form>
     )
 }
