@@ -22,14 +22,14 @@ export const Products = () => {
                 {categories.map((cat, index) => (
                     <div  
                         key={index}
-                        className={`category-button ${hovered === index ? "expanded" : "compact"}`}
+                        className="category-button"
                         onMouseEnter={() => setHovered(index)}
                         onMouseLeave={() => setHovered(null)}
                     >
                         {hovered === index ? (
-                            <img src={cat.img} alt={cat.name} className="category-image" />
+                            <img src={cat.img} alt={cat.name} className="category-image" /> 
                         ) : (
-                            <span>{cat.name}</span>
+                            <span>{cat.name}</span> 
                         )}
                     </div>
                     

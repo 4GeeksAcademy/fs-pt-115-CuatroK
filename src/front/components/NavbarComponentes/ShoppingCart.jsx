@@ -17,7 +17,7 @@ export const ShoppingCart = () => {
 
             {/* Panel lateral del carrito */}
             <div
-                className="offcanvas offcanvas-end"
+                className="offcanvas offcanvas-end" 
                 tabIndex="-1"
                 id="cartPanel"
                 aria-labelledby="cartPanelLabel"
