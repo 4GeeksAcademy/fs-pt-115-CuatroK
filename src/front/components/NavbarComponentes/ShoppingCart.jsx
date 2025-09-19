@@ -1,6 +1,19 @@
 import { Link } from "react-router-dom"
+import { useFetch } from "../../hooks/useFetch"
+import { useAuth } from "../../hooks/useAuth";
 
 export const ShoppingCart = () => {
+    const { token } = useAuth()
+    const url = import.meta.env.VITE_BACKEND_URL + "/api/shopping-cart";
+    const { data } = useFetch(url, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+
+    console.log(data)
+
     return (
         <div className="mt-2">
 
@@ -38,7 +51,7 @@ export const ShoppingCart = () => {
                         <p>Producto 2 - €9.99</p>
                     </div>
                     <Link to="payment">
-                    <button className="btn btn-warning w-100">Finalizar compra</button>
+                        <button className="btn btn-warning w-100">Finalizar compra</button>
                     </Link>
                 </div>
             </div>

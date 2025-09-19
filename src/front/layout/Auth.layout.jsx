@@ -1,17 +1,13 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { Navbar } from "../components/Navbar";
 import { useAuth } from "../hooks/useAuth";
 
-export function ProfileLayout() {
+export function AuthLayout() {
     const { user } = useAuth()
-
-    if (!user) {
-        return <Navigate to={"/login"}></Navigate>
+    if (user) {
+        return <Navigate to={"/"}></Navigate>
     }
     return (
         <>
-
-            <Navbar />
             <Outlet />
         </>
     )

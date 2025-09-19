@@ -1,7 +1,8 @@
 from typing import Optional, List
-from sqlalchemy import String, Numeric
+from sqlalchemy import String, Numeric, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship, foreign
 from . import db
+
 
 class Jewell(db.Model):
     __tablename__ = "jewells"
@@ -26,6 +27,11 @@ class Jewell(db.Model):
     bracelet: Mapped[Optional[str]] = mapped_column(String(30))
     watch: Mapped[Optional[str]] = mapped_column(String(30))
     watch_bracelet_material: Mapped[Optional[str]] = mapped_column(String(30))
+    highlighted = mapped_column(Boolean, default=False)
+    quantity: Mapped[int] = mapped_column(nullable=False)
+
+    cart_items = relationship(
+        "ShoppingCart", back_populates="jewell")
 
     category_rel = relationship(
         "Category",
@@ -135,6 +141,8 @@ class Jewell(db.Model):
             "bracelet": self.bracelet,
             "watch": self.watch,
             "watch_bracelet_material": self.watch_bracelet_material,
+            "highlighted": self.highlighted,
+            "quantity": self.quantity,
         }
 
 
