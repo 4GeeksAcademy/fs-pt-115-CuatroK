@@ -3,16 +3,7 @@ import { useFetch } from "../../hooks/useFetch"
 import { useAuth } from "../../hooks/useAuth";
 
 export const ShoppingCart = () => {
-    const { token } = useAuth()
-    const url = import.meta.env.VITE_BACKEND_URL + "/api/shopping-cart";
-    const { data } = useFetch(url, {
-        method: "GET",
-        headers: {
-            "Authorization": `Bearer ${token}`
-        }
-    })
-
-    console.log(data)
+    
 
     return (
         <div className="mt-2">
