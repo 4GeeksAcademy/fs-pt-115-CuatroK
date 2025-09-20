@@ -74,10 +74,10 @@ export const AddressModal = ({ getUserApi }) => {
     }, [])
 
     return (
-        <>
+        <div className="w-100 products-card p-4">
             <button
                 type="button"
-                className="btn btn-primary fs-5 mt-3 modal-body"
+                className="btn btn-warning btn-warning-custom fs-5 mt-3 modal-body w-50 mx-auto d-block"
                 onClick={() => bsModalRef.current?.show()}
             >
                 Agregar nueva dirección
@@ -206,6 +206,6 @@ export const AddressModal = ({ getUserApi }) => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }

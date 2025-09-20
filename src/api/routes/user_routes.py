@@ -41,7 +41,7 @@ def create_user():
     body_message = render_template(
         "welcome_message.html", username=new_user.username)
     message = Message(
-        subject="bienvenido mamañema",
+        subject="Bienvenido joven",
         recipients=[data.get("email")],
         html=body_message
     )
