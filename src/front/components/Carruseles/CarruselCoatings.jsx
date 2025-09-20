@@ -14,7 +14,7 @@ export const CarruselCollares = () => {
         const fetchDataCoatings = async () => {
             try {
                 setLoading(true)
-                const response = await fetch(`${API_URL}/api/coatings`)
+                const response = await fetch(`${API_URL}/api/jewells`)
 
                 if (!response.ok) {
                     throw new Error(`error: ${response.status}`)
