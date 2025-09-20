@@ -9,6 +9,7 @@ export const Catalog = () => {
   useEffect(() => {
     const cargarJoyas = async () => {
       const data = await getJoyasSearch();
+      console.log(data);
       if (data) setJoyas(data);
     };
     cargarJoyas();
