@@ -1,0 +1,13 @@
+.btn-warning-custom {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-warning-custom:hover {
+  background-color: #e0a800;
+  transform: scale(1.05);
+}
+
+.btn-warning-custom:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.5);
+}

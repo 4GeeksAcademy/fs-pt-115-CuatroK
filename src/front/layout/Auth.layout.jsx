@@ -1,11 +1,7 @@
-import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { Outlet } from "react-router-dom";
 
 export function AuthLayout() {
-    const { user } = useAuth()
-    if (user) {
-        return <Navigate to={"/"}></Navigate>
-    }
+
     return (
         <>
             <Outlet />

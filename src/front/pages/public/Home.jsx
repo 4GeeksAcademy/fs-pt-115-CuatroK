@@ -4,14 +4,15 @@ import { CarruselSecundario } from "../../components/public/CarruselSecundario.j
 import { Carrusel_principal } from "../../components/public/Carrusel_principal.jsx";
 import { postCatalogo } from "../../services/postCatalogo.js";
 import { catalogo } from "../../catalogo.js";
+import { getJoyasSearch } from "../../services/serviceApi.js";
 
 export const Home = () => {
 
   useEffect(() => {
-    const createCatalogo = async () => {
-      //await postCatalogo(catalogo.items)
+    const getjoyas = async () => {
+      await getJoyasSearch()
     }
-    createCatalogo()
+    getjoyas()
   }, [])
 
 

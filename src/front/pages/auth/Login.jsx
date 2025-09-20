@@ -50,12 +50,24 @@ export const Login = () => {
                         <form onSubmit={handleOnSubmit}>
                             <div className="mb-3">
                                 <label htmlFor="email" className="form-label">Correo Electronico</label>
-                                <input type="email" className={`form-control ${!inputValue.email && error ? "input-data-missing" : ""}`} id="email" aria-describedby="emailHelp" name="email" value={inputValue.email} onChange={handleOnChange} />
+                                <input
+                                    type="email"
+                                    className={`form-control ${inputValue.email.trim().length < 6 && error ? "input-data-missing" : ""}`}
+                                    id="email"
+                                    aria-describedby="emailHelp"
+                                    name="email"
+                                    value={inputValue.email}
+                                    onChange={handleOnChange} />
                                 <div id="emailHelp" className="form-text">Nunca compartiremos tu correo electrónico con nadie más.</div>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="password" className="form-label">Contraseña</label>
-                                <input type="password" className={`form-control ${!inputValue.password && error ? "input-data-missing" : ""}`} id="password" name="password" value={inputValue.password} onChange={handleOnChange} />
+                                <input type="password"
+                                    className={`form-control ${!inputValue.password && error ? "input-data-missing" : ""}`}
+                                    id="password"
+                                    name="password"
+                                    value={inputValue.password}
+                                    onChange={handleOnChange} />
                             </div>
                             {
                                 error &&
