@@ -9,7 +9,6 @@ export default function CarritoProfileCard({
     price,
     quantity,
     onRemove,
-    getTotalProducts,
     fetchData
 }) {
     const total = quantity * price
@@ -33,9 +32,6 @@ export default function CarritoProfileCard({
         await substractCartProduct(id)
         await fetchData()
     }
-    useEffect(() => {
-        getTotalProducts(total)
-    }, [total])
 
     return (
         <article className="product-card mb-1" aria-label={`Producto ${name}`}>

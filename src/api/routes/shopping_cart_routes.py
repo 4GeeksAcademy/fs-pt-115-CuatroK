@@ -50,7 +50,7 @@ def get_user_cart():
     return jsonify([cart_item.serialize() for cart_item in cart_items]), 200
 
 
-@shopping_cart_bp.route("/<int:cart_id>", methods=["DELETE"])
+@shopping_cart_bp.route("/<int:cart_id>/delete-cart", methods=["DELETE"])
 @jwt_required()
 def delete_cart(cart_id):
     if not cart_id:
@@ -61,6 +61,23 @@ def delete_cart(cart_id):
     db.session.delete(cart)
     db.session.commit()
     return jsonify({'msg': 'carrito borrato'}), 200
+
+
+@shopping_cart_bp.route("/<int:item_id>/remove-item", methods=["DELETE"])
+@jwt_required()
+def remove_item(item_id):
+    user = get_jwt_identity()
+
+    cart_item = ShoppingCart.query.filter_by(
+        id=item_id, user_id=int(user)).first()
+
+    if not cart_item:
+        return jsonify({'msg': 'El producto no existe en tu carrito'}), 404
+
+    db.session.delete(cart_item)
+    db.session.commit()
+
+    return jsonify({'msg': 'Producto eliminado del carrito'}), 200
 
 
 @shopping_cart_bp.route("/<int:item_id>/add", methods=["POST"])
@@ -74,7 +91,7 @@ def sum_item(item_id):
 
 @shopping_cart_bp.route("/<int:item_id>/substract", methods=["POST"])
 @jwt_required()
-def remove_item(item_id):
+def substract_item(item_id):
     cart_item = ShoppingCart.query.get(item_id)
     cart_item.remove_quantity()
     db.session.commit()
