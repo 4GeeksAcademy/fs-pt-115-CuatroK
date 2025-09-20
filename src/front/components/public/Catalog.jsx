@@ -15,6 +15,12 @@ export const Catalog = () => {
     cargarJoyas();
   }, []);
 
+  const joyasFiltradas = activarBusqueda
+    ? joyas.filter(joya =>
+      joya.name.toLowerCase().includes(busqueda.toLowerCase())
+    )
+    : [];
+
   return (
     <div className="container mt-4">
       <SearchBar />

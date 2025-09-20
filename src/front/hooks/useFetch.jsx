@@ -24,6 +24,7 @@ export const useFetch = (url, options = {}) => {
         fetchData()
     }, [url])
     return {
+        fetchData,
         loading,
         error,
         data

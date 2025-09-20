@@ -11,6 +11,7 @@ export const getUser = async () => {
     },
   });
   const data = await response.json();
+
   console.log(data);
   return data;
 };
@@ -150,10 +151,9 @@ export const getJoyasSearch = async () => {
     if (!res.ok) {
       throw new Error(`Error HTTP: ${res.status}`);
     }
-     const data = await res.json();
-     console.log(data);
-     return data;
-    
+    const data = await res.json();
+    console.log(data);
+    return data;
   } catch (error) {
     console.error(error);
   }
