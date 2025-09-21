@@ -1,13 +1,72 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import "./Style_Catalogo.css";
 
-// src/front/pages/Catalogo/Catalogo.jsx
-import { fetchProducts } from '../../../services/serviceApiCatalogo.js';
 
+const PRODUCTS = [
+  {
+    id: 1,
+    name: 'Pulsera "crystal" blanca',
+    description: "Plata de ley con circonitas blancas.",
+    price: 55,
+    url_image: "https://m.media-amazon.com/images/I/51DHugShjML._UY1000_.jpg",
+    category: "Pulsera",
+    quantity: 12,
+    highlighted: true,
+  },
+  {
+    id: 2,
+    name: 'Pulsera "crystal" roja',
+    description: "Plata de ley con circonitas rojas.",
+    price: 55,
+    url_image: "https://m.media-amazon.com/images/I/51DHugShjML._UY1000_.jpg",
+    category: "Pulsera",
+    quantity: 7,
+    highlighted: true,
+  },
+  {
+    id: 3,
+    name: "Pulsera Figaro",
+    description: "Cadena estilo figaro con circonitas.",
+    price: 74,
+    url_image: "https://m.media-amazon.com/images/I/51DHugShjML._UY1000_.jpg",
+    category: "Pulsera",
+    quantity: 0,
+    highlighted: false,
+  },
+  {
+    id: 4,
+    name: "Pulsera Valparaíso",
+    description: "Multicolor con baño de rodio.",
+    price: 54,
+    url_image: "https://m.media-amazon.com/images/I/51DHugShjML._UY1000_.jpg",
+    category: "Pulsera",
+    quantity: 5,
+    highlighted: false,
+  },
+  {
+    id: 5,
+    name: "Reloj Clásico",
+    description: "Acero inoxidable, esfera minimalista.",
+    price: 89,
+    url_image: "https://m.media-amazon.com/images/I/51DHugShjML._UY1000_.jpg",
+    category: "Reloj",
+    quantity: 3,
+    highlighted: false,
+  },
+  {
+    id: 6,
+    name: "Anillo Solitario",
+    description: "Circonia central, acabado brillante.",
+    price: 39,
+    url_image: "https://m.media-amazon.com/images/I/51DHugShjML._UY1000_.jpg",
+    category: "Anillo",
+    quantity: 10,
+    highlighted: true,
+  },
+];
 
+const EURO = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" });
 
-
-const EURO_FORMAT = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" });
 
 function ProductCard({ product }) {
   const isInStock = (product.quantity ?? 0) > 0;
@@ -32,7 +91,7 @@ function ProductCard({ product }) {
           <h6 className="fw-semibold title-2lines mb-2">{product.name}</h6>
 
           <div className="d-flex align-items-baseline gap-2">
-            <span className="fw-bold">{EURO_FORMAT.format(product.price ?? 0)}</span>
+            <span className="fw-bold">{EURO.format(product.price ?? 0)}</span>
           </div>
 
           <div className="mt-1 small">
@@ -47,79 +106,51 @@ function ProductCard({ product }) {
   );
 }
 
+
 export default function Catalogo() {
-  // Controles de interfaz
+  // Controles UI
   const [searchText, setSearchText] = useState("");
   const [sortOption, setSortOption] = useState("relevance"); // relevance | priceAsc | priceDesc
   const [onlyHighlighted, setOnlyHighlighted] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
 
-  // Estado de datos
-  const [productsFromApi, setProductsFromApi] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
+  const categories = useMemo(() => {
+    const set = new Set(PRODUCTS.map(p => p.category).filter(Boolean));
+    return ["", ...Array.from(set)]; // "" = todas
+  }, []);
 
-  const requestControllerRef = useRef(null);
-
-  // Cargar productos desde la API (permite filtrar por categoría en el servidor)
-  useEffect(() => {
-    if (requestControllerRef.current) requestControllerRef.current.abort();
-    const abortController = new AbortController();
-    requestControllerRef.current = abortController;
-
-    setIsLoading(true);
-    setErrorMessage("");
-
-    fetchProducts(
-      {
-        // Envía solo filtros que soporte tu backend como query params:
-        // category, brand, metal, gender, etc. Aquí usamos category como ejemplo:
-        category: selectedCategory || undefined,
-      },
-      abortController.signal
-    )
-      .then((products) => setProductsFromApi(products))
-      .catch((error) => {
-        if (error.name !== "AbortError") setErrorMessage(error.message || "Error al cargar productos");
-      })
-      .finally(() => setIsLoading(false));
-
-    return () => abortController.abort();
-  }, [selectedCategory]);
-
-  // Filtrado/ordenación en cliente (para búsqueda, “solo nuevos” y orden de precio)
+ 
   const visibleProducts = useMemo(() => {
-    const normalizedSearch = searchText.trim().toLowerCase();
+    const q = searchText.trim().toLowerCase();
 
-    let filteredProducts = productsFromApi.filter((product) => {
+    let out = PRODUCTS.filter((p) => {
       const matchesSearch =
-        !normalizedSearch ||
-        product.name?.toLowerCase().includes(normalizedSearch) ||
-        product.description?.toLowerCase().includes(normalizedSearch) ||
-        product.category?.toLowerCase().includes(normalizedSearch);
+        !q ||
+        p.name?.toLowerCase().includes(q) ||
+        p.description?.toLowerCase().includes(q) ||
+        p.category?.toLowerCase().includes(q);
 
-      const matchesHighlighted = !onlyHighlighted || Boolean(product.highlighted);
+      const matchesHighlighted = !onlyHighlighted || Boolean(p.highlighted);
+      const matchesCategory = !selectedCategory || p.category === selectedCategory;
 
-      return matchesSearch && matchesHighlighted;
+      return matchesSearch && matchesHighlighted && matchesCategory;
     });
 
-    if (sortOption === "priceAsc") {
-      filteredProducts.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
-    } else if (sortOption === "priceDesc") {
-      filteredProducts.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
-    }
-    // relevance: dejamos el orden como viene
-
-    return filteredProducts;
-  }, [productsFromApi, searchText, onlyHighlighted, sortOption]);
+    if (sortOption === "priceAsc") out.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
+    if (sortOption === "priceDesc") out.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
+   
+    return out;
+  }, [searchText, onlyHighlighted, sortOption, selectedCategory]);
 
   return (
     <div className="container py-4">
-      {/* Cabecera + controles */}
+      {/* Cabecera + filtros */}
       <div className="d-flex flex-column flex-md-row gap-3 align-items-md-end justify-content-between mb-3">
         <div>
           <h2 className="mb-1">Catálogo</h2>
-          <p className="text-muted mb-0">Conectado a tu API Flask.</p>
+          <p className="text-muted mb-0">
+            Datos locales (sin API). Cámbialos por los tuyos cuando quieras.
+          </p>
         </div>
 
         <div className="d-flex flex-wrap gap-2">
@@ -127,14 +158,14 @@ export default function Catalogo() {
             className="form-control"
             placeholder="Buscar por nombre, descripción o categoría…"
             value={searchText}
-            onChange={(event) => setSearchText(event.target.value)}
+            onChange={(e) => setSearchText(e.target.value)}
             style={{ minWidth: 220 }}
           />
 
           <select
             className="form-select"
             value={sortOption}
-            onChange={(event) => setSortOption(event.target.value)}
+            onChange={(e) => setSortOption(e.target.value)}
           >
             <option value="relevance">Ordenar: relevancia</option>
             <option value="priceAsc">Precio: más bajo</option>
@@ -143,48 +174,47 @@ export default function Catalogo() {
 
           <div className="form-check d-flex align-items-center ms-1">
             <input
-              id="checkboxOnlyHighlighted"
+              id="onlyHighlighted"
               className="form-check-input"
               type="checkbox"
               checked={onlyHighlighted}
-              onChange={(event) => setOnlyHighlighted(event.target.checked)}
+              onChange={(e) => setOnlyHighlighted(e.target.checked)}
             />
-            <label htmlFor="checkboxOnlyHighlighted" className="form-check-label ms-1">
+            <label htmlFor="onlyHighlighted" className="form-check-label ms-1">
               Solo destacados
             </label>
           </div>
 
-          {/* Filtro de catálogo que sí va al servidor (ejemplo: categoría) */}
           <select
             className="form-select"
             value={selectedCategory}
-            onChange={(event) => setSelectedCategory(event.target.value)}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            title="Categoría"
           >
             <option value="">Todas las categorías</option>
-            <option value="Anillo">Anillo</option>
-            <option value="Pulsera">Pulsera</option>
-            <option value="Reloj">Reloj</option>
-            {/* Puedes llenar este select pidiendo /categories a tu API si quieres */}
+            {categories
+              .filter((c) => c) // quita el vacío ya puesto arriba
+              .map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
           </select>
         </div>
       </div>
 
-      {/* Mensajes de carga y error */}
-      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-      {isLoading && <div className="py-5 text-center text-muted">Cargando productos…</div>}
+      {/* Grid de productos */}
+      <div className="row">
+        {visibleProducts.map((p) => (
+          <ProductCard key={p.id} product={p} />
+        ))}
 
-      {/* Listado de productos */}
-      {!isLoading && (
-        <div className="row">
-          {visibleProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-
-          {visibleProducts.length === 0 && (
-            <div className="col-12 text-center text-muted py-5">No hay productos que coincidan.</div>
-          )}
-        </div>
-      )}
+        {visibleProducts.length === 0 && (
+          <div className="col-12 text-center text-muted py-5">
+            No hay productos que coincidan.
+          </div>
+        )}
+      </div>
     </div>
   );
 }
