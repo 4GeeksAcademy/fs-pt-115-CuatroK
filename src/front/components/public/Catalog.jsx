@@ -17,14 +17,14 @@ export const Catalog = () => {
   }, []);
 
   const joyasFiltradas = activarBusqueda
-  ? joyas.filter(joya =>
+    ? joyas.filter(joya =>
       joya.name.toLowerCase().includes(busqueda.toLowerCase())
     )
-  : [];
+    : [];
 
   return (
     <div className="container mt-4">
-      <SearchBar busqueda={busqueda} setBusqueda={setBusqueda} setActivarBusqueda={setActivarBusqueda}/>
+      <SearchBar busqueda={busqueda} setBusqueda={setBusqueda} setActivarBusqueda={setActivarBusqueda} />
 
       <div className="row mt-3">
         {joyasFiltradas.length > 0 ? (
