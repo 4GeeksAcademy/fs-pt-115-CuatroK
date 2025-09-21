@@ -7,12 +7,24 @@ export const SearchResults = () => {
   const { busqueda } = useParams();
   const [joyas, setJoyas] = useState([]);
 
+  function normalizePlural(word) {
+    return word
+      .toLowerCase()
+      .trim()
+      .replace(/(es|s)$/, "");
+  }
   useEffect(() => {
     const cargarJoyas = async () => {
       const data = await getJoyasSearch();
+      console.log(data);
+
       if (data) {
-        const filtradas = data.filter(joya =>
-          joya.name.toLowerCase().includes(busqueda.toLowerCase())
+        const filtradas = data.items.filter(joya => {
+          const name = normalizePlural(joya.name);
+          const term = normalizePlural(busqueda);
+
+          return name.startsWith(term) || term.startsWith(name);
+        }
         );
         setJoyas(filtradas);
       }

@@ -5,27 +5,27 @@ import { SearchBar } from "./SearchBar";
 
 export const Catalog = () => {
   const [joyas, setJoyas] = useState([]);
+  const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
     const cargarJoyas = async () => {
       const data = await getJoyasSearch();
-      console.log(data);
       if (data) setJoyas(data);
     };
     cargarJoyas();
   }, []);
 
-  const joyasFiltradas = activarBusqueda
+  const joyasFiltradas = busqueda.trim()
     ? joyas.filter(joya =>
-      joya.name.toLowerCase().includes(busqueda.toLowerCase())
-    )
-    : [];
+        joya.name.toLowerCase().includes(busqueda.toLowerCase())
+      )
+    : joyas;
 
   return (
     <div className="container mt-4">
-      <SearchBar />
+      <SearchBar busqueda={busqueda} setBusqueda={setBusqueda} />
       <div className="row mt-3">
-        {joyas.map((joya, index) => (
+        {joyasFiltradas.map((joya, index) => (
           <div className="col-md-4 mb-3" key={index}>
             <CategoryCard
               image={joya.url_image}
