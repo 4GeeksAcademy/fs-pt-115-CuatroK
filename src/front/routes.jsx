@@ -29,9 +29,6 @@ import { ProccessToResetPassword } from "./pages/admin/ProcessToResetPassword";
 import { ForgotPassword } from "./pages/auth/ForgotPassword";
 import { AuthLayout } from "./layout/Auth.layout";
 
-
-import { Catalogo } from "./pages/public/Catalogo/Catalogo";
-
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 export const router = createBrowserRouter(
@@ -45,6 +42,7 @@ export const router = createBrowserRouter(
         <Route path="demo" element={<Demo />} />
         <Route path="calculadora" element={<CalculadoraMetales />} />
         <Route path="gallery" element={<Gallery />} />
+        <Route path="resultados/:busqueda" element={<SearchResults />} />
         <Route path="/" element={<Products />} />
         <Route path="/catalogo/:category" element={<Catalogo />} />
 

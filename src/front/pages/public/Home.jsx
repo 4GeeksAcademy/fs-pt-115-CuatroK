@@ -8,14 +8,6 @@ import { getJoyasSearch } from "../../services/serviceApi.js";
 
 export const Home = () => {
 
-  useEffect(() => {
-    const getjoyas = async () => {
-      await getJoyasSearch()
-    }
-    getjoyas()
-  }, [])
-
-
 
   return (
 
