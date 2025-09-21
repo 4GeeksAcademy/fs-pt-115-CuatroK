@@ -28,7 +28,7 @@ export const Profile = () => {
             }
         }
     }, [user]);
-
+    console.log(user)
 
     if (!user) {
         return <LoadingSpinner />;
