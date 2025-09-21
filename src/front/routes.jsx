@@ -15,7 +15,6 @@ import { AboutUs } from "./components/NavbarComponentes/AboutUs";
 import { CreateAccount } from "./pages/auth/CreateAccount";
 import { Login } from "./pages/auth/Login";
 
-
 import { RootLayout } from "./layout/Root.layout";
 import { PublicLayout } from "./layout/Public.layout";
 import CalculadoraMetales from "./components/public/Calculadora";
@@ -30,11 +29,10 @@ import { ProccessToResetPassword } from "./pages/admin/ProcessToResetPassword";
 import { ForgotPassword } from "./pages/auth/ForgotPassword";
 import { AuthLayout } from "./layout/Auth.layout";
 
-import Catalogo from "./pages/public/Catalogo/Catalogo";
 
+import { Catalogo } from "./pages/public/Catalogo/Catalogo";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -47,11 +45,10 @@ export const router = createBrowserRouter(
         <Route path="demo" element={<Demo />} />
         <Route path="calculadora" element={<CalculadoraMetales />} />
         <Route path="gallery" element={<Gallery />} />
-        <Route path="catalogo" element={<Catalogo />} />
-        <Route path="catalogo/:categoryName" element={<Catalogo />} />
-        
-        <Route path="*" element={<h1>404</h1>} />
+        <Route path="/" element={<Products />} />
+        <Route path="/catalogo/:category" element={<Catalogo />} />
 
+        <Route path="*" element={<h1>404</h1>} />
       </Route>
 
       <Route element={<ProfileLayout />}>
@@ -68,14 +65,11 @@ export const router = createBrowserRouter(
         <Route path="reset-password-form" element={<ResetPassword />} />
       </Route>
 
-      <Route element={<AuthLayout />} >
-
+      <Route element={<AuthLayout />}>
         <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="register" element={<CreateAccount />} />
         <Route path="login" element={<Login />} />
-
       </Route>
-
     </Route>
   )
 );
