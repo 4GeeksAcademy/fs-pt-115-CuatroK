@@ -1,9 +1,24 @@
 import { Link } from "react-router-dom"
 import { useFetch } from "../../hooks/useFetch"
 import { useAuth } from "../../hooks/useAuth";
+import { useEffect } from "react";
 
 export const ShoppingCart = () => {
-    
+    useEffect(() => {
+        const offcanvasEl = document.getElementById("cartPanel");
+        if (!offcanvasEl) return;
+
+        const handleHidden = () => {
+            document.querySelectorAll(".offcanvas-backdrop").forEach((el) => el.remove());
+            document.body.classList.remove("offcanvas-backdrop");
+        };
+
+        offcanvasEl.addEventListener("hidden.bs.offcanvas", handleHidden);
+
+        return () => {
+            offcanvasEl.removeEventListener("hidden.bs.offcanvas", handleHidden);
+        };
+    }, []);
 
     return (
         <div className="mt-2">
@@ -21,7 +36,7 @@ export const ShoppingCart = () => {
 
             {/* Panel lateral del carrito */}
             <div
-                className="offcanvas offcanvas-end" 
+                className="offcanvas offcanvas-end"
                 tabIndex="-1"
                 id="cartPanel"
                 aria-labelledby="cartPanelLabel"

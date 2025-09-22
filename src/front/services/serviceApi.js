@@ -12,6 +12,10 @@ export const getUser = async () => {
   });
   const data = await response.json();
 
+  if (data.msg == "Token has expired") {
+    sessionStorage.removeItem("token");
+  }
+
   console.log(data);
   return data;
 };

@@ -5,7 +5,6 @@ import { CarruselCategoria } from "../../components/Carruseles/CarruselCategoria
 
 export const Home = () => {
 
- 
   return (
 
     <>
