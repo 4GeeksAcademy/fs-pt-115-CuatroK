@@ -1,86 +1,88 @@
-// src/front/components/Carruseles/CarruselCategoria.jsx
 import React, { useEffect, useState } from "react";
 import { getJoyasSearch } from "../../services/serviceApi";
 
-const API_URL = import.meta.env.VITE_BACKEND_URL;
-const FALLBACK_IMG = "https://via.placeholder.com/320x192?text=Sin+imagen";
+const CARDS_PER_SLIDE = 4;
 
-// Si la URL de la imagen es absoluta, la usa tal cual.
-// Si es relativa (con o sin "/"), la prefija con API_URL.
-const resolveImageUrl = (src) => {
-  if (!src) return FALLBACK_IMG;
-  if (/^https?:\/\//i.test(src)) return src;
-  if (src.startsWith("/")) return `${API_URL}${src}`;
-  return `${API_URL}/${src}`;
-};
-
-export const CarruselCategoria = ({ category, highlighted }) => {
-  const [items, setItems]   = useState([]);
+export function CarruselCategoria({ category, highlighted }) {
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    (async () => {
+    async function load() {
       try {
-        setLoading(true);
-        const list = await getJoyasSearch(); // fetch centralizado en el service
-        setItems(Array.isArray(list) ? list : (list?.items ?? []));
+        const data = await getJoyasSearch();             
+        setItems(Array.isArray(data) ? data : (data?.items ?? []));
         setError(null);
-      } catch (e) {
-        setError(e.message || "Error al cargar productos");
+      } catch {
+        setError("No se pudo cargar");
       } finally {
         setLoading(false);
       }
-    })();
+    }
+    load();
   }, []);
 
-  if (loading) return <div className="p-6 text-center">Cargando…</div>;
-  if (error)   return <div className="p-6 text-center text-red-600">{error}</div>;
+  if (loading) return <p className="text-center p-4">Cargando…</p>;
+  if (error)   return <p className="text-center text-danger p-4">{error}</p>;
 
   const cat = (category || "").toLowerCase();
-  const isHighlighted = (it) =>
-    typeof it?.highlighted === "boolean" ? it.highlighted : !!it?.destacado;
+  const passHighlight = (it) =>
+    typeof it.highlighted === "boolean" ? it.highlighted : !!it.destacado;
+
+
+  const filtered = items.filter((it) => {
+    const sameCat = (it?.category || "").toLowerCase() === cat;
+    if (!sameCat) return false;
+    return typeof highlighted === "boolean" ? passHighlight(it) === highlighted : true;
+  });
+
+  const slides = [];
+  for (let i = 0; i < filtered.length; i += CARDS_PER_SLIDE) {
+    slides.push(filtered.slice(i, i + CARDS_PER_SLIDE));
+  }
+
+  const carouselId = `carrusel-${cat}-${highlighted ? "hi" : "all"}`;
 
   return (
-    <div className="carousel slide">
+    <div id={carouselId} className="carousel slide my-3" data-bs-ride="carousel">
       <div className="carousel-inner">
-        <div className="carousel-item active">
-          <div className="d-flex justify-content-center gap-3 flex-wrap">
-            {items
-              .filter((it) => {
-                const sameCat = (it?.category || "").toLowerCase() === cat;
-                if (!sameCat) return false;
-                return typeof highlighted === "boolean" ? isHighlighted(it) === highlighted : true;
-              })
-              .map((item) => (
+        {slides.map((group, idx) => (
+          <div key={idx} className={`carousel-item ${idx === 0 ? "active" : ""}`}>
+            <div className="d-flex justify-content-center gap-3 flex-wrap">
+              {group.map((item) => (
                 <div key={item.id} className="card" style={{ width: "18rem" }}>
                   <img
-                    src={resolveImageUrl(item.url_image)}
-                    alt={item.name || "Producto"}
                     className="card-img-top"
+                    src={item.url_image || FALLBACK_IMG}
+                    alt={item.name || "Producto"}
+                    onError={(e) => (e.currentTarget.src = FALLBACK_IMG)}
                     loading="lazy"
-                    onError={(e) => { e.currentTarget.src = FALLBACK_IMG; }}
                   />
                   <div className="card-body">
                     <h5 className="card-title">{item.name}</h5>
                     <p className="card-text">{item.price}</p>
-                    <a href="#" className="btn btn-primary">Agregar al carrito</a>
+                    <button className="btn btn-primary">Agregar al carrito</button>
                   </div>
                 </div>
               ))}
-
-            {items.filter((it) => {
-              const sameCat = (it?.category || "").toLowerCase() === cat;
-              if (!sameCat) return false;
-              return typeof highlighted === "boolean" ? isHighlighted(it) === highlighted : true;
-            }).length === 0 && (
-              <div className="text-muted py-5">No hay productos para esta categoría.</div>
-            )}
+            </div>
           </div>
-        </div>
+        ))}
       </div>
+
+      <button className="carousel-control-prev" type="button"
+        data-bs-target={`#${carouselId}`} data-bs-slide="prev">
+        <span className="carousel-control-prev-icon" aria-hidden="true" />
+        <span className="visually-hidden">Anterior</span>
+      </button>
+      <button className="carousel-control-next" type="button"
+        data-bs-target={`#${carouselId}`} data-bs-slide="next">
+        <span className="carousel-control-next-icon" aria-hidden="true" />
+        <span className="visually-hidden">Siguiente</span>
+      </button>
     </div>
   );
-};
+}
 
-export default CarruselCategoria;
+
