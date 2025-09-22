@@ -31,29 +31,34 @@ export const Products = () => {
     },
   ];
 
-
-  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [hovered, setHovered] = useState(null);
 
   return (
     <div className="row" style={{ width: "100vw", margin: 0, padding: 0 }}>
       <div className="d-flex justify-content-center align-items-center flex-nowrap overflow-auto gap-3 p-3 page-background-color">
         {categories.map((cat, index) => {
-          const isHovered = hoveredIndex === index;
           const toUrl = `/catalogo/${encodeURIComponent(cat.apiName)}`;
+          const isHovered = hovered === index;
+
           return (
             <Link
               key={cat.apiName}
               to={toUrl}
               className="text-decoration-none"
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
+              onMouseEnter={() => setHovered(index)}
+              onMouseLeave={() => setHovered(null)}
               aria-label={`Ver catálogo de ${cat.displayName}`}
             >
-              <div className={`category-button ${isHovered ? "expanded" : "compact"}`}>
+              <div className={`category-button ${isHovered ? "is-hovered" : ""}`}>
                 {isHovered ? (
-                  <img src={cat.img} alt={cat.displayName} className="category-image" />
+                  <img
+                    src={cat.img}
+                    alt={cat.displayName}
+                    className="category-image"
+                    loading="lazy"
+                  />
                 ) : (
-                  <span>{cat.displayName}</span>
+                  <span className="category-label">{cat.displayName}</span>
                 )}
               </div>
             </Link>
