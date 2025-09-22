@@ -16,9 +16,13 @@ export const Catalog = () => {
   }, []);
 
   const joyasFiltradas = busqueda.trim()
-    ? joyas.filter(joya =>
-        joya.name.toLowerCase().includes(busqueda.toLowerCase())
-      )
+    ? joyas.filter(joya => {
+      const termino = busqueda.toLowerCase();
+      return (
+        joya.name.toLowerCase().includes(termino) ||
+        (joya.metal && joya.metal.toLowerCase().includes(termino))
+      );
+    })
     : joyas;
 
   return (
