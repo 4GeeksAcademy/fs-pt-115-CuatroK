@@ -1,0 +1,59 @@
+
+.gallery-thumbs {
+  max-height: 520px;
+}
+.thumb-btn {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: transparent;
+  border-radius: .5rem;
+  overflow: hidden;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.thumb-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,.08);
+}
+.thumb-btn img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+.thumb-active {
+  outline: 2px solid var(--bs-dark);
+}
+
+
+.img-contain {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+
+.sticky-buy-box {
+  top: 1.5rem; 
+  border-radius: 1rem;
+}
+
+
+.card {
+  border-radius: 1rem;
+}
+
+/* Ficha técnica */
+.specs-list .spec-label {
+  min-width: 160px;
+}
+.border-200 {
+  border-color: #eceff3 !important;
+}
+
+
+.badge.bg-danger,
+.badge.text-bg-danger {
+  font-weight: 700;
+}
+.badge.bg-dark {
+  font-weight: 700;
+}

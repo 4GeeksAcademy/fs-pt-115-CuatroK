@@ -6,7 +6,7 @@ export const Products = () => {
   const categories = [
     {
       displayName: "Relojes",
-      apiName: "Reloj",
+      apiName: "relojes",
       img: "https://i.pinimg.com/1200x/27/e8/21/27e8213686298acdd9789bce0f94db50.jpg",
     },
     {
