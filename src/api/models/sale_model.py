@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from app import db
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey, DateTime
@@ -26,7 +26,7 @@ class Sale(db.Model):
             "user_id": self.user_id,
             "discount": self.discount.serialize() if self.discount else None,
             "total": self.total,
-            "date": self.date.isoformat(),
+            "date": self.date.replace(tzinfo=timezone.utc).isoformat(),
             "items": [item.serialize() for item in self.items]
         }
 

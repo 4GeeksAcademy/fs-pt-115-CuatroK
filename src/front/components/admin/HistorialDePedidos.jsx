@@ -13,39 +13,38 @@ export const HistorialDePedidos = () => {
         },
     })
 
-    console.log(data)
-    if (loading) {
-        return (<div className="d-flex justify-content-center align-items-center w-100 h-100">
-            <div
-                className="spinner-border text-warning"
-                role="status"
-                style={{ width: "2rem", height: "2rem" }}
-            >
-                <span className="visually-hidden">Cargando...</span>
-            </div>
-        </div>)
-    }
-
     return (
         <>
             <h2>Historial</h2>
-            <div >
-                <div >
-                    <div className=" bg-success p-3">
-                        {
-                            data.map((item) => (
-                                <HistorialDePedidosCard
-                                    id={item.id}
-                                    total={item.total}
-                                    item={item.items.reduce((acc, curr) => acc + curr.quantity, 0)}
-                                    date={item.date}
-                                />
-                            ))
-
-                        }
+            {
+                loading || !data ? (
+                    (<div className="d-flex justify-content-center align-items-center w-100 h-100">
+                        <div
+                            className="spinner-border text-warning"
+                            role="status"
+                            style={{ width: "2rem", height: "2rem" }}
+                        >
+                            <span className="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>)
+                ) :
+                    <div >
+                        <div >
+                            <div className=" bg-success p-3">
+                                {
+                                    data.map((item) => (
+                                        <HistorialDePedidosCard
+                                            id={item.id}
+                                            total={item.total}
+                                            quantity={item.items.reduce((acc, curr) => acc + curr.quantity, 0)}
+                                            date={item.date}
+                                        />
+                                    ))
+                                }
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+            }
         </>
     )
 }
