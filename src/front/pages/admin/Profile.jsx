@@ -8,10 +8,11 @@ import { useAuth } from "../../hooks/useAuth";
 import LoadingSpinner from "../../components/public/LoadingSpinner";
 import { Carrito } from "../../components/admin/Carrito";
 import { useNavigate } from "react-router-dom";
+import { HistorialDePedidos } from "../../components/admin/HistorialDePedidos";
 
-export const Profile = () => {
+export const Profile = ({ textOption }) => {
     const [isActive, setIsActive] = useState("Datos personales");
-    const { user } = useAuth()
+    const { user, token, loading } = useAuth()
     const navigate = useNavigate()
 
     const getUserApi = async () => {
@@ -20,12 +21,18 @@ export const Profile = () => {
     };
 
     useEffect(() => {
+        if (textOption) {
+            setIsActive(textOption)
+        }
         getUserApi();
         if (user) {
             if (user.msg == 'Token has expired') {
                 sessionStorage.removeItem("token");
                 return navigate("/")
             }
+        }
+        if (!token && !loading) {
+            return navigate("/")
         }
     }, [user]);
     console.log(user)
@@ -101,7 +108,7 @@ export const Profile = () => {
                     ) : isActive == "Seguridad" ? (
                         <Seguridad />
                     ) : isActive == "Historial de pedidos" ? (
-                        <h1>Historial de pedidos</h1>
+                        <HistorialDePedidos />
                     ) : (
                         <Carrito />
                     )}

@@ -4,12 +4,13 @@ import { loadStripe } from "@stripe/stripe-js";
 import { CheckoutForm } from "./CheckoutForm";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const url = import.meta.env.VITE_BACKEND_URL + "/api";
 
 export const Payment = () => {
   const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
-    fetch("https://urban-computing-machine-5gwj946rvqp2p44v-3001.app.github.dev/api/create-payment-intent", {
+    fetch(`${url}/create-payment-intent`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

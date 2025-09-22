@@ -23,9 +23,11 @@ export const CreateAccount = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (inputValue.email.trim().length < 6 || !inputValue.email.includes("@") || !inputValue.email.includes(".com")) {
+        if (inputValue.email.trim().length < 6 || inputValue.email.includes("@") || inputValue.email.includes(".com") && inputValue.password.trim().length < 5 && inputValue.username.trim().length < 3) {
             await registerUser(inputValue, navigate)
-
+        }
+        else {
+            setError("Faltan datos por rellenar")
         }
     };
 
@@ -91,7 +93,7 @@ export const CreateAccount = () => {
                                 value={inputValue.email}
                                 onChange={handleOnChange}
                             />
-                            {error && (inputValue.email.trim().length < 6 || !inputValue.email.includes("@")) || !inputValue.email.includes(".com") && (
+                            {error && inputValue.email.trim().length < 6 && (
                                 <div
                                     className="bg-danger text-white p-2 rounded"
                                     style={{ position: "absolute", top: "100%", left: 0, zIndex: 10, whiteSpace: "nowrap" }}
