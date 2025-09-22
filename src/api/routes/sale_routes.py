@@ -65,3 +65,11 @@ def create_sale_route():
 def get_sales():
     sales = Sale.query.all()
     return jsonify([s.serialize() for s in sales])
+
+
+@sale_bp.route("/user", methods=["GET"])
+@jwt_required()
+def get_user_sales():
+    user_id = get_jwt_identity()
+    sales = Sale.query.filter_by(user_id=user_id).all()
+    return jsonify([s.serialize() for s in sales])
