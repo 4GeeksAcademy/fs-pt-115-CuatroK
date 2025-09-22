@@ -1,0 +1,182 @@
+
+.container.py-4 {
+  --cat-gap: 1rem;
+}
+
+h1.mb-3 {
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  font-weight: 800;
+  letter-spacing: .2px;
+  margin-bottom: .25rem !important;
+}
+
+
+.catalogo-intro {
+  color: #6c757d;
+  max-width: 80ch;
+  line-height: 1.5;
+}
+
+
+.row.g-3 {
+  --bs-gutter-x: 1.25rem;
+  --bs-gutter-y: 1.25rem;
+}
+
+
+.card.h-100.position-relative {
+  border: 1px solid #efefef !important;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: box-shadow .18s ease, transform .18s ease;
+  background: #fff;
+}
+
+.card.h-100.position-relative:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.06);
+}
+
+
+.card-img-top {
+  background: #fff;
+  object-fit: contain !important; 
+  padding: 1.25rem;
+}
+
+
+.card-body {
+  padding: 0.9rem 1rem 1.1rem 1rem !important;
+}
+
+
+.card-title {
+  font-size: .98rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  min-height: 2.5rem; 
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: .35rem !important;
+}
+
+.card-text.small {
+  color: #9096a1 !important;
+  min-height: 2.2rem;
+}
+
+
+.fw-bold {
+  color: #e0182d; 
+  font-weight: 800 !important;
+  letter-spacing: .2px;
+}
+
+.precio-tachado {
+  color: #9aa1ac;
+  text-decoration: line-through;
+  margin-left: .35rem;
+  font-weight: 500;
+  font-size: .95rem;
+}
+
+
+.btn.btn-primary.w-100.mt-2 {
+  background: #111 !important;      
+  border-color: #111 !important;
+  border-radius: 100px;
+  padding: .6rem .9rem;
+  font-weight: 600;
+}
+.btn.btn-primary.w-100.mt-2:hover {
+  filter: brightness(1.1);
+}
+
+
+
+.badge.text-bg-warning {
+  --_bg: #111;
+  background: var(--_bg) !important;  
+  color: #fff !important;
+  font-weight: 700;
+  padding: .35rem .5rem;
+  border-radius: 6px;
+  text-transform: none;
+  letter-spacing: .2px;
+}
+
+
+.badge-nuevo {
+  background: #111 !important;
+  color: #fff !important;
+  font-weight: 700;
+}
+.badge-descuento {
+  background: #ff4d4f !important;      
+  color: #fff !important;
+  font-weight: 800;
+}
+
+
+.badge.top-right {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+
+.btn-like {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  border-radius: 999px;
+  padding: .35rem .55rem;
+  background: #fff;
+  border: 1px solid #e9ecf2;
+  box-shadow: 0 6px 18px rgba(17, 24, 39, .08);
+  line-height: 1;
+}
+
+
+.title-2lines {          
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.text-muted-soft { color: #9aa1ac !important; }
+
+
+.filtro-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(1px);
+  z-index: 1040;
+}
+
+
+.filtro-drawer {
+  position: fixed; top: 0; height: 100vh; width: 340px; max-width: 90vw;
+  background: #fff; display: flex; flex-direction: column;
+  z-index: 1050;
+}
+
+
+.filtro-left { left: 0; box-shadow: 8px 0 24px rgba(0,0,0,.15); }
+
+
+.filtro-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-bottom: 1px solid #eee;
+}
+.filtro-body {
+  padding: 12px 16px; overflow: auto; display: grid; gap: 8px;
+}
+.filtro-footer {
+  margin-top: auto; display: flex; gap: 8px; align-items: center;
+  padding: 12px 16px; border-top: 1px solid #eee;
+}
+
+.filtro-summary { cursor: pointer; font-weight: 600; padding: 8px 0; }
+.filtro-check { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
