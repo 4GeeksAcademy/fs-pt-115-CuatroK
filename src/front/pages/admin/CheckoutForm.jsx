@@ -1,6 +1,8 @@
 import React from "react";
 import { useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js";
 
+const url = import.meta.env.VITE_BACKEND_URL + "/api";
+
 export const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
@@ -12,7 +14,7 @@ export const CheckoutForm = () => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "https://urban-computing-machine-5gwj946rvqp2p44v-3000.app.github.dev/",
+        return_url: `${url}`,
       },
     });
 
@@ -24,9 +26,9 @@ export const CheckoutForm = () => {
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
-        <PaymentElement className="mt-5"/>
-        <button className="btn btn-warning mt-3 mb-3" 
-        type="submit" disabled={!stripe}>
+        <PaymentElement className="mt-5" />
+        <button className="btn btn-warning mt-3 mb-3"
+          type="submit" disabled={!stripe}>
           Pagar
         </button>
       </form>

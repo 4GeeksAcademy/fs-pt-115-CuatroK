@@ -6,7 +6,7 @@ import { router } from "./routes";  // Import the router configuration
 import { StoreProvider } from './hooks/useGlobalReducer';  // Import the StoreProvider for global state management
 import { BackendURL } from './components/BackendURL';
 
-import "bootstrap/dist/css/bootstrap-utilities.min.css"
+import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js"
 import { AuthProvider } from './hooks/useAuth';
 // Catalogo 
