@@ -120,10 +120,7 @@ export const DatosPersonales = ({ user, getUserApi }) => {
                         <div className="input-group input-group-sm mb-3">
                             <input
                                 type="text"
-                                className={`form-control ${userInfo.full_name.trim().length < 5
-                                    ? "input-data-missing"
-                                    : ""
-                                    }`}
+                                className={`form-control`}
                                 aria-label="Sizing example input"
                                 aria-describedby="inputGroup-sizing-sm"
                                 name="full_name"
@@ -131,21 +128,7 @@ export const DatosPersonales = ({ user, getUserApi }) => {
                                 value={userInfo.full_name ?? ""}
                                 onKeyDown={HandleProfileKeyDown}
                             />
-                            {userInfo.full_name.trim().length < 5 && (
-                                <div
-                                    className="bg-danger text-white p-2 rounded"
-                                    style={{
-                                        position: "absolute",
-                                        top: "100%",
-                                        left: 0,
-                                        zIndex: 10,
-                                        whiteSpace: "nowrap",
-                                    }}
-                                >
-                                    <i className="fa-solid fa-circle-exclamation me-1"></i>
-                                    Tu nombre debe tener al menos 5 caracteres
-                                </div>
-                            )}
+
                         </div>
                     </div>
                     <div className="col-6 ms-auto">

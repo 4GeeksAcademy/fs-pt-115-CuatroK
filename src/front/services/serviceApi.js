@@ -162,3 +162,45 @@ export const getJoyasSearch = async () => {
     console.error(error);
   }
 };
+export const getDiscount = async (token) => {
+  try {
+    const res = await fetch(`${url}/discount/user`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error(`Error HTTP: ${res.status}`);
+    }
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const postSale = async (totalAmount, discount, token) => {
+  try {
+    const res = await fetch(`${url}/sale`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        total: totalAmount,
+        discount: discount ? discount : null,
+      }),
+    });
+    if (!res.ok) {
+      throw new Error(`Error HTTP: ${res.status}`);
+    }
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};

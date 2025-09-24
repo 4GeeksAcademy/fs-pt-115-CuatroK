@@ -51,3 +51,17 @@ export const removeCartItem = async (jewell_id) => {
     console.error(error.message);
   }
 };
+
+export const getSales = async (user_id) => {
+  const token = sessionStorage.getItem("token");
+  const response = await fetch(`${url}/sale/${user_id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) throw new Error("Error en el fetch");
+  const data = await response.json();
+  return data;
+};

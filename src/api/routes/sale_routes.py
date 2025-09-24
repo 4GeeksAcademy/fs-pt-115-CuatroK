@@ -33,6 +33,8 @@ def create_sale_route():
         return jsonify({'msg': 'Tu carrito está vacío'}), 400
 
     data = request.get_json()
+    if not data.get("total"):
+        return jsonify({'msg': 'No se recibió ningun total del pedido'})
     discount_code = data.get("discount_code")
 
     discount = apply_discount(discount_code)
@@ -41,7 +43,7 @@ def create_sale_route():
     if discount:
         total -= min(discount.total, total)
 
-    sale = Sale(user_id=user_id, discount=discount, total=total)
+    sale = Sale(user_id=user_id, discount=discount, total=data.get("total"))
     db.session.add(sale)
     db.session.flush()
 
@@ -64,4 +66,12 @@ def create_sale_route():
 @sale_bp.route("/", methods=["GET"])
 def get_sales():
     sales = Sale.query.all()
+    return jsonify([s.serialize() for s in sales])
+
+
+@sale_bp.route("/user", methods=["GET"])
+@jwt_required()
+def get_user_sales():
+    user_id = get_jwt_identity()
+    sales = Sale.query.filter_by(user_id=user_id).all()
     return jsonify([s.serialize() for s in sales])
