@@ -50,7 +50,7 @@ export const router = createBrowserRouter(
         <Route path="/" element={<Products />} />
         <Route path="/catalogo/:category" element={<Catalogo />} />
         <Route path="/producto/:idOrSlug" element={<ProductoPage />} />
-        
+
         <Route path="*" element={<h1>404</h1>} />
       </Route>
 
