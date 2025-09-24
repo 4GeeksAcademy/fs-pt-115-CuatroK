@@ -16,10 +16,17 @@ const env = (k, fb = "") => {
 };
 const CURRENCY = env("CURRENCY", "EUR");
 
+const toNonNegativeString = (value) => {
+  if (value === "" || value === null || value === undefined) return "";
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "";
+  return String(Math.max(0, n));
+};
+
 export default function CalculadoraMetales() {
   const [gramsGold, setGramsGold] = useState("");
   const [gramsSilver, setGramsSilver] = useState("");
-  const [silverPORCENTAJE, setSilverPORCENTAJE] = useState("");
+  const [silverPORCENTAJE, setSilverPORCENTAJE] = useState("999");
   const [state, setState] = useState({
     loading: true,
     error: "",
@@ -68,7 +75,6 @@ export default function CalculadoraMetales() {
   const silverVal = fmt(gS * sFactor * pgSilver);
 
   return (
-
     <div className="container bg-dark mt-5 mb-5 py-4">
       <div className="row g-4">
         <div className="col-12">
@@ -78,11 +84,11 @@ export default function CalculadoraMetales() {
                 Calculadora de Metales
               </h3>
               <p className="text-center text-secondary mb-1">
-                <h3>Moneda: EUR </h3>
+                <h3>Moneda: {CURRENCY}</h3>
               </p>
               <div className="text-center text-secondary mb-1">
                 <p>Últ. oro: {fmtTime(state.gold?.fetchedAt)}</p>
-                <p>Últ. Plata: {fmtTime(state.silver?.fetchedAt)}</p>
+                <p>Últ. plata: {fmtTime(state.silver?.fetchedAt)}</p>
               </div>
             </div>
           </div>
@@ -97,10 +103,7 @@ export default function CalculadoraMetales() {
                 <span className="badge bg-secondary">{goldPgr}</span>
               </p>
               <div className="mb-3">
-                <label
-                  htmlFor="gramsGold"
-                  className="form-label text-secondary"
-                >
+                <label htmlFor="gramsGold" className="form-label text-secondary">
                   Gramos (oro)
                 </label>
                 <input
@@ -109,7 +112,13 @@ export default function CalculadoraMetales() {
                   className="form-control bg-dark text-light border-secondary"
                   placeholder="Ej: 7.5"
                   value={gramsGold}
-                  onChange={(e) => setGramsGold(e.target.value)}
+                  min="0"
+                  step="0.01"
+                  inputMode="decimal"
+                  onKeyDown={(e) => {
+                    if (e.key === "-") e.preventDefault();
+                  }}
+                  onChange={(e) => setGramsGold(toNonNegativeString(e.target.value))}
                 />
               </div>
               <div className="row g-2">
@@ -142,6 +151,7 @@ export default function CalculadoraMetales() {
           </div>
         </div>
 
+
         <div className="col-12 col-lg-6">
           <div className="card bg-dark text-light border-secondary h-100">
             <div className="card-body">
@@ -152,10 +162,7 @@ export default function CalculadoraMetales() {
               </p>
               <div className="row g-3">
                 <div className="col-12">
-                  <label
-                    htmlFor="gramsSilver"
-                    className="form-label text-secondary"
-                  >
+                  <label htmlFor="gramsSilver" className="form-label text-secondary">
                     Gramos (plata)
                   </label>
                   <input
@@ -164,14 +171,17 @@ export default function CalculadoraMetales() {
                     className="form-control bg-dark text-light border-secondary"
                     placeholder="Ej: 12.3"
                     value={gramsSilver}
-                    onChange={(e) => setGramsSilver(e.target.value)}
+                    min="0"
+                    step="0.01"
+                    inputMode="decimal"
+                    onKeyDown={(e) => {
+                      if (e.key === "-") e.preventDefault();
+                    }}
+                    onChange={(e) => setGramsSilver(toNonNegativeString(e.target.value))}
                   />
                 </div>
                 <div className="col-12">
-                  <label
-                    htmlFor="PORCENTAJE"
-                    className="form-label text-secondary"
-                  >
+                  <label htmlFor="PORCENTAJE" className="form-label text-secondary">
                     Ley (pureza)
                   </label>
                   <select
@@ -196,6 +206,7 @@ export default function CalculadoraMetales() {
             </div>
           </div>
         </div>
+      
       </div>
     </div>
   );
