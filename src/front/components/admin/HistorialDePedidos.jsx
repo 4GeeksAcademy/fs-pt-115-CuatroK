@@ -1,6 +1,7 @@
 import { useAuth } from "../../hooks/useAuth";
 import { useFetch } from "../../hooks/useFetch"
 import { HistorialDePedidosCard } from "./historialDePedidosComponents/HistorialDePedidosCard"
+import "../../index.css"
 
 const url = import.meta.env.VITE_BACKEND_URL + "/api";
 export const HistorialDePedidos = () => {
@@ -30,7 +31,7 @@ export const HistorialDePedidos = () => {
                 ) :
                     <div >
                         <div >
-                            <div className=" bg-success p-3">
+                            <div className="products-card  p-3">
                                 {
                                     data.map((item) => (
                                         <HistorialDePedidosCard

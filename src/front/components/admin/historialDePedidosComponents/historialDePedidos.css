@@ -113,3 +113,73 @@
 .remove-btn:hover {
   color: #b52b27;
 }
+
+.no-style-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.pedido-detail {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.pedido-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.pedido-header h1 {
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  color: #333;
+}
+
+.pedido-date,
+.pedido-total {
+  font-size: 18px;
+  color: #000000;
+}
+
+.pedido-items h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.pedido-items-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.pedido-item-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fafafa;
+  align-items: center;
+}
+
+.pedido-item-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.pedido-item-info h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #222;
+}
+
+.pedido-item-brand {
+  font-size: 0.9rem;
+  color: #777;
+}
