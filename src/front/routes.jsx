@@ -31,7 +31,7 @@ import { AuthLayout } from "./layout/Auth.layout";
 import { SearchResults } from "./components/public/SearchResults";
 import { Catalogo } from "./pages/public/Catalogo/Catalogo";
 import { ProductoPage } from "./pages/public/Producto/ProductoPage";
- 
+
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
