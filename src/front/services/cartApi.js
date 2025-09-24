@@ -65,3 +65,19 @@ export const getSales = async (user_id) => {
   const data = await response.json();
   return data;
 };
+export const GetCartProducts = async () => {
+  const token = sessionStorage.getItem("token");
+  try {
+    const response = await fetch(`${url}/shopping-cart`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) throw new Error("Error al obtener el carrito");
+    return await response.json(); 
+  } catch (error) {
+    console.error(error.message);
+    return [];
+  }
+};

@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom"
 import { useFetch } from "../../hooks/useFetch"
 import { useAuth } from "../../hooks/useAuth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { GetCartProducts } from "../../services/cartApi";
 
 export const ShoppingCart = () => {
+        const [cartItems, setCartItems] = useState([]);
         useEffect(() => {
                 const offcanvasEl = document.getElementById("cartPanel");
                 if (!offcanvasEl) return;
@@ -18,6 +20,15 @@ export const ShoppingCart = () => {
                 return () => {
                         offcanvasEl.removeEventListener("hidden.bs.offcanvas", handleHidden);
                 };
+        }, []);
+
+        useEffect(() => {
+                const fetchCart = async () => {
+                        const items = await GetCartProducts();
+                        setCartItems(items);
+                };
+
+                fetchCart();
         }, []);
 
         return (
@@ -53,8 +64,17 @@ export const ShoppingCart = () => {
                                 <div className="offcanvas-body">
                                         {/* Aquí puedes renderizar productos dinámicos */}
                                         <div className="mb-3">
-                                                <p>Producto 1 - €19.99</p>
-                                                <p>Producto 2 - €9.99</p>
+                                                {cartItems.length === 0 ? (
+                                                        <p>Tu carrito está vacío.</p>
+                                                ) : (
+                                                        <div className="mb-3">
+                                                                {cartItems.map((item, index) => (
+                                                                        <p key={index}>
+                                                                                {item.name} - €{Number(item.price).toFixed(2)}
+                                                                        </p>
+                                                                ))}
+                                                        </div>
+                                                )}
                                         </div>
                                         <Link to="payment">
                                                 <button className="btn btn-warning w-100">Finalizar compra</button>
