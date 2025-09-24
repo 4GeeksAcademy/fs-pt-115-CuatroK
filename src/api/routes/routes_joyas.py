@@ -20,6 +20,7 @@ Jewell_bp = Blueprint("jewells_bp", __name__)
 
 CORS(Jewell_bp)
 
+
 def json_error(message, status=400, **extra):
     response_payload = {"ok": False, "error": message}
     response_payload.update(extra)
@@ -91,6 +92,7 @@ def create_jewell():
         "name", "description", "price") if k not in request_data]
     if missing_required:
         return json_error(f"Faltan campos: {', '.join(missing_required)}")
+    print(request_data)
 
     try:
         price_value = float(request_data["price"])
