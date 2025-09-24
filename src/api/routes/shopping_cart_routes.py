@@ -60,7 +60,7 @@ def delete_cart(cart_id):
 
     db.session.delete(cart)
     db.session.commit()
-    return jsonify({'msg': 'carrito borrato'}), 200
+    return jsonify({'msg': 'carrito borrado'}), 200
 
 
 @shopping_cart_bp.route("/<int:item_id>/remove-item", methods=["DELETE"])
