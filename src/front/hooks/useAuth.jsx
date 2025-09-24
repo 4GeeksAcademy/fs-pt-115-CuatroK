@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }) => {
             );
 
             const data = await response.json();
-
             if (!response.ok) {
                 throw new Error(data.msg);
             }
