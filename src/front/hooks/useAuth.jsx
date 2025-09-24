@@ -9,6 +9,8 @@ export const AuthProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [token, setToken] = useState(sessionStorage.getItem("token") || null);
+    const [finalAmount, setFinalAmount] = useState(null)
+    const [discount, setDiscount] = useState("")
 
     const registerUser = async (userData, navigate) => {
         setLoading(true);
@@ -80,7 +82,7 @@ export const AuthProvider = ({ children }) => {
     }, [token])
 
     return (
-        <AuthContext.Provider value={{ user, error, setError, loading, token, registerUser, loginUser, logoutUser }}>
+        <AuthContext.Provider value={{ user, error, setError, loading, token, registerUser, loginUser, logoutUser, finalAmount, setFinalAmount, discount, setDiscount }}>
             {children}
         </AuthContext.Provider>
     )
