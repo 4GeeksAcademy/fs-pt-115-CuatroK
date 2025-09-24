@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { CategoryCard } from "./CategoryCard";
+import { getJoyasSearch } from "../../services/serviceApi";
 import { SearchBar } from "./SearchBar";
-import { getJoyasSearch } from "./serviceApi";
 
 export const Catalog = () => {
   const [joyas, setJoyas] = useState([]);
   const [busqueda, setBusqueda] = useState("");
-  const [activarBusqueda, setActivarBusqueda] = useState(false);
 
   useEffect(() => {
     const cargarJoyas = async () => {
@@ -16,30 +15,29 @@ export const Catalog = () => {
     cargarJoyas();
   }, []);
 
-  const joyasFiltradas = activarBusqueda
-    ? joyas.filter(joya =>
-      joya.name.toLowerCase().includes(busqueda.toLowerCase())
-    )
-    : [];
+  const joyasFiltradas = busqueda.trim()
+    ? joyas.filter(joya => {
+      const termino = busqueda.toLowerCase();
+      return (
+        joya.name.toLowerCase().includes(termino) ||
+        (joya.metal && joya.metal.toLowerCase().includes(termino))
+      );
+    })
+    : joyas;
 
   return (
     <div className="container mt-4">
-      <SearchBar busqueda={busqueda} setBusqueda={setBusqueda} setActivarBusqueda={setActivarBusqueda} />
-
+      <SearchBar busqueda={busqueda} setBusqueda={setBusqueda} />
       <div className="row mt-3">
-        {joyasFiltradas.length > 0 ? (
-          joyasFiltradas.map((joya, index) => (
-            <div className="col-md-4 mb-3" key={index}>
-              <CategoryCard
-                image={joya.url_image}
-                name={joya.name}
-                price={joya.price}
-              />
-            </div>
-          ))
-        ) : (
-          <p className="text-muted text-center">No se encontraron joyas con ese nombre.</p>
-        )}
+        {joyasFiltradas.map((joya, index) => (
+          <div className="col-md-4 mb-3" key={index}>
+            <CategoryCard
+              image={joya.url_image}
+              name={joya.name}
+              price={joya.price}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
