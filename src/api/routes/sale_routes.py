@@ -34,14 +34,14 @@ def create_sale_route():
 
     data = request.get_json()
     if not data.get("total"):
-        return jsonify({'msg': 'No se recibió ningun total del pedido'})
+        return jsonify({'msg': 'No se recibió ningun total del pedido'}), 400
     discount_code = data.get("discount_code")
 
     discount = apply_discount(discount_code)
 
     total = sum(item.jewell.price * item.quantity for item in cart_items)
     if discount:
-        total -= min(discount.total, total)
+        total = total - (total * discount / 100)
 
     sale = Sale(user_id=user_id, discount=discount, total=data.get("total"))
     db.session.add(sale)
