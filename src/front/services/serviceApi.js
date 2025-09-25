@@ -20,7 +20,7 @@ export const getUser = async () => {
   return data;
 };
 
-export const updateUserData = async (dataUpdated) => {
+export const updateUserData = async (dataUpdated, getUser) => {
   const token = sessionStorage.getItem("token");
   console.log(dataUpdated);
   try {
@@ -36,6 +36,7 @@ export const updateUserData = async (dataUpdated) => {
     if (!response.ok) {
       console.error(data.msg);
     }
+    await getUser();
     return data;
   } catch (error) {
     console.error(error.message);
@@ -44,6 +45,7 @@ export const updateUserData = async (dataUpdated) => {
 
 export const updateAddressData = async (dataUpdated, id) => {
   const token = sessionStorage.getItem("token");
+
   try {
     const response = await fetch(`${url}/user/client/address/${id}`, {
       method: "PATCH",
@@ -194,6 +196,30 @@ export const postSale = async (totalAmount, discount, token) => {
         total: totalAmount,
         discount: discount ? discount : null,
       }),
+    });
+    if (!res.ok) {
+      throw new Error(`Error HTTP: ${res.status}`);
+    }
+    const data = await res.json();
+    console.log(data);
+    if (data.items.length === 1) {
+      await createDiscount(20, "Bienvenida-", token);
+    }
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const createDiscount = async (total, discount_code, token) => {
+  try {
+    const res = await fetch(`${url}/discount`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ total: total, discount_code: discount_code }),
     });
     if (!res.ok) {
       throw new Error(`Error HTTP: ${res.status}`);

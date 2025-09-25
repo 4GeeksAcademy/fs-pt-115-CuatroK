@@ -4,7 +4,7 @@ import { useFetch } from "../../hooks/useFetch";
 import "../../index.css"
 import CarritoProfileCard from "./carritoComponents/CarritoProfileCard"
 import { removeCartItem } from "../../services/cartApi";
-import { getDiscount, getJoyasSearch } from "../../services/serviceApi";
+import { getDiscount } from "../../services/serviceApi";
 import LoadingSpinner from "../public/LoadingSpinner";
 import { Link } from "react-router-dom";
 

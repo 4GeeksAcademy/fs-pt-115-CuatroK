@@ -4,7 +4,6 @@ import "../../index.css";
 import "../button.css";
 import { Address } from "./datosPersonalesComponents/Address";
 import { AddressModal } from "./datosPersonalesComponents/AddressModal";
-import { Link } from "react-router-dom";
 
 export const DatosPersonales = ({ user, getUserApi }) => {
     const [userInfo, setUserInfo] = useState({
@@ -17,19 +16,25 @@ export const DatosPersonales = ({ user, getUserApi }) => {
     const [dataToSubmit, setDataToSubmit] = useState(false);
 
     const SendDataUpdated = async (userInfo) => {
-        if (userInfo.full_name.trim().length < 5) {
-            return console.log("muy corto");
-        }
         if (userInfo.username.trim().length < 3) {
-            return console.log("muy corto");
+            setDataMissingError(true)
+            return;
         }
+
+        setDataMissingError(false)
         const dataToSend = {
             username: userInfo.username,
             full_name: userInfo.full_name,
             gender: userInfo.gender,
             birth_date: userInfo.birth_date,
         };
-        await updateUserData(dataToSend);
+
+        setUserInfo(dataToSend);
+        try {
+            await updateUserData(dataToSend, getUserApi);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const HandleProfileKeyDown = (e) => {
@@ -46,20 +51,14 @@ export const DatosPersonales = ({ user, getUserApi }) => {
 
     const HandleProfileOnChange = (e) => {
         const { name, value } = e.target;
-
-        setDataMissingError(false);
+        setUserInfo((prev) => ({ ...prev, [name]: value }));
         setDataToSubmit(true);
-        let updatedUser = { ...userInfo, [name]: value };
-
-        setUserInfo(updatedUser);
     };
 
     const HandleSelectors = (e) => {
         const { name, value } = e.target;
-        let updatedUser = { ...userInfo, [name]: value };
-
-        setUserInfo(updatedUser);
-        SendDataUpdated(updatedUser);
+        setUserInfo((prev) => ({ ...prev, [name]: value }));
+        setDataToSubmit(true);
     };
 
     const HandleBirthDate = (e) => {
@@ -178,7 +177,27 @@ export const DatosPersonales = ({ user, getUserApi }) => {
                                 <option value="">Selecciona...</option>
                                 <option value="male">Masculino</option>
                                 <option value="female">Femenino</option>
-                                <option value="other">Otro</option>
+                                <option value="non-binary">No binario</option>
+                                <option value="genderqueer">Genderqueer</option>
+                                <option value="genderfluid">Género fluido</option>
+                                <option value="Demagogo">Demagogo 🎆</option>
+                                <option value="agender">Agénero</option>
+                                <option value="bigender">Bigénero</option>
+                                <option value="demiboy">Demiboy</option>
+                                <option value="demigirl">Demigirl</option>
+                                <option value="androgyne">Andrógino</option>
+                                <option value="two-spirit">Dos espíritus</option>
+                                <option value="pangender">Pangénero</option>
+                                <option value="neutrois">Neutrois</option>
+                                <option value="trans">Trans</option>
+                                <option value="enby">Enby</option>
+                                <option value="Femboy">Femboy</option>
+                                <option value="dinosaur">Dinosaurio 🦖</option>
+                                <option value="gato">Gato 🐱</option>
+                                <option value="perrito">Bellaco 🐶</option>
+                                <option value="npc-sin-propósito">NPC sin propósito 🎭</option>
+                                <option value="kpop">Fan de Taylor 💜</option>
+                                <option value="shrek">Fan de Travis 🧅</option>
                             </select>
                         </div>
                     </div>
