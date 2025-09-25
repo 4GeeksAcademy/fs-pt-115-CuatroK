@@ -1,6 +1,5 @@
 const API_BASE_URL = (
-  import.meta.env.VITE_API_URL ||
-  "https://vigilant-lamp-r4w7576jwqv935rj4-3001.app.github.dev"
+  import.meta.env.VITE_BACKEND_URL
 ).replace(/\/$/, "");
 
 export async function getJoyasSearch() {
