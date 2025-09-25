@@ -34,7 +34,7 @@ export const ShoppingCart = () => {
                 <i className="fa-solid fa-cart-shopping text-warning"></i>
             </button>
 
-            {/* Panel lateral del carrito */}
+            
             <div
                 className="offcanvas offcanvas-end"
                 tabIndex="-1"
