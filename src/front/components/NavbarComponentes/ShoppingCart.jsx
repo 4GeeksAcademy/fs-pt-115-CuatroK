@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { GetCartProducts, removeCartItem } from "../../services/cartApi";
 import CarritoProfileCard from "../admin/carritoComponents/CarritoProfileCard";
 import { useAuth } from "../../hooks/useAuth"
-import { useFetch} from "../../hooks/useFetch"
+import { useFetch } from "../../hooks/useFetch"
 
 export const ShoppingCart = () => {
         const [cartItems, setCartItems] = useState([]);
@@ -14,10 +14,10 @@ export const ShoppingCart = () => {
                 headers: {
                         Authorization: `Bearer ${token}`,
                 },
-     
+
         })
-       console.log(data);
-       
+        console.log(data);
+
         useEffect(() => {
                 const offcanvasEl = document.getElementById("cartPanel");
                 if (!offcanvasEl) return;
@@ -34,11 +34,14 @@ export const ShoppingCart = () => {
         }, []);
 
         useEffect(() => {
+                const fetchAsync = async () => {
+                        await fetchData()
+                }
                 if (data) {
+
+                        fetchAsync()
                         setCartItems(data)
                 }
-          
-                
         }, [data]);
 
         const totalAmount = cartItems.reduce(
@@ -46,9 +49,9 @@ export const ShoppingCart = () => {
                 0
         );
         const handleRemove = async (id) => {
-        await removeCartItem(id)
-        await fetchData()
-    }
+                await removeCartItem(id)
+                await fetchData()
+        }
 
         return (
                 <div className="mt-2">
@@ -100,7 +103,7 @@ export const ShoppingCart = () => {
                                                                 ))}
                                                 </div>
                                         )}
-                                        <p className="fw-bold text-end">Total: {finalAmount.toFixed(2)} €</p>
+                                        <p className="fw-bold text-end">Total: {finalAmount ? finalAmount.toFixed(2) : "0.00"} €</p>
 
                                         <Link to="payment">
                                                 <button className="btn btn-warning w-100">Finalizar compra</button>
