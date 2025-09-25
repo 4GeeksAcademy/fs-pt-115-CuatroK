@@ -15,15 +15,13 @@ export const SearchBar = () => {
 
   return (
     <div>
-      <div
-        className="search-trigger"
-        onMouseEnter={() => setShowSearch(true)}
-        onMouseLeave={() => setShowSearch(false)}
-      >
-        <i className="fa-sharp fa-solid fa-magnifying-glass text-warning"></i>
+      <div className="input-group mt-2">
+        <span className="input-group-text bg-white border-end-0">
+          <i className="fa-sharp fa-solid fa-magnifying-glass text-warning"></i>
+        </span>
         <input
           type="text"
-          className={`form-control search-bar ${showSearch ? "visible" : ""}`}
+          className="form-control border-start-0"
           placeholder="Buscar joyas"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}

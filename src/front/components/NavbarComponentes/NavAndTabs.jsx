@@ -5,11 +5,11 @@ export const NavAndTabs = () => {
   const [activeTab, setActiveTab] = useState(null);
   return (
     <div>
-      <button className={`btn btn-warning me-2 text-warning border-0 ${activeTab === "productos" ? "active" : ""}`}
+      <button className={`btn btn-warning me-2 text-warning border-0 ${activeTab === "productos" ? "active" : ""} mt-1`}
         onClick={() => setActiveTab("productos")}
         style={{ backgroundColor: ' #5C3D2E' }} > Productos
       </button> <button
-        className={`btn btn-warning text-warning border-0 ${activeTab === "contacto" ? "active" : ""}`}
+        className={`btn btn-warning text-warning border-0 ${activeTab === "contacto" ? "active" : ""} mt-1`}
         onClick={() => setActiveTab("contacto")}
         style={{ backgroundColor: ' #5C3D2E' }} > Contactanos
       </button> <div className="mt-3"> {activeTab === "productos" && <Products />} {activeTab === "contacto" && <ContactUs />}
