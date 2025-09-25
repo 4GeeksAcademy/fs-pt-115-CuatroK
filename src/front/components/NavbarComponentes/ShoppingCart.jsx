@@ -37,14 +37,9 @@ export const ShoppingCart = () => {
                 if (data) {
                         setCartItems(data)
                 }
-          
-                
-        }, [data]);
+          }, [data]);
 
-        const totalAmount = cartItems.reduce(
-                (sum, item) => sum + item.price * item.quantity,
-                0
-        );
+        
         const handleRemove = async (id) => {
         await removeCartItem(id)
         await fetchData()
@@ -100,9 +95,9 @@ export const ShoppingCart = () => {
                                                                 ))}
                                                 </div>
                                         )}
-                                        <p className="fw-bold text-end">Total: {finalAmount.toFixed(2)} €</p>
+                                        <p className="fw-bold text-end">Total: {finalAmount} €</p>
 
-                                        <Link to="payment">
+                                        <Link to="/user">
                                                 <button className="btn btn-warning w-100">Finalizar compra</button>
                                         </Link>
                                 </div>
