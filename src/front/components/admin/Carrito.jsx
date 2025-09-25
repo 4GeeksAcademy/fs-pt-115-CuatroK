@@ -18,7 +18,7 @@ export const Carrito = () => {
             Authorization: `Bearer ${token}`,
         },
     })
-
+    console.log(data)
     const [cartItems, setCartItems] = useState([])
 
     const [showCouponInput, setShowCouponInput] = useState(false)
