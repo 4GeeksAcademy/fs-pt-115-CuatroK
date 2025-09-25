@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getJoyasSearch } from "../../../services/jewellsService";
 import "./ProductoPage_style.css";
+import { addCart, SumCartProduct } from "../../../services/cartApi";
 
 const SPEC_LABELS = {
   brand: "Marca",
@@ -58,6 +59,7 @@ export const ProductoPage = () => {
       </div>
     );
 
+
   
   const images = Array.isArray(item.images) && item.images.length > 0 ? item.images : [item.url_image];
 
@@ -67,6 +69,15 @@ export const ProductoPage = () => {
     .filter(([, value]) => value !== null && value !== undefined && String(value).trim() !== "");
 
   const inStock = (item.quantity ?? 0) > 0;
+
+  const handleAddToCart = async () => {
+  try {
+    await addCart(item.id);
+    window.dispatchEvent(new Event("cartUpdated")); // ← Emitimos evento
+  } catch (error) {
+    console.error("Error al añadir al carrito:", error);
+  }
+};
 
   return (
     <div className="container py-4">
@@ -147,7 +158,7 @@ export const ProductoPage = () => {
                 <button
                   className="btn btn-dark btn-lg"
                   disabled={!inStock}
-                  onClick={() => {
+                  onClick={() => {handleAddToCart()
                 }}
                 >
                   Añadir al carrito

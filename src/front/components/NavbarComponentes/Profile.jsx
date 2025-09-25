@@ -11,7 +11,7 @@ export const Profile = () => {
     return (
         <div className="position-relative text-end">
             <button
-                className="btn btn-outline-dark"
+                className="btn btn-outline-dark mt-2"
                 onClick={() => setOpen(!open)}
                 style={{ width: 50, height: 50 }}
             >

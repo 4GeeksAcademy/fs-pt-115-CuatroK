@@ -1,5 +1,3 @@
-
-import { CarruselSecundario } from "../../components/public/CarruselSecundario.jsx";
 import { Carrusel_principal } from "../../components/public/Carrusel_principal.jsx";
 import { CarruselCategoria } from "../../components/Carruseles/CarruselCategoria.jsx"
 import { Publicidad1 } from "../../components/publicidad/Publicidad1.jsx";
@@ -7,6 +5,7 @@ import { Publicidad2 } from "../../components/publicidad/Publicidad2.jsx";
 import { Publicidad3 } from "../../components/publicidad/Publicidad3.jsx";
 import { Publicidad4 } from "../../components/publicidad/Publicidad4.jsx";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Publicidad5 } from "../../components/publicidad/Publicidad5.jsx";
 
 export const Home = () => {
 
@@ -16,9 +15,7 @@ export const Home = () => {
 
     <>
       <Carrusel_principal />
-
-      <CarruselSecundario />
-
+      < Publicidad5 />
       <h1 className="text-center my-4">Destacados de Colgantes</h1>
       <CarruselCategoria category="colgantes" highlighted={true} />
       <Publicidad4 />
