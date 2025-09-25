@@ -68,10 +68,10 @@ export const Products = () => {
 
         <Link to="/calculadora">
           <button
-            className="btn btn-warning mb-3 color-buttons"
-            style={{ borderRadius: "50px" }}
+            className="btn btn-warning mb-3 color-buttons category-button mt-3"
+            style={{ borderRadius: "12px" }}
           >
-            Venta de Metales
+            Calculadora de Metales
           </button>
         </Link>
       </div>

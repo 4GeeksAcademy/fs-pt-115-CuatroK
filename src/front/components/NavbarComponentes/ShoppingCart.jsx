@@ -105,7 +105,7 @@ export const ShoppingCart = () => {
                                         )}
                                         <p className="fw-bold text-end">Total: {finalAmount ? finalAmount.toFixed(2) : "0.00"} €</p>
 
-                                        <Link to="payment">
+                                        <Link to="/user">
                                                 <button className="btn btn-warning w-100">Finalizar compra</button>
                                         </Link>
                                 </div>
