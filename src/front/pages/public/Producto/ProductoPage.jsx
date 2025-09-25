@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getJoyasSearch } from "../../../services/jewellsService";
 import "./ProductoPage_style.css";
-import { SumCartProduct } from "../../../services/cartApi";
+import { addCart, SumCartProduct } from "../../../services/cartApi";
 
 const SPEC_LABELS = {
   brand: "Marca",
@@ -71,12 +71,13 @@ export const ProductoPage = () => {
   const inStock = (item.quantity ?? 0) > 0;
 
   const handleAddToCart = async () => {
-    try {
-    await SumCartProduct(item.id);
+  try {
+    await addCart(item.id);
+    window.dispatchEvent(new Event("cartUpdated")); // ← Emitimos evento
   } catch (error) {
     console.error("Error al añadir al carrito:", error);
   }
-  }
+};
 
   return (
     <div className="container py-4">

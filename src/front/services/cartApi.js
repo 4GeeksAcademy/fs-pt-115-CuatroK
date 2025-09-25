@@ -81,3 +81,20 @@ export const GetCartProducts = async () => {
     return [];
   }
 };
+export const addCart = async (jewell_id) => {
+  const token = sessionStorage.getItem("token");
+  try {
+    const response = await fetch(`${url}/shopping-cart`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({jewell_id: jewell_id})
+    });
+    if (!response.ok) throw new Error("Error al obtener el carrito");
+    return await response.json(); 
+  } catch (error) {
+    console.error(error.message);
+    return []};
+}
