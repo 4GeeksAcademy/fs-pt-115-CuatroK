@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getJoyasSearch } from "../../../services/jewellsService";
 import "./ProductoPage_style.css";
-import { addCart, SumCartProduct } from "../../../services/cartApi";
+import { useCart } from "../../../hooks/useFetch";
 
 const SPEC_LABELS = {
   brand: "Marca",
@@ -23,8 +23,9 @@ const SPEC_LABELS = {
 export const ProductoPage = () => {
   const { idOrSlug } = useParams();
   const [item, setItem] = useState(null);
-  const [status, setStatus] = useState("loading"); // loading | ok | error
+  const [status, setStatus] = useState("loading");
   const [imgIndex, setImgIndex] = useState(0);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     let alive = true;
@@ -59,32 +60,21 @@ export const ProductoPage = () => {
       </div>
     );
 
-
-  
   const images = Array.isArray(item.images) && item.images.length > 0 ? item.images : [item.url_image];
 
-  
   const specs = Object.entries(SPEC_LABELS)
     .map(([key, label]) => [label, item?.[key]])
     .filter(([, value]) => value !== null && value !== undefined && String(value).trim() !== "");
 
   const inStock = (item.quantity ?? 0) > 0;
 
-  const handleAddToCart = async () => {
-  try {
-    await addCart(item.id);
-    window.dispatchEvent(new Event("cartUpdated")); // ← Emitimos evento
-  } catch (error) {
-    console.error("Error al añadir al carrito:", error);
-  }
-};
-
   return (
     <div className="container py-4">
       <div className="row g-4">
-        {/* ---------- Galería ---------- */}
+        {/* Galería */}
         <div className="col-12 col-lg-7">
-          <div className="row g-3"> 
+          <div className="row g-3">
+            {/* Miniaturas */}
             <div className="col-12 col-md-2 order-2 order-md-1">
               <div className="gallery-thumbs d-flex d-md-block gap-2 overflow-auto">
                 {images.map((src, i) => (
@@ -92,8 +82,6 @@ export const ProductoPage = () => {
                     key={i}
                     className={`thumb-btn btn p-0 border ${i === imgIndex ? "thumb-active" : ""}`}
                     onClick={() => setImgIndex(i)}
-                    aria-label={`Imagen ${i + 1}`}
-                    title={`Imagen ${i + 1}`}
                   >
                     <img
                       src={src}
@@ -107,6 +95,7 @@ export const ProductoPage = () => {
               </div>
             </div>
 
+            {/* Imagen principal */}
             <div className="col-12 col-md-10 order-1 order-md-2">
               <div className="ratio ratio-1x1 bg-white border rounded d-flex align-items-center justify-content-center">
                 <img
@@ -117,7 +106,6 @@ export const ProductoPage = () => {
                     e.currentTarget.src = "https://via.placeholder.com/800?text=Sin+imagen";
                   }}
                 />
-                
                 <div className="position-absolute top-0 start-0 m-2 d-flex flex-column gap-2">
                   {item.highlighted && <span className="badge bg-dark">Nuevo</span>}
                   {item.discount && <span className="badge bg-danger">-{item.discount}%</span>}
@@ -127,9 +115,10 @@ export const ProductoPage = () => {
           </div>
         </div>
 
-        
+        {/* Info producto */}
         <div className="col-12 col-lg-5">
-          <div className="card shadow-sm sticky-lg-top sticky-buy-box">
+          <div className="card shadow-sm sticky-lg-top sticky-buy-box"
+            style={{ zIndex: 1 }} >
             <div className="card-body">
               <div className="d-flex align-items-center justify-content-between mb-2">
                 <span className="badge text-bg-light">{item.category ?? "Sin categoría"}</span>
@@ -158,14 +147,12 @@ export const ProductoPage = () => {
                 <button
                   className="btn btn-dark btn-lg"
                   disabled={!inStock}
-                  onClick={() => {handleAddToCart()
-                }}
+                  onClick={() => addToCart(item.id)} // 👈 usamos el contexto
                 >
                   Añadir al carrito
                 </button>
               </div>
 
-              
               {specs.length > 0 && (
                 <>
                   <hr className="my-4" />

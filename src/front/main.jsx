@@ -13,6 +13,7 @@ import { AuthProvider } from './hooks/useAuth';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { AuthProviderGoogle } from './auth/AuthProvider';
+import { CartProvider } from './hooks/useFetch';
 
 
 
@@ -30,9 +31,11 @@ const Main = () => {
             <AuthProviderGoogle>
                 <StoreProvider>
                     <AuthProvider>
-                        Store
-                        <RouterProvider router={router}>
-                        </RouterProvider>
+                        <CartProvider>
+
+                            <RouterProvider router={router}>
+                            </RouterProvider>
+                        </CartProvider>
                     </AuthProvider>
                 </StoreProvider>
             </AuthProviderGoogle>

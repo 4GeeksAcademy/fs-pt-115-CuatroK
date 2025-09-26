@@ -1,29 +1,29 @@
 import { useEffect, useState } from "react";
-import { useFetch } from "../../../hooks/useFetch";
 import { useAuth } from "../../../hooks/useAuth";
 import { CategoryCard } from "../../public/CategoryCard";
 import LoadingSpinner from "../../public/LoadingSpinner";
 import { useParams } from "react-router-dom";
 import "./historialDePedidos.css"
 
-
-const url = import.meta.env.VITE_BACKEND_URL + "/api";
 export const PedidoDetail = () => {
-    const { token } = useAuth()
     const { id } = useParams();
+    const { token } = useAuth()
+    const [historyData, setHistoryData] = useState()
 
-    const { data, loading } = useFetch(`${url}/sale/user`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    })
-    if (loading || !data) {
+    const getSalesHistory = async () => {
+        const data = await getHistory(token)
+        setHistoryData(data)
+    }
+
+    useEffect(() => {
+        getSalesHistory()
+    }, [])
+
+    if (!historyData) {
         return <LoadingSpinner />
     }
 
-    const pedido = data.find((p) => p.id === parseInt(id));
+    const pedido = historyData.find((p) => p.id === parseInt(id));
     console.log(pedido.items)
 
     const fecha = new Date(pedido.date).toLocaleString("es-ES", {

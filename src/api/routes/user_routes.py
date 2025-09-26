@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, Blueprint, render_template, url_for
 from flask_cors import CORS
 from api.models.user_model import User, UserDirection
+from api.models.models_joyas import Jewell
 from api.extentions import db, mail
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt
 from flask_mail import Message
@@ -347,3 +348,61 @@ def create_user_google():
     return jsonify({'msg': 'user created successfully',
                     'user': new_user.serialize(),
                     'token': token}), 200
+
+
+@user_bp.route("add-favorite", methods=["POST"])
+@jwt_required()
+def add_favorite():
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    jewell_id = data.get("jewell_id")
+
+    if not jewell_id:
+        return jsonify({'msg': 'Debe proporcionar un jewell_id'}), 400
+
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'msg': 'Usuario no encontrado'}), 404
+
+    jewell = Jewell.query.get(jewell_id)
+    if not jewell:
+        return jsonify({'msg': 'Joya no encontrada'}), 404
+
+    if jewell not in user.favorites:
+        user.favorites.append(jewell)
+        db.session.commit()
+
+    return jsonify({'msg': 'Favorito añadido', 'jewell': jewell.serialize()}), 200
+
+
+@user_bp.route("remove-favorite", methods=["DELETE"])
+@jwt_required()
+def remove_favorite():
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    jewell_id = data.get("jewell_id")
+
+    if not jewell_id:
+        return jsonify({'msg': 'Debe proporcionar un jewell_id'}), 400
+
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'msg': 'Usuario no encontrado'}), 404
+
+    jewell = Jewell.query.get(jewell_id)
+    if not jewell:
+        return jsonify({'msg': 'Joya no encontrada'}), 404
+
+    if jewell in user.favorites:
+        user.favorites.remove(jewell)
+        db.session.commit()
+
+    return jsonify({'msg': 'Favorito eliminado', 'jewell': jewell.serialize()}), 200
+
+
+@user_bp.route("favorites", methods=["GET"])
+@jwt_required()
+def get_favorites():
+    user_id = get_jwt_identity()
+    user = User.query.get(int(user_id))
+    return jsonify(user.serialize()["favorites"])

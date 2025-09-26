@@ -1,11 +1,13 @@
 // src/front/components/Carruseles/CarruselCategoria.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getJoyasSearch } from "../../services/serviceApi";
+import { addFavorite, getFavorite, getJoyasSearch, removeFavorite } from "../../services/serviceApi";
+import { useAuth } from "../../hooks/useAuth";
 
 export function CarruselCategoria({ category, highlighted }) {
   const [items, setItems] = useState([]);
   const [favoritos, setFavoritos] = useState(() => new Set());
+  const { token } = useAuth()
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,12 +42,26 @@ export function CarruselCategoria({ category, highlighted }) {
     navigate(`/producto/${encodeURIComponent(idOSlug)}`);
   };
 
-  const añadirFavoritos = (id) => {
-    setFavoritos((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
+  const añadirFavoritos = async (id) => {
+    if (!token) return; // no hacemos nada si no hay token
+    try {
+      if (favoritos.has(id)) {
+        // Si ya es favorito, lo removemos
+        await removeFavorite(token, id);
+      } else {
+        // Si no es favorito, lo agregamos
+        await addFavorite(token, id);
+      }
+
+      // Actualizar Set localmente para reflejar el cambio inmediatamente
+      setFavoritos(prev => {
+        const next = new Set(prev);
+        next.has(id) ? next.delete(id) : next.add(id);
+        return next;
+      });
+    } catch (error) {
+      console.error("Error al actualizar favorito:", error);
+    }
   };
 
   const slides = [];

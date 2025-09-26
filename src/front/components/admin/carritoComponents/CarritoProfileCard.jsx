@@ -9,7 +9,6 @@ export default function CarritoProfileCard({
     price,
     quantity,
     onRemove,
-    fetchData
 }) {
     const total = quantity * price
 
@@ -25,12 +24,10 @@ export default function CarritoProfileCard({
 
     const sumQuantity = async () => {
         await SumCartProduct(id)
-        await fetchData()
     }
 
     const substractQuantity = async () => {
         await substractCartProduct(id)
-        await fetchData()
     }
 
     return (

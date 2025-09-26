@@ -10,6 +10,7 @@ import { Carrito } from "../../components/admin/Carrito";
 import { useNavigate } from "react-router-dom";
 import { HistorialDePedidos } from "../../components/admin/HistorialDePedidos";
 import { Cupones } from "../../components/admin/Cupones";
+import { Favoritos } from "../../components/admin/Favoritos";
 
 export const Profile = ({ textOption }) => {
     const [isActive, setIsActive] = useState("Datos personales");
@@ -109,7 +110,7 @@ export const Profile = ({ textOption }) => {
                         <Carrito />
                     ) : isActive == "Cupones" ? (
                         <Cupones />
-                    ) : <h1>Hola </h1>}
+                    ) : <Favoritos />}
                 </div>
             </div>
         </div>
