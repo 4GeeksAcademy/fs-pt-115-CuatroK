@@ -1,49 +1,31 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { GetCartProducts, removeCartItem } from "../../services/cartApi";
+import { removeCartItem } from "../../services/cartApi";
 import CarritoProfileCard from "../admin/carritoComponents/CarritoProfileCard";
-import { useAuth } from "../../hooks/useAuth"
-import { useFetch} from "../../hooks/useFetch"
+import { useCart } from "../../hooks/useFetch";
+import { useAuth } from "../../hooks/useAuth";
 
 export const ShoppingCart = () => {
-        const [cartItems, setCartItems] = useState([]);
-        const { token, finalAmount } = useAuth()
-        const url = import.meta.env.VITE_BACKEND_URL + "/api/shopping-cart"
-        const { data, fetchData, loading } = useFetch(url, {
-                method: "GET",
-                headers: {
-                        Authorization: `Bearer ${token}`,
-                },
-     
-        })
-       console.log(data);
-       
-        useEffect(() => {
-                const offcanvasEl = document.getElementById("cartPanel");
-                if (!offcanvasEl) return;
-
-                const handleHidden = () => {
-                        document.querySelectorAll(".offcanvas-backdrop").forEach((el) => el.remove());
-                        document.body.classList.remove("offcanvas-backdrop");
-                };
-
-                offcanvasEl.addEventListener("hidden.bs.offcanvas", handleHidden);
-                return () => {
-                        offcanvasEl.removeEventListener("hidden.bs.offcanvas", handleHidden);
-                };
-        }, []);
+        const { cartItems, fetchCart } = useCart();
+        const { finalAmount, setFinalAmount } = useAuth()
 
         useEffect(() => {
-                if (data) {
-                        setCartItems(data)
+                if (cartItems.length > 0) {
+                        const total = cartItems.reduce(
+                                (acc, item) => acc + item.jewell.price * item.quantity,
+                                0
+                        );
+                        setFinalAmount(total);
+                } else {
+                        setFinalAmount(0);
                 }
-          }, [data]);
+                fetchCart();
+        }, [cartItems, fetchCart]);
 
-        
         const handleRemove = async (id) => {
-        await removeCartItem(id)
-        await fetchData()
-    }
+                await removeCartItem(id);
+                await fetchCart();
+        };
 
         return (
                 <div className="mt-2">
@@ -75,11 +57,11 @@ export const ShoppingCart = () => {
                                 </div>
 
                                 <div className="offcanvas-body">
-                                        {cartItems.length === 0 ? (
+                                        {!cartItems ? (
                                                 <p>Tu carrito está vacío.</p>
                                         ) : (
                                                 <div className="mb-3">
-                                                        {[...cartItems]
+                                                        {cartItems
                                                                 .sort((a, b) => a.id - b.id)
                                                                 .map((item) => (
                                                                         <CarritoProfileCard
@@ -90,12 +72,11 @@ export const ShoppingCart = () => {
                                                                                 price={item.jewell.price}
                                                                                 quantity={item.quantity}
                                                                                 onRemove={() => handleRemove(item.id)}
-                                                                                fetchData={fetchData}
                                                                         />
                                                                 ))}
                                                 </div>
                                         )}
-                                        <p className="fw-bold text-end">Total: {finalAmount} €</p>
+                                        <p className="fw-bold text-end">Total: {finalAmount ? finalAmount.toFixed(2) : "0.00"} €</p>
 
                                         <Link to="/user">
                                                 <button className="btn btn-warning w-100">Finalizar compra</button>

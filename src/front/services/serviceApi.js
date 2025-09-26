@@ -20,7 +20,7 @@ export const getUser = async () => {
   return data;
 };
 
-export const updateUserData = async (dataUpdated) => {
+export const updateUserData = async (dataUpdated, getUser) => {
   const token = sessionStorage.getItem("token");
   console.log(dataUpdated);
   try {
@@ -36,6 +36,7 @@ export const updateUserData = async (dataUpdated) => {
     if (!response.ok) {
       console.error(data.msg);
     }
+    await getUser();
     return data;
   } catch (error) {
     console.error(error.message);
@@ -44,6 +45,7 @@ export const updateUserData = async (dataUpdated) => {
 
 export const updateAddressData = async (dataUpdated, id) => {
   const token = sessionStorage.getItem("token");
+
   try {
     const response = await fetch(`${url}/user/client/address/${id}`, {
       method: "PATCH",
@@ -181,6 +183,25 @@ export const getDiscount = async (token) => {
     console.error(error);
   }
 };
+export const getHistory = async (token) => {
+  try {
+    const res = await fetch(`${url}/sale/user`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error(`Error HTTP: ${res.status}`);
+    }
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const postSale = async (totalAmount, discount, token) => {
   try {
@@ -194,6 +215,92 @@ export const postSale = async (totalAmount, discount, token) => {
         total: totalAmount,
         discount: discount ? discount : null,
       }),
+    });
+    if (!res.ok) {
+      throw new Error(`Error HTTP: ${res.status}`);
+    }
+    const data = await res.json();
+    const historyData = await getHistory(token);
+    console.log(historyData);
+    if (historyData.length === 1) {
+      await createDiscount(20, "Bienvenida-", token);
+    }
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const createDiscount = async (total, discount_code, token) => {
+  try {
+    const res = await fetch(`${url}/discount`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ total: total, discount_code: discount_code }),
+    });
+    if (!res.ok) {
+      throw new Error(`Error HTTP: ${res.status}`);
+    }
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const addFavorite = async (token, jewell_id) => {
+  try {
+    const res = await fetch(`${url}/user/client/add-favorite`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ jewell_id: jewell_id }),
+    });
+    if (!res.ok) {
+      throw new Error(`Error HTTP: ${res.status}`);
+    }
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getFavorite = async (token) => {
+  try {
+    const res = await fetch(`${url}/user/client/favorites`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error(`Error HTTP: ${res.status}`);
+    }
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const removeFavorite = async (token, jewell_id) => {
+  try {
+    const res = await fetch(`${url}/user/client/remove-favorite`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ jewell_id: jewell_id }),
     });
     if (!res.ok) {
       throw new Error(`Error HTTP: ${res.status}`);

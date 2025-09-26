@@ -1,12 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Bienvenido a CuatroK</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #f4f4f7;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        width: 100%;
+        background-color: #f4f4f7;
+        padding: 40px 0;
+      }
+      .email-wrapper {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        background: linear-gradient(135deg, #4b0082, #8a2be2);
+        color: #ffffff;
+        text-align: center;
+        padding: 30px 20px;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 26px;
+      }
+      .body {
+        padding: 30px 40px;
+        color: #333333;
+        line-height: 1.6;
+        text-align: center;
+      }
+      .body p {
+        margin: 15px 0;
+        font-size: 16px;
+      }
+      .btn {
+        display: inline-block;
+        margin: 25px 0;
+        padding: 12px 25px;
+        background: #4b0082;
+        color: #ffffff !important;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: bold;
+        font-size: 16px;
+      }
+      .footer {
+        text-align: center;
+        font-size: 12px;
+        color: #999999;
+        padding: 20px;
+        background: #f4f4f7;
+      }
+    </style>
   </head>
-  <style></style>
   <body>
-    <h1>Bienvenido {{username}}</h1>
+    <div class="container">
+      <div class="email-wrapper">
+        <!-- Header -->
+        <div class="header">
+          <h1>¡Bienvenido a CuatroK!</h1>
+        </div>
+
+        <!-- Body -->
+        <div class="body">
+          <p>Hola <strong>{{ username }}</strong>,</p>
+          <p>
+            Nos alegra muchísimo que formes parte de <strong>CuatroK</strong>.
+          </p>
+          <p>
+            A partir de ahora podrás disfrutar de nuestros descuentos,
+            promociones y todas las ventajas de ser miembro de la comunidad.
+          </p>
+
+          <p style="text-align: center">
+            <a href="{{ reset_link }}" class="btn"> Explorar ahora </a>
+          </p>
+
+          <p>¡Gracias por unirte y bienvenido a bordo! 🚀</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+          <p>© {{ now.year }} CuatroK. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { getUser } from "../services/serviceApi";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const AuthContext = createContext();
 
@@ -11,6 +12,42 @@ export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(sessionStorage.getItem("token") || null);
     const [finalAmount, setFinalAmount] = useState(null)
     const [discount, setDiscount] = useState("")
+    const { loginWithRedirect, user: userAuth0, isAuthenticated, logout: logoutGoogle } = useAuth0();
+
+    const loginUsingGoogle = () => {
+        loginWithRedirect()
+    }
+
+    const loginSync = async () => {
+        if (!userAuth0) return
+        console.log(userAuth0)
+
+        setLoading(true)
+        try {
+            const response = await fetch(`${url}/user/client/register-google`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: userAuth0.email,
+                        username: userAuth0.nickname,
+                        full_name: userAuth0.name,
+                    })
+                }
+            )
+            const data = await response.json()
+            setToken(data.token)
+            sessionStorage.setItem("token", data.token)
+            setUser(data.user)
+            return data
+        } catch (error) {
+            setError(error)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const registerUser = async (userData, navigate) => {
         setLoading(true);
@@ -66,6 +103,7 @@ export const AuthProvider = ({ children }) => {
 
     const logoutUser = () => {
         sessionStorage.removeItem("token")
+        logoutGoogle()
         setToken(null)
         setUser(null)
     }
@@ -80,8 +118,13 @@ export const AuthProvider = ({ children }) => {
         }
     }, [token])
 
+    useEffect(() => {
+        if (userAuth0 && isAuthenticated) {
+            loginSync()
+        }
+    }, [userAuth0, isAuthenticated])
     return (
-        <AuthContext.Provider value={{ user, error, setError, loading, token, registerUser, loginUser, logoutUser, finalAmount, setFinalAmount, discount, setDiscount }}>
+        <AuthContext.Provider value={{ user, error, setError, loading, token, registerUser, loginUser, logoutUser, finalAmount, setFinalAmount, discount, setDiscount, loginUsingGoogle, getUserApi }}>
             {children}
         </AuthContext.Provider>
     )
