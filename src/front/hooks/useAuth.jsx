@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { getUser } from "../services/serviceApi";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -93,7 +94,8 @@ export const AuthProvider = ({ children }) => {
 
             setToken(data.token)
             sessionStorage.setItem("token", data.token)
-            navigate("/")
+
+
         } catch (error) {
             setError(error.message);
         } finally {
@@ -108,16 +110,16 @@ export const AuthProvider = ({ children }) => {
         setUser(null)
     }
 
-    const getUserApi = async () => {
+    const getUserApi = async (navigate) => {
         const data = await getUser()
         setUser(data)
-    }
-    useEffect(() => {
-        if (token) {
-            getUserApi()
+        if (user && !user.is_admin) {
+            navigate("/")
         }
-    }, [token])
-
+        if (user && user.is_admin) {
+            navigate("/admin-home")
+        }
+    }
     useEffect(() => {
         if (userAuth0 && isAuthenticated) {
             loginSync()
