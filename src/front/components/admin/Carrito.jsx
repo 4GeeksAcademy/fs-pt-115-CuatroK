@@ -15,8 +15,8 @@ export const Carrito = () => {
 
     // cargar carrito inicial
     useEffect(() => {
-        fetchCart();
-    }, [fetchCart]);
+        if (token) fetchCart();
+    }, [token]);
 
     // recalcular totales cuando cambie el carrito
     useEffect(() => {
@@ -25,7 +25,7 @@ export const Carrito = () => {
                 (acc, item) => acc + item.jewell.price * item.quantity,
                 0
             );
-            setDiscount(null);
+            setDiscount(0);
             setTotalAmount(total);
             setFinalAmount(total);
         } else {
@@ -59,6 +59,9 @@ export const Carrito = () => {
         style: "currency",
         currency: "EUR",
     }).format(finalAmount || totalAmount);
+
+    console.log(finalAmount)
+    console.log(totalAmount)
 
     return (
         <div>

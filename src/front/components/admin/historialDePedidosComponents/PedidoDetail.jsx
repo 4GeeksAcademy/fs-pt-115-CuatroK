@@ -4,6 +4,7 @@ import { CategoryCard } from "../../public/CategoryCard";
 import LoadingSpinner from "../../public/LoadingSpinner";
 import { useParams } from "react-router-dom";
 import "./historialDePedidos.css"
+import { getHistory } from "../../../services/serviceApi";
 
 export const PedidoDetail = () => {
     const { id } = useParams();
