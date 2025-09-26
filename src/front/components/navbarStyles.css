@@ -1,21 +1,14 @@
-.search-trigger {
-  position: relative;
+.search-bar-container {
   display: flex;
   align-items: center;
 }
 
 .search-bar {
-  width: 0;
-  opacity: 0;
-  transition: width 0.4s ease, opacity 0.4s ease;
-  margin-left: 10px;
+  width: 200px;
   padding: 0.375rem 0.75rem;
   font-size: 1rem;
-}
-
-.search-bar.visible {
-  width: 180px;
-  opacity: 1;
+  border: 1px solid #ccc;
+  transition: none; /* sin animaciones */
 }
 
 .fixed-nav-tools {

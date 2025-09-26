@@ -11,7 +11,7 @@ export const Profile = () => {
     return (
         <div className="position-relative text-end">
             <button
-                className="btn btn-outline-dark"
+                className="btn btn-outline-dark mt-2"
                 onClick={() => setOpen(!open)}
                 style={{ width: 50, height: 50 }}
             >
@@ -26,9 +26,7 @@ export const Profile = () => {
                     <li><Link className="dropdown-item" to="/user">Perfil</Link></li>
                     <li><a className="dropdown-item" href="#">Configuración</a></li>
                     <li><hr className="dropdown-divider" /></li>
-                    <Link to={"/login"}>
-                        <li><button className="dropdown-item" onClick={logoutUser}>Cerrar sesión</button></li>
-                    </Link>
+                    <li><button className="dropdown-item" onClick={logoutUser}>Cerrar sesión</button></li>
                 </ul>
             )}
         </div>

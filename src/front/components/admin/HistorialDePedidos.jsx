@@ -1,24 +1,27 @@
 import { useAuth } from "../../hooks/useAuth";
-import { useFetch } from "../../hooks/useFetch"
 import { HistorialDePedidosCard } from "./historialDePedidosComponents/HistorialDePedidosCard"
 import "../../index.css"
+import { useEffect, useState } from "react";
+import { getHistory } from "../../services/serviceApi";
 
-const url = import.meta.env.VITE_BACKEND_URL + "/api";
 export const HistorialDePedidos = () => {
     const { token } = useAuth()
-    const { data, loading } = useFetch(`${url}/sale/user`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    })
+    const [historyData, setHistoryData] = useState()
+
+    const getSalesHistory = async () => {
+        const data = await getHistory(token)
+        setHistoryData(data)
+    }
+
+    useEffect(() => {
+        getSalesHistory()
+    }, [])
 
     return (
         <>
             <h2>Historial</h2>
             {
-                loading || !data ? (
+                !historyData ? (
                     (<div className="d-flex justify-content-center align-items-center w-100 h-100">
                         <div
                             className="spinner-border text-warning"
@@ -28,24 +31,30 @@ export const HistorialDePedidos = () => {
                             <span className="visually-hidden">Cargando...</span>
                         </div>
                     </div>)
-                ) :
-                    <div >
+                ) : (
+                    historyData.length === 0 ? (
+                        <h3 className="products-card text-center py-5 my-3">
+                            Tu historial está vacío...
+                        </h3>
+                    ) : (
                         <div >
-                            <div className="products-card  p-3">
-                                {
-                                    data.map((item) => (
-                                        <HistorialDePedidosCard
-                                            id={item.id}
-                                            total={item.total}
-                                            quantity={item.items.reduce((acc, curr) => acc + curr.quantity, 0)}
-                                            date={item.date}
-                                        />
-                                    ))
-                                }
+                            <div >
+                                <div className="products-card  p-3">
+                                    {
+                                        historyData.map((item) => (
+                                            <HistorialDePedidosCard
+                                                id={item.id}
+                                                total={item.total}
+                                                quantity={item.items.reduce((acc, curr) => acc + curr.quantity, 0)}
+                                                date={item.date}
+                                            />
+                                        ))
+                                    }
+                                </div>
                             </div>
                         </div>
-                    </div>
-            }
+                    )
+                )}
         </>
     )
 }
