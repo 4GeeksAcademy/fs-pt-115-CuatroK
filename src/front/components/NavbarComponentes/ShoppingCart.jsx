@@ -7,7 +7,7 @@ import { useAuth } from "../../hooks/useAuth";
 
 export const ShoppingCart = () => {
         const { cartItems, fetchCart } = useCart();
-        const { finalAmount, setFinalAmount } = useAuth()
+        const { finalAmount, setFinalAmount } = useAuth();
 
         useEffect(() => {
                 if (cartItems.length > 0) {
@@ -56,35 +56,8 @@ export const ShoppingCart = () => {
                                         ></button>
                                 </div>
 
-
-            
-            <div
-                className="offcanvas offcanvas-end"
-                tabIndex="-1"
-                id="cartPanel"
-                aria-labelledby="cartPanelLabel"
-            >
-                <div className="offcanvas-header">
-                    <h5 className="offcanvas-title" id="cartPanelLabel">Tu carrito</h5>
-                    <button
-                        type="button"
-                        className="btn-close"
-                        data-bs-dismiss="offcanvas"
-                        aria-label="Cerrar"
-                    ></button>
-                </div>
-                <div className="offcanvas-body">
-                    
-                    <div className="mb-3">
-                        <p>Producto 1 - €19.99</p>
-                        <p>Producto 2 - €9.99</p>
-                    </div>
-                    <Link to="payment">
-                        <button className="btn btn-warning w-100">Finalizar compra</button>
-                    </Link>
-
                                 <div className="offcanvas-body">
-                                        {!cartItems ? (
+                                        {cartItems.length === 0 ? (
                                                 <p>Tu carrito está vacío.</p>
                                         ) : (
                                                 <div className="mb-3">
@@ -103,14 +76,15 @@ export const ShoppingCart = () => {
                                                                 ))}
                                                 </div>
                                         )}
-                                        <p className="fw-bold text-end">Total: {finalAmount ? finalAmount.toFixed(2) : "0.00"} €</p>
+                                        <p className="fw-bold text-end">
+                                                Total: {finalAmount ? finalAmount.toFixed(2) : "0.00"} €
+                                        </p>
 
                                         <Link to="/user">
                                                 <button className="btn btn-warning w-100">Finalizar compra</button>
                                         </Link>
                                 </div>
                         </div>
-
                 </div>
         );
 };
