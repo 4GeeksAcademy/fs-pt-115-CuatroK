@@ -12,6 +12,8 @@ import { AuthProvider } from './hooks/useAuth';
 // Catalogo 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { AuthProviderGoogle } from './auth/AuthProvider';
+import { CartProvider } from './hooks/useFetch';
 
 
 
@@ -25,13 +27,18 @@ const Main = () => {
     return (
         <React.StrictMode>
             {/* Provide global state to all components */}
-            <StoreProvider>
-                {/* Set up routing for the application */}
-                <AuthProvider>
-                    <RouterProvider router={router}>
-                    </RouterProvider>
-                </AuthProvider>
-            </StoreProvider>
+            {/* Set up routing for the application */}
+            <AuthProviderGoogle>
+                <StoreProvider>
+                    <AuthProvider>
+                        <CartProvider>
+
+                            <RouterProvider router={router}>
+                            </RouterProvider>
+                        </CartProvider>
+                    </AuthProvider>
+                </StoreProvider>
+            </AuthProviderGoogle>
 
         </React.StrictMode >
     );

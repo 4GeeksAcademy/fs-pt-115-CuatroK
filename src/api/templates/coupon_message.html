@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>¡Tu cupón de descuento — CuatroK!</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #fbe8e7;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        width: 100%;
+        background-color: #fbe8e7;
+        padding: 40px 0;
+      }
+      .email-wrapper {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+      .header {
+        background: linear-gradient(135deg, #d4af37, #eed9c4);
+        color: #ffffff;
+        text-align: center;
+        padding: 30px 20px;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 26px;
+      }
+      .body {
+        padding: 30px 40px;
+        color: #333333;
+        line-height: 1.6;
+      }
+      .body p {
+        margin: 15px 0;
+      }
+      .coupon {
+        text-align: center;
+        margin: 30px 0;
+      }
+      .coupon-code {
+        display: inline-block;
+        padding: 15px 30px;
+        font-size: 20px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        color: #4b0082;
+        border: 2px dashed #4b0082;
+        border-radius: 8px;
+        background-color: #eed9c4;
+        margin-bottom: 20px;
+      }
+      .coupon-total {
+        text-align: center;
+        font-size: 22px;
+        font-weight: bold;
+        color: #d4af37;
+        margin: 10px 0 25px 0;
+      }
+      .btn {
+        display: inline-block;
+        margin: 25px 0;
+        padding: 12px 25px;
+        background: #d4af37;
+        color: #ffffff !important;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: bold;
+      }
+      .footer {
+        text-align: center;
+        font-size: 12px;
+        color: #999999;
+        padding: 20px;
+        background: #fbe8e7;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="email-wrapper">
+        <!-- Header -->
+        <div class="header">
+          <h1>¡Felicidades, {{ username }}!</h1>
+          <p>Has recibido un cupón exclusivo de <strong>CuatroK</strong></p>
+        </div>
+
+        <!-- Body -->
+        <div class="body">
+          <p>
+            Estamos encantados de premiarte con un
+            <strong>descuento especial</strong> en tu próxima compra.
+          </p>
+
+          <div class="coupon">
+            <p>Tu código es:</p>
+            <div class="coupon-code">{{ discount_code }}</div>
+            <div class="coupon-total">Total del cupón: {{ total }}%</div>
+          </div>
+
+          <p>
+            Este cupón es válido hasta el
+            <strong>{{ expiration_date }}</strong>.
+          </p>
+          <p>Haz clic en el botón para canjearlo:</p>
+
+          <p style="text-align: center">
+            <a href="{{ reset_link }}" class="btn">Canjear Cupón</a>
+          </p>
+
+          <p>¡Gracias por ser parte de la familia <strong>CuatroK</strong>!</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+          <p>© {{ now.year }} CuatroK. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

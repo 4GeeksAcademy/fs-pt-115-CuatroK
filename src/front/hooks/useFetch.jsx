@@ -1,33 +1,50 @@
-import { useEffect, useState } from "react"
+import { createContext, useContext, useState } from "react";
+import { useAuth } from "../hooks/useAuth";
 
-export const useFetch = (url, options = {}) => {
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(null)
-    const [data, setData] = useState(null)
-    
+const CartContext = createContext();
 
-    const fetchData = async () => {
-        setLoading(true)
+export const CartProvider = ({ children }) => {
+    const { token } = useAuth();
+    const [cartItems, setCartItems] = useState([]);
+
+    const fetchCart = async () => {
         try {
-            const response = await fetch(url, options)
-            const data = await response.json()
-            if (!response.ok) throw new Error("Error en el fetch")
-            setData(data)
-        } catch (error) {
-            setError(error.message)
-        } finally {
-            setLoading(false)
-        }
-    }
+            const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/shopping-cart", {
+                method: "GET",
+                headers: { Authorization: `Bearer ${token}` }
+            });
 
-    useEffect(() => {
-        fetchData()
-    }, [url])
-    return {
-        fetchData,
-        loading,
-        error,
-        data,
-        
-    }
-}
+            if (!res.ok) {
+                console.error("Error al cargar carrito:", res.status);
+                setCartItems([]);
+                return;
+            }
+
+            const data = await res.json();
+            setCartItems(Array.isArray(data) ? data : []);
+        } catch (err) {
+            console.error("Error en fetchCart:", err);
+            setCartItems([]);
+        }
+    };
+
+    const addToCart = async (id) => {
+        await fetch(import.meta.env.VITE_BACKEND_URL + "/api/shopping-cart", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ jewell_id: id })
+        });
+        await fetchCart();
+    };
+
+    return (
+        <CartContext.Provider value={{ cartItems, fetchCart, addToCart }}>
+            {children}
+        </CartContext.Provider>
+    );
+};
+
+export const useCart = () => useContext(CartContext);

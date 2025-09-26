@@ -9,16 +9,13 @@ import LoadingSpinner from "../../components/public/LoadingSpinner";
 import { Carrito } from "../../components/admin/Carrito";
 import { useNavigate } from "react-router-dom";
 import { HistorialDePedidos } from "../../components/admin/HistorialDePedidos";
+import { Cupones } from "../../components/admin/Cupones";
+import { Favoritos } from "../../components/admin/Favoritos";
 
 export const Profile = ({ textOption }) => {
     const [isActive, setIsActive] = useState("Datos personales");
-    const { user, token, loading } = useAuth()
+    const { user, token, loading, getUserApi } = useAuth()
     const navigate = useNavigate()
-
-    const getUserApi = async () => {
-        await getUser();
-
-    };
 
     useEffect(() => {
         if (textOption) {
@@ -34,8 +31,8 @@ export const Profile = ({ textOption }) => {
         if (!token && !loading) {
             return navigate("/")
         }
-    }, [user]);
-    console.log(user)
+        console.log(user)
+    }, []);
 
     if (!user) {
         return <LoadingSpinner />;
@@ -109,9 +106,11 @@ export const Profile = ({ textOption }) => {
                         <Seguridad />
                     ) : isActive == "Historial de pedidos" ? (
                         <HistorialDePedidos />
-                    ) : (
+                    ) : isActive == "Carrito" ? (
                         <Carrito />
-                    )}
+                    ) : isActive == "Cupones" ? (
+                        <Cupones />
+                    ) : <Favoritos />}
                 </div>
             </div>
         </div>

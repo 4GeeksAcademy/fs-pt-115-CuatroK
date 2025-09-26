@@ -1,9 +1,14 @@
 // src/front/components/Carruseles/CarruselCategoria.jsx
 import React, { useEffect, useState } from "react";
-import { getJoyasSearch } from "../../services/serviceApi";
+import { useNavigate } from "react-router-dom";
+import { addFavorite, getFavorite, getJoyasSearch, removeFavorite } from "../../services/serviceApi";
+import { useAuth } from "../../hooks/useAuth";
 
 export function CarruselCategoria({ category, highlighted }) {
   const [items, setItems] = useState([]);
+  const [favoritos, setFavoritos] = useState(() => new Set());
+  const { token } = useAuth()
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -30,13 +35,35 @@ export function CarruselCategoria({ category, highlighted }) {
     return <p className="text-center text-muted my-4">No hay productos para esta categoría.</p>;
   }
 
-  // Formateador de precios en EUR (se usa dentro del map)
-  const euro = new Intl.NumberFormat("de-DE", {
-    style: "currency",
-    currency: "EUR",
-  });
+  const euro = new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" });
 
-  // Partimos en grupos de 4 para cada slide del carrusel
+  const abrirProducto = (p) => {
+    const idOSlug = p?.slug ? p.slug : String(p?.id ?? "");
+    navigate(`/producto/${encodeURIComponent(idOSlug)}`);
+  };
+
+  const añadirFavoritos = async (id) => {
+    if (!token) return; // no hacemos nada si no hay token
+    try {
+      if (favoritos.has(id)) {
+        // Si ya es favorito, lo removemos
+        await removeFavorite(token, id);
+      } else {
+        // Si no es favorito, lo agregamos
+        await addFavorite(token, id);
+      }
+
+      // Actualizar Set localmente para reflejar el cambio inmediatamente
+      setFavoritos(prev => {
+        const next = new Set(prev);
+        next.has(id) ? next.delete(id) : next.add(id);
+        return next;
+      });
+    } catch (error) {
+      console.error("Error al actualizar favorito:", error);
+    }
+  };
+
   const slides = [];
   for (let i = 0; i < filtered.length; i += 4) {
     slides.push(filtered.slice(i, i + 4));
@@ -50,37 +77,58 @@ export function CarruselCategoria({ category, highlighted }) {
         {slides.map((group, index) => (
           <div key={index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
             <div className="d-flex justify-content-center gap-3 flex-wrap">
-              {group.map((item) => (
-                <div
-                  key={item.id}
-                  className="card h-100 d-flex flex-column"
-                  style={{ width: "18rem", minHeight: 420 }}
-                >
+              {group.map((item) => {
+                const isFav = favoritos.has(item.id); // ← usar el estado correcto
+                return (
                   <div
-                    style={{
-                      height: 220,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: 12,
-                      background: "#fff"
-                    }}
+                    key={item.id}
+                    className="card h-100 position-relative"
+                    role="button"
+                    tabIndex={0}
+                    style={{ cursor: "pointer", width: "18rem" }}
+                    onClick={() => abrirProducto(item)}
+                    onKeyDown={(e) => e.key === "Enter" && abrirProducto(item)}
                   >
                     <img
                       src={item.url_image}
                       alt={item.name || "Producto"}
+                      className="card-img-top"
+                      style={{ objectFit: "cover", height: 200 }}
                       loading="lazy"
-                      style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
                     />
-                  </div>
 
-                  <div className="card-body d-flex flex-column">
-                    <h5 className="card-title text-truncate">{item.name}</h5>
-                    <p className="card-text mb-3">{euro.format(item.price)}</p>
-                    <button className="btn btn-primary mt-auto">Agregar al carrito</button>
+                    <div className="card-body d-flex flex-column">
+                      <h5 className="card-title">{item.name || "Sin nombre"}</h5>
+                      <p className="card-text small text-muted mb-2">
+                        {item.description || "Sin descripción."}
+                      </p>
+                      <div className="mt-auto">
+                        <div className="fw-bold">{euro.format(item.price)}</div>
+                      </div>
+                    </div>
+
+                    {passHighlight(item) && (
+                      <span className="badge text-bg-warning top-right">Destacado</span>
+                    )}
+
+                    <button
+                      className="btn-like"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        añadirFavoritos(item.id);
+                      }}
+                      aria-pressed={isFav}
+                      aria-label={isFav ? "Quitar de favoritos" : "Añadir a favoritos"}
+                      title={isFav ? "Quitar de favoritos" : "Añadir a favoritos"}
+                    >
+                      <i
+                        className={isFav ? "fa-solid fa-heart" : "fa-regular fa-heart"}
+                        style={{ color: isFav ? "#e0182d" : "#9aa1ac", fontSize: 18 }}
+                      />
+                    </button>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         ))}
@@ -93,9 +141,8 @@ export function CarruselCategoria({ category, highlighted }) {
         data-bs-slide="prev"
       >
         <span className="carousel-control-prev-icon" aria-hidden="true" />
-        <span className="visually-hidden">Anterior</span>
+        <span className="visually-hidden"></span>
       </button>
-
       <button
         className="carousel-control-next"
         type="button"
@@ -103,7 +150,7 @@ export function CarruselCategoria({ category, highlighted }) {
         data-bs-slide="next"
       >
         <span className="carousel-control-next-icon" aria-hidden="true" />
-        <span className="visually-hidden">Siguiente</span>
+        <span className="visually-hidden"></span>
       </button>
     </div>
   );
