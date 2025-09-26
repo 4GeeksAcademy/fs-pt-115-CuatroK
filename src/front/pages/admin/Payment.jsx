@@ -13,13 +13,12 @@ export const Payment = () => {
   const { finalAmount } = useAuth()
   const [clientSecret, setClientSecret] = useState("");
 
-
   useEffect(() => {
     if (finalAmount) {
       fetch(`${url}/create-payment-intent`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: finalAmount * 100 }),
+        body: JSON.stringify({ amount: finalAmount }),
       })
         .then(res => res.json())
         .then(data => setClientSecret(data.clientSecret))

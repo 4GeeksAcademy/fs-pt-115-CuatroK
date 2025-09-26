@@ -7,7 +7,11 @@ import { useAuth } from "../../hooks/useAuth";
 
 export const ShoppingCart = () => {
         const { cartItems, fetchCart } = useCart();
-        const { finalAmount, setFinalAmount } = useAuth();
+        const { finalAmount, setFinalAmount, token } = useAuth();
+
+        useEffect(() => {
+                if (token) fetchCart();
+        }, [token]);
 
         useEffect(() => {
                 if (cartItems.length > 0) {
@@ -19,8 +23,7 @@ export const ShoppingCart = () => {
                 } else {
                         setFinalAmount(0);
                 }
-                fetchCart();
-        }, [cartItems, fetchCart]);
+        }, [cartItems, setFinalAmount]);
 
         const handleRemove = async (id) => {
                 await removeCartItem(id);
@@ -57,7 +60,7 @@ export const ShoppingCart = () => {
                                 </div>
 
                                 <div className="offcanvas-body">
-                                        {cartItems.length === 0 ? (
+                                        {!cartItems || cartItems.length === 0 ? (
                                                 <p>Tu carrito está vacío.</p>
                                         ) : (
                                                 <div className="mb-3">
@@ -76,6 +79,7 @@ export const ShoppingCart = () => {
                                                                 ))}
                                                 </div>
                                         )}
+
                                         <p className="fw-bold text-end">
                                                 Total: {finalAmount ? finalAmount.toFixed(2) : "0.00"} €
                                         </p>
@@ -87,4 +91,4 @@ export const ShoppingCart = () => {
                         </div>
                 </div>
         );
-};
+}
