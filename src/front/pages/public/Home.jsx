@@ -8,9 +8,6 @@ import { Publicidad5 } from "../../components/publicidad/Publicidad5.jsx";
 
 export const Home = () => {
 
-
-
-
   return (
 
     <>
@@ -37,5 +34,4 @@ export const Home = () => {
 
     </>
   );
-
 };

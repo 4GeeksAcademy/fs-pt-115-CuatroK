@@ -39,6 +39,7 @@ import { PostProduct } from "./pages/admin/isAdmin/PostProduct";
 import { ProductList } from "./pages/admin/isAdmin/ProductList";
 import { SalesList } from "./pages/admin/isAdmin/SalesList";
 import { UserList } from "./pages/admin/isAdmin/UserList";
+import { InactiveAccount } from "./pages/public/InactiveAccount";
 
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
@@ -67,7 +68,7 @@ export const router = createBrowserRouter(
           </Elements>
         }> </Route>
 
-
+        <Route path="/inactiveAccount" element={<InactiveAccount />}></Route>
         <Route path="*" element={<h1>404</h1>} />
       </Route>
 

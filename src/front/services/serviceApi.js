@@ -14,6 +14,8 @@ export const getUser = async () => {
 
   if (data.msg == "Token has expired") {
     sessionStorage.removeItem("token");
+  } else if (data.msg == "Not enough segments") {
+    sessionStorage.removeItem("token");
   }
 
   console.log(data);
@@ -40,6 +42,32 @@ export const updateUserData = async (dataUpdated, getUser) => {
     return data;
   } catch (error) {
     console.error(error.message);
+  }
+};
+
+export const updateUserState = async (dataUpdated, user_id, setLoading) => {
+  const token = sessionStorage.getItem("token");
+  console.log(dataUpdated);
+  console.log(user_id);
+  setLoading(true);
+  try {
+    const response = await fetch(`${url}/user/client/patch-account-state`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ is_active: dataUpdated, id: user_id }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      console.error(data.msg);
+    }
+    return data;
+  } catch (error) {
+    console.error(error.message);
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -301,6 +329,25 @@ export const removeFavorite = async (token, jewell_id) => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ jewell_id: jewell_id }),
+    });
+    if (!res.ok) {
+      throw new Error(`Error HTTP: ${res.status}`);
+    }
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getAllUsers = async (token) => {
+  try {
+    const res = await fetch(`${url}/user/client`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     if (!res.ok) {
       throw new Error(`Error HTTP: ${res.status}`);

@@ -2,9 +2,13 @@ import { Outlet } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import LoadingSpinner from "../components/public/LoadingSpinner";
 import { AdminNavbar } from "../pages/admin/isAdmin/AdminNavbar";
+import { useEffect } from "react";
 
 export function AdminLayout() {
-    const { user } = useAuth()
+    const { user, getUserApi } = useAuth()
+    useEffect(() => {
+        getUserApi()
+    }, [])
 
     console.log(user)
     if (!user) {

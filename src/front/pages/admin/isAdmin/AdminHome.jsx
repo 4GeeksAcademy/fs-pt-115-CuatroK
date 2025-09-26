@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 
 export const AdminHome = () => {
+
+
     const Divider = () => (
         <div
             style={{
@@ -11,6 +13,7 @@ export const AdminHome = () => {
             }}
         />
     );
+
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100 ">

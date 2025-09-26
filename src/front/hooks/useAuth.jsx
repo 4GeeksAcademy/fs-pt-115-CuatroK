@@ -113,13 +113,22 @@ export const AuthProvider = ({ children }) => {
     const getUserApi = async (navigate) => {
         const data = await getUser()
         setUser(data)
-        if (user && !user.is_admin) {
+        if (user && !user.is_admin && navigate) {
             navigate("/")
         }
-        if (user && user.is_admin) {
+        if (user && user.is_admin && navigate) {
             navigate("/admin-home")
         }
     }
+    useEffect(() => {
+        if (user) {
+            if (user.msg == 'Token has expired' || user.msg == "Not enough segments") {
+                sessionStorage.removeItem("token");
+                setToken(null)
+                setUser(null)
+            }
+        }
+    }, [user])
     useEffect(() => {
         if (userAuth0 && isAuthenticated) {
             loginSync()

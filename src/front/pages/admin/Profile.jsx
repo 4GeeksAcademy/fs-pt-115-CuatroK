@@ -32,7 +32,7 @@ export const Profile = ({ textOption }) => {
             return navigate("/")
         }
         console.log(user)
-    }, []);
+    }, [token, user]);
 
     if (!user) {
         return <LoadingSpinner />;
