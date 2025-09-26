@@ -1,8 +1,7 @@
-// src/front/routes.jsx
 import {
   createBrowserRouter,
   createRoutesFromElements,
-  Route,
+  Route
 } from "react-router-dom";
 
 import { Home } from "./pages/public/Home";
@@ -28,11 +27,12 @@ import { ResetPassword } from "./pages/auth/ResetPassword";
 import { ProccessToResetPassword } from "./pages/admin/ProcessToResetPassword";
 import { ForgotPassword } from "./pages/auth/ForgotPassword";
 import { AuthLayout } from "./layout/Auth.layout";
-import { SearchResults } from "./components/public/SearchResults";
 import { Catalogo } from "./pages/public/Catalogo/Catalogo";
 import { ProductoPage } from "./pages/public/Producto/ProductoPage";
 import { PedidoDetail } from "./components/admin/historialDePedidosComponents/PedidoDetail";
 import { PaymentSuccessfull } from "./pages/public/PaymentSuccessfull";
+
+import { SearchResults } from "./pages/public/SearchResult/SearchResult";
 
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
@@ -48,10 +48,13 @@ export const router = createBrowserRouter(
         <Route path="demo" element={<Demo />} />
         <Route path="calculadora" element={<CalculadoraMetales />} />
         <Route path="gallery" element={<Gallery />} />
-        <Route path="resultados/:busqueda" element={<SearchResults />} />
         <Route path="/" element={<Products />} />
+        
+        <Route path="resultados/:busqueda" element={<SearchResults />} />
+
         <Route path="/catalogo/:category" element={<Catalogo />} />
         <Route path="/producto/:idOrSlug" element={<ProductoPage />} />
+        
         <Route path="/success" element={
           <Elements stripe={stripePromise}>
             <PaymentSuccessfull />

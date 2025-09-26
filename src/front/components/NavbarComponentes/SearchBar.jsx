@@ -9,7 +9,8 @@ export const SearchBar = () => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && busqueda.trim() !== "") {
-      navigate(`/resultados/${busqueda}`);
+      navigate(`/resultados/${encodeURIComponent(busqueda.trim())}`);
+
     }
   };
 
