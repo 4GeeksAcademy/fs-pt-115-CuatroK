@@ -51,7 +51,7 @@ export const ShoppingCart = () => {
                     ></button>
                 </div>
                 <div className="offcanvas-body">
-                    {/* Aquí puedes renderizar productos dinámicos */}
+                    
                     <div className="mb-3">
                         <p>Producto 1 - €19.99</p>
                         <p>Producto 2 - €9.99</p>
