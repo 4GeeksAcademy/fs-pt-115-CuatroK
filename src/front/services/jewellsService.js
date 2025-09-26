@@ -1,14 +1,8 @@
-
 const API_BASE_URL = (
-
   import.meta.env.VITE_API_URL ||
   import.meta.env.VITE_BACKEND_URL ||
   "http://localhost:3001"
-
-  import.meta.env.VITE_BACKEND_URL
-
 ).replace(/\/$/, "");
-
 
 export async function getJoyasSearch() {
   try {
