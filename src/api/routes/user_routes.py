@@ -86,9 +86,9 @@ def get_users():
     user = db.session.get(User, int(user_id))
     print(user.is_admin)
     if user.is_admin:
-        users = User.query.all()
+        users = User.query.order_by(User.full_name.asc()).all()
         return jsonify([u.serialize() for u in users]), 200
-    return jsonify({'msg': 'You have no access for this action'})
+    return jsonify({'msg': 'You have no access for this action'}), 403
 
 
 @user_bp.route("/linksecretoparahacerungetgeneral", methods=["GET"])
@@ -109,7 +109,7 @@ def get_user():
 
 @user_bp.route("/convert_admin", methods=["POST"])
 def convert_client_to_admin():
-    user_id = -5  # CAMBIAR ÉSTE NÚMERO EL CUAL ES UN ID AL NUMERO ID DEL USUARIO QUE SE QUIERE CONVERTIR EN ADMIN
+    user_id = 9  # CAMBIAR ÉSTE NÚMERO EL CUAL ES UN ID AL NUMERO ID DEL USUARIO QUE SE QUIERE CONVERTIR EN ADMIN
     if not user_id:
         return jsonify({'MSG': 'LEAVE RAT'}), 400
     user = db.session.get(User, user_id)
@@ -231,6 +231,26 @@ def upgrade_user_data():
     user.full_name = data.get("full_name", user.full_name)
     db.session.commit()
     return jsonify({'msg': 'user data updated', 'user': user.serialize()}), 200
+
+
+@user_bp.route("/patch-account-state", methods=["PATCH"])
+@jwt_required()
+def patch_account_state():
+    current_user_id = get_jwt_identity()
+    if not current_user_id:
+        jsonify({'msg': 'Usuario no identificado'})
+    user = User.query.get(int(request.json.get("id")))
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    new_state = request.json.get("is_active")
+    if new_state is None:
+        return jsonify({"error": "is_active is required"}), 400
+
+    user.is_active = new_state
+    db.session.commit()
+
+    return jsonify({"msg": "User state updated", "id": user.id, "is_active": user.is_active}), 200
 
 
 @user_bp.route("/address/<int:address_id>", methods=["Delete"])

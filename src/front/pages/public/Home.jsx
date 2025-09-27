@@ -4,12 +4,9 @@ import { Publicidad1 } from "../../components/publicidad/Publicidad1.jsx";
 import { Publicidad2 } from "../../components/publicidad/Publicidad2.jsx";
 import { Publicidad3 } from "../../components/publicidad/Publicidad3.jsx";
 import { Publicidad4 } from "../../components/publicidad/Publicidad4.jsx";
-import { useAuth0 } from "@auth0/auth0-react";
 import { Publicidad5 } from "../../components/publicidad/Publicidad5.jsx";
 
 export const Home = () => {
-
-  const { user } = useAuth0()
 
   return (
 
@@ -37,5 +34,4 @@ export const Home = () => {
 
     </>
   );
-
 };

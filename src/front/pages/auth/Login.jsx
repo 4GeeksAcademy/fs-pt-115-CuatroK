@@ -4,7 +4,7 @@ import "../../index.css"
 import { useAuth } from "../../hooks/useAuth"
 
 export const Login = () => {
-    const { loginUser, loading, error, setError, loginUsingGoogle } = useAuth()
+    const { loginUser, loading, error, setError, loginUsingGoogle, getUserApi, token, user } = useAuth()
     const [inputValue, setInputValue] = useState({
         email: "",
         password: ""
@@ -29,6 +29,12 @@ export const Login = () => {
     useEffect(() => {
         setError("")
     }, [])
+
+    useEffect(() => {
+        if (token) {
+            getUserApi(navigate)
+        }
+    }, [token, user])
 
     return (
         <div>
@@ -77,7 +83,7 @@ export const Login = () => {
                             }
 
                             <div className="text-center mb-5">
-                                <button type="submit" className="btn btn-warning color-buttons">{loading ? "Cargando..." : "Iniciar Sesión"}</button>
+                                <button type="submit" className="btn btn-warning color-buttons">{loading || token ? "Cargando..." : "Iniciar Sesión"}</button>
                             </div>
                             <div className="col-md-4"></div>
                             <div className="text-center">

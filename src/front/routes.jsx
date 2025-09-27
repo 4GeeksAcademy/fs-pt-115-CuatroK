@@ -33,6 +33,13 @@ import { PedidoDetail } from "./components/admin/historialDePedidosComponents/Pe
 import { PaymentSuccessfull } from "./pages/public/PaymentSuccessfull";
 
 import { SearchResults } from "./pages/public/SearchResult/SearchResult";
+import { AdminLayout } from "./layout/Admin.layout";
+import { AdminHome } from "./pages/admin/isAdmin/AdminHome";
+import { PostProduct } from "./pages/admin/isAdmin/PostProduct";
+import { ProductList } from "./pages/admin/isAdmin/ProductList";
+import { SalesList } from "./pages/admin/isAdmin/SalesList";
+import { UserList } from "./pages/admin/isAdmin/UserList";
+import { InactiveAccount } from "./pages/public/InactiveAccount";
 
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
@@ -49,19 +56,19 @@ export const router = createBrowserRouter(
         <Route path="calculadora" element={<CalculadoraMetales />} />
         <Route path="gallery" element={<Gallery />} />
         <Route path="/" element={<Products />} />
-        
+
         <Route path="resultados/:busqueda" element={<SearchResults />} />
 
         <Route path="/catalogo/:category" element={<Catalogo />} />
         <Route path="/producto/:idOrSlug" element={<ProductoPage />} />
-        
+
         <Route path="/success" element={
           <Elements stripe={stripePromise}>
             <PaymentSuccessfull />
           </Elements>
         }> </Route>
 
-
+        <Route path="/inactiveAccount" element={<InactiveAccount />}></Route>
         <Route path="*" element={<h1>404</h1>} />
       </Route>
 
@@ -78,6 +85,14 @@ export const router = createBrowserRouter(
         <Route path="reset-password" element={<ProccessToResetPassword />} />
         <Route path="reset-password-form" element={<ResetPassword />} />
         <Route path="/sale/:id" element={<PedidoDetail />} />
+      </Route>
+
+      <Route element={<AdminLayout />}>
+        <Route path="admin-home" element={<AdminHome />}></Route>
+        <Route path="post-product" element={<PostProduct />}></Route>
+        <Route path="product-list" element={<ProductList />}></Route>
+        <Route path="sales-list" element={<SalesList />}></Route>
+        <Route path="user-list" element={<UserList />}></Route>
       </Route>
 
       <Route element={<AuthLayout />}>
