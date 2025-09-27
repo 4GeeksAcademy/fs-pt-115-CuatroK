@@ -6,21 +6,21 @@ import { useCart } from "../../hooks/useFetch";
 import { useAuth } from "../../hooks/useAuth";
 
 export const ShoppingCart = () => {
-  const { cartItems, fetchCart } = useCart();
-  const { finalAmount, setFinalAmount } = useAuth();
+        const { cartItems, fetchCart } = useCart();
+        const { finalAmount, setFinalAmount } = useAuth()
 
-  useEffect(() => {
-    if (cartItems.length > 0) {
-      const total = cartItems.reduce(
-        (acc, item) => acc + item.jewell.price * item.quantity,
-        0
-      );
-      setFinalAmount(total);
-    } else {
-      setFinalAmount(0);
-    }
-    fetchCart();
-  }, [cartItems, fetchCart, setFinalAmount]);
+        useEffect(() => {
+                if (cartItems.length > 0) {
+                        const total = cartItems.reduce(
+                                (acc, item) => acc + item.jewell.price * item.quantity,
+                                0
+                        );
+                        setFinalAmount(total);
+                } else {
+                        setFinalAmount(0);
+                }
+                fetchCart();
+        }, [cartItems, fetchCart]);
 
   const handleRemove = async (id) => {
     await removeCartItem(id);
@@ -59,37 +59,61 @@ export const ShoppingCart = () => {
           ></button>
         </div>
 
-        {/* Body (uno solo) */}
-        <div className="offcanvas-body">
-          {(!cartItems || cartItems.length === 0) ? (
-            <p>Tu carrito está vacío.</p>
-          ) : (
-            <div className="mb-3">
-              {cartItems
-                .sort((a, b) => a.id - b.id)
-                .map((item) => (
-                  <CarritoProfileCard
-                    key={item.id}
-                    id={item.id}
-                    name={item.jewell.name}
-                    image={item.jewell.url_image}
-                    price={item.jewell.price}
-                    quantity={item.quantity}
-                    onRemove={() => handleRemove(item.id)}
-                  />
-                ))}
-            </div>
-          )}
 
-          <p className="fw-bold text-end">
-            Total: {finalAmount ? finalAmount.toFixed(2) : "0.00"} €
-          </p>
+            
+            <div
+                className="offcanvas offcanvas-end"
+                tabIndex="-1"
+                id="cartPanel"
+                aria-labelledby="cartPanelLabel"
+            >
+                <div className="offcanvas-header">
+                    <h5 className="offcanvas-title" id="cartPanelLabel">Tu carrito</h5>
+                    <button
+                        type="button"
+                        className="btn-close"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Cerrar"
+                    ></button>
+                </div>
+                <div className="offcanvas-body">
+                    
+                    <div className="mb-3">
+                        <p>Producto 1 - €19.99</p>
+                        <p>Producto 2 - €9.99</p>
+                    </div>
+                    <Link to="payment">
+                        <button className="btn btn-warning w-100">Finalizar compra</button>
+                    </Link>
 
-          <Link to="/user">
-            <button className="btn btn-warning w-100">Finalizar compra</button>
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
+                                <div className="offcanvas-body">
+                                        {!cartItems ? (
+                                                <p>Tu carrito está vacío.</p>
+                                        ) : (
+                                                <div className="mb-3">
+                                                        {cartItems
+                                                                .sort((a, b) => a.id - b.id)
+                                                                .map((item) => (
+                                                                        <CarritoProfileCard
+                                                                                key={item.id}
+                                                                                id={item.id}
+                                                                                name={item.jewell.name}
+                                                                                image={item.jewell.url_image}
+                                                                                price={item.jewell.price}
+                                                                                quantity={item.quantity}
+                                                                                onRemove={() => handleRemove(item.id)}
+                                                                        />
+                                                                ))}
+                                                </div>
+                                        )}
+                                        <p className="fw-bold text-end">Total: {finalAmount ? finalAmount.toFixed(2) : "0.00"} €</p>
+
+                                        <Link to="/user">
+                                                <button className="btn btn-warning w-100">Finalizar compra</button>
+                                        </Link>
+                                </div>
+                        </div>
+
+                </div>
+        );
 };

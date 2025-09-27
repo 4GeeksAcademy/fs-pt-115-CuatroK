@@ -15,8 +15,13 @@ def create_payment_intent():
         data = request.get_json()
         if not data.get("amount"):
             return jsonify({'msg': 'No se encontró el monto'})
+        amount = data.get("amount")
+        try:
+            amount = int(float(amount) * 100)
+        except Exception:
+            return jsonify({'msg': 'Monto inválido'}), 400
         intent = stripe.PaymentIntent.create(
-            amount=data.get("amount") * 100,
+            amount=amount,
             currency="eur",
             automatic_payment_methods={"enabled": True},
 
