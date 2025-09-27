@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "./historialDePedidos.css"
+import { useAuth } from "../../../hooks/useAuth";
 
 export const HistorialDePedidosCard = ({
     id,
@@ -7,6 +8,7 @@ export const HistorialDePedidosCard = ({
     quantity,
     date,
 }) => {
+    const { user } = useAuth()
     const fecha = new Date(date);
     const legible = fecha.toLocaleString("es-ES", {
         year: "numeric",
@@ -20,9 +22,9 @@ export const HistorialDePedidosCard = ({
         style: "currency",
         currency: "EUR",
     }).format(total)
-
+    console.log(user)
     return (
-        <Link to={`/sale/${id}`} className="no-style-link">
+        <Link to={!user.is_admin ? `/sale/${id}` : `/sale-detail/${id}`} className="no-style-link">
             <article className="product-card mb-1">
                 <div className="product-info">
                     <div className="product-header">
