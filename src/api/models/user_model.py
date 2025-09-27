@@ -53,7 +53,8 @@ class User(db.Model):
             "birth_date": self.birth_date.isoformat() if self.birth_date else None,
             "full_name": self.full_name,
             "is_admin": self.is_admin,
-            "favorites": [favorite.serialize() for favorite in self.favorites] if self.favorites else []
+            "favorites": [favorite.serialize() for favorite in self.favorites] if self.favorites else [],
+            "is_active": self.is_active
             # do not serialize the password, its a security breach
         }
 
