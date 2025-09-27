@@ -1,397 +1,391 @@
-
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getJoyasSearch } from "../../../services/jewellsService";
 import "./Style_Catalogo.css";
 import LoadingSpinner from "../../../components/public/LoadingSpinner";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import { Dropdown } from "bootstrap";
 
 const LABELS = {
-    brand: "Marca",
-    metal: "Metal",
-    coating: "Recubrimiento",
-    gender: "Género",
-    gem: "Gema",
-    ring_type: "Tipo de anillo",
-    earring_type: "Tipo de pendiente",
-    bracelet: "Tipo de pulsera",
-    watch: "Tipo de reloj",
-    watch_bracelet_material: "Material correa",
-    water_resistance: "Resistencia al agua",
-    caja: "Caja",
-    clasp: "Cierre",
+  brand: "Marca", metal: "Metal", coating: "Recubrimiento", gender: "Género",
+  gem: "Gema", ring_type: "Tipo de anillo", earring_type: "Tipo de pendiente",
+  bracelet: "Tipo de pulsera", watch: "Tipo de reloj",
+  watch_bracelet_material: "Material correa", water_resistance: "Resistencia al agua",
+  caja: "Caja", clasp: "Cierre",
 };
 
-
 const CANDIDATE_FIELDS = [
-    "brand",
-    "metal",
-    "coating",
-    "gender",
-    "gem",
-    "ring_type",
-    "earring_type",
-    "bracelet",
-    "watch",
-    "watch_bracelet_material",
-    "water_resistance",
-    "caja",
-    "clasp",
+  "brand","metal","coating","gender","gem","ring_type","earring_type","bracelet",
+  "watch","watch_bracelet_material","water_resistance","caja","clasp",
 ];
 
 export const Catalogo = () => {
+  const { category } = useParams();
+  const navigate = useNavigate();
 
-    const { category } = useParams();
-    const navigate = useNavigate();
+  const [cargando, setCargando] = useState(false);
+  const [errorTexto, setErrorTexto] = useState("");
+  const [productosBase, setProductosBase] = useState([]);
+  const [panelAbierto, setPanelAbierto] = useState(false);
+  const [filtros, setFiltros] = useState({});
+  const [rangoPrecio, setRangoPrecio] = useState({ min: "", max: "" });
+  const [opciones, setOpciones] = useState({ campos: {}, precioMin: 0, precioMax: 0 });
+  const [productosFiltrados, setProductosFiltrados] = useState([]);
+  const [sortBy, setSortBy] = useState("relevance");
 
-    const [cargando, setCargando] = useState(false);
-    const [errorTexto, setErrorTexto] = useState("");
+  useEffect(() => {
+    const triggers = document.querySelectorAll('[data-bs-toggle="dropdown"]');
+    const instances = Array.from(triggers).map((el) => new Dropdown(el));
+    return () => instances.forEach((i) => i.dispose());
+  }, []);
 
+  let tituloCategoria = category || "";
+  try { tituloCategoria = decodeURIComponent(tituloCategoria); } catch {}
 
-    const [productosBase, setProductosBase] = useState([]);
+  const abrirProducto = (productoItem) => {
+    const idOSlug = productoItem?.slug ? productoItem.slug : String(productoItem?.id ?? "");
+    navigate(`/producto/${encodeURIComponent(idOSlug)}`);
+  };
 
+  const formatearPrecio = (valorPrecio) => {
+    const n = Number(valorPrecio);
+    if (Number.isNaN(n)) return "—";
+    return `${n.toFixed(2)} €`;
+  };
 
-    const [panelAbierto, setPanelAbierto] = useState(false);
+  const coincideCategoria = (catProd, catElegida) => {
+    const a = String(catProd || "").trim().toLowerCase();
+    const b = String(catElegida || "").trim().toLowerCase();
+    const plural = b.endsWith("s") ? b : b + "s";
+    const singular = b.endsWith("s") ? b.slice(0, -1) : b;
+    return a === b || a === plural || a === singular;
+  };
 
+  useEffect(() => {
+    let vivo = true;
+    (async () => {
+      setCargando(true);
+      setErrorTexto("");
+      setProductosBase([]);
+      setFiltros({});
+      setRangoPrecio({ min: "", max: "" });
+      try {
+        const all = await getJoyasSearch();
+        const lista = (all || []).filter((p) => coincideCategoria(p?.category, tituloCategoria));
+        if (!vivo) return;
+        setProductosBase(lista);
+        if (lista.length === 0) setErrorTexto(`No hay productos en “${tituloCategoria}”.`);
+      } catch (e) {
+        if (!vivo) return;
+        setErrorTexto(e?.message || "Error al cargar las joyas.");
+      } finally {
+        if (vivo) setCargando(false);
+      }
+    })();
+    return () => { vivo = false; };
+  }, [category]);
 
-    const [filtros, setFiltros] = useState({});
+  useEffect(() => {
+    const uniqueSorted = (arr) =>
+      [...new Set(arr.filter((v) => v != null && String(v).trim() !== ""))].sort((a, b) =>
+        String(a).localeCompare(String(b))
+      );
 
+    const campos = {};
+    CANDIDATE_FIELDS.forEach((key) => {
+      const values = uniqueSorted(productosBase.map((p) => p?.[key]));
+      if (values.length) campos[key] = { label: LABELS[key] || key, values };
+    });
 
-    const [rangoPrecio, setRangoPrecio] = useState({ min: "", max: "" });
+    const precios = productosBase.map((p) => Number(p.price) || 0);
+    const precioMin = precios.length ? Math.min(...precios) : 0;
+    const precioMax = precios.length ? Math.max(...precios) : 0;
 
+    setOpciones({ campos, precioMin, precioMax });
+  }, [productosBase]);
 
-    let tituloCategoria = category || "";
-    try { tituloCategoria = decodeURIComponent(tituloCategoria); } catch { }
+  useEffect(() => {
+    setFiltros((prev) => {
+      const next = {};
+      Object.keys(opciones.campos).forEach((k) => {
+        const oldSel = prev[k] || [];
+        const allowed = new Set(opciones.campos[k].values);
+        next[k] = oldSel.filter((v) => allowed.has(v));
+      });
+      return next;
+    });
+  }, [opciones.campos]);
 
-
-    const abrirProducto = (productoItem) => {
-        const idOSlug = productoItem?.slug ? productoItem.slug : String(productoItem?.id ?? "");
-        navigate(`/producto/${encodeURIComponent(idOSlug)}`);
-    };
-
-    const formatearPrecio = (valorPrecio) => {
-        const numeroPrecio = Number(valorPrecio);
-        if (Number.isNaN(numeroPrecio)) return "—";
-        return `${numeroPrecio.toFixed(2)} €`;
-    };
-
-    const coincideCategoria = (categoriaProducto, categoriaElegida) => {
-        const textoCategoriaProducto = String(categoriaProducto || "").trim().toLowerCase();
-        const textoCategoriaElegida = String(categoriaElegida || "").trim().toLowerCase();
-        const categoriaPlural = textoCategoriaElegida.endsWith("s")
-            ? textoCategoriaElegida
-            : textoCategoriaElegida + "s";
-        const categoriaSingular = textoCategoriaElegida.endsWith("s")
-            ? textoCategoriaElegida.slice(0, -1)
-            : textoCategoriaElegida;
-        return (
-            textoCategoriaProducto === textoCategoriaElegida ||
-            textoCategoriaProducto === categoriaPlural ||
-            textoCategoriaProducto === categoriaSingular
-        );
-    };
-
-
-    useEffect(() => {
-        let componenteVivo = true;
-        (async () => {
-            setCargando(true);
-            setErrorTexto("");
-            setProductosBase([]);
-            setFiltros({});
-            setRangoPrecio({ min: "", max: "" });
-
-            try {
-                const todasLasJoyas = await getJoyasSearch();
-                const listaPorCategoria = (todasLasJoyas || []).filter((productoItem) =>
-                    coincideCategoria(productoItem?.category, tituloCategoria)
-                );
-                if (!componenteVivo) return;
-                setProductosBase(listaPorCategoria);
-                if (listaPorCategoria.length === 0) setErrorTexto(`No hay productos en “${tituloCategoria}”.`);
-            } catch (errorCarga) {
-                if (!componenteVivo) return;
-                setErrorTexto(errorCarga?.message || "Error al cargar las joyas.");
-            } finally {
-                if (componenteVivo) setCargando(false);
-            }
-        })();
-        return () => { componenteVivo = false; };
-    }, [category]);
-
-
-    const opciones = useMemo(() => {
-        const obtenerUnicosOrdenados = (arregloValores) =>
-            [...new Set(arregloValores.filter((valor) => valor != null && String(valor).trim() !== ""))].sort(
-                (valorA, valorB) => String(valorA).localeCompare(String(valorB))
-            );
-
-        const camposConOpciones = {};
-        CANDIDATE_FIELDS.forEach((campoCandidato) => {
-            const valoresCampo = obtenerUnicosOrdenados(productosBase.map((productoItem) => productoItem?.[campoCandidato]));
-            if (valoresCampo.length > 0) {
-                camposConOpciones[campoCandidato] = { label: LABELS[campoCandidato] || campoCandidato, values: valoresCampo };
-            }
-        });
-
-        const listaPrecios = productosBase.map((productoItem) => Number(productoItem.price) || 0);
-        const precioMinimoDisponible = listaPrecios.length ? Math.min(...listaPrecios) : 0;
-        const precioMaximoDisponible = listaPrecios.length ? Math.max(...listaPrecios) : 0;
-
-        return { campos: camposConOpciones, precioMin: precioMinimoDisponible, precioMax: precioMaximoDisponible };
-    }, [productosBase]);
-
-
-    useEffect(() => {
-        setFiltros((filtrosPrevios) => {
-            const filtrosNormalizados = {};
-            Object.keys(opciones.campos).forEach((campoClave) => {
-                const seleccionesAnteriores = filtrosPrevios[campoClave] || [];
-                const valoresPermitidos = new Set(opciones.campos[campoClave].values);
-                filtrosNormalizados[campoClave] = seleccionesAnteriores.filter((valorSeleccionado) =>
-                    valoresPermitidos.has(valorSeleccionado)
-                );
-            });
-            return filtrosNormalizados;
-        });
-    }, [opciones.campos]);
-
-
-    const productosFiltrados = useMemo(() => {
-        return (productosBase || []).filter((productoItem) => {
-            // 1) filtros por facetas
-            for (const [campoClave, listaSeleccion] of Object.entries(filtros)) {
-                if (listaSeleccion?.length) {
-                    const valorProductoEnCampo = String(productoItem?.[campoClave] ?? "").trim();
-                    if (!listaSeleccion.includes(valorProductoEnCampo)) return false;
-                }
-            }
-
-            const precioProducto = Number(productoItem.price) || 0;
-            const precioMinimoSeleccion = rangoPrecio.min !== "" ? Number(rangoPrecio.min) : -Infinity;
-            const precioMaximoSeleccion = rangoPrecio.max !== "" ? Number(rangoPrecio.max) : Infinity;
-            if (!(precioProducto >= precioMinimoSeleccion && precioProducto <= precioMaximoSeleccion)) return false;
-
-            return true;
-        });
-    }, [productosBase, filtros, rangoPrecio]);
-
-
-    const toggleCheck = (campoClave, valorOpcion) => {
-        setFiltros((filtrosPrevios) => {
-            const conjuntoActual = new Set(filtrosPrevios[campoClave] || []);
-            if (conjuntoActual.has(valorOpcion)) conjuntoActual.delete(valorOpcion);
-            else conjuntoActual.add(valorOpcion);
-            return { ...filtrosPrevios, [campoClave]: Array.from(conjuntoActual) };
-        });
-    };
-
-    const limpiarFiltros = () => {
-        setFiltros(Object.fromEntries(Object.keys(opciones.campos).map((campoClave) => [campoClave, []])));
-        setRangoPrecio({ min: "", max: "" });
-    };
-
-
-    const contarOpcionesDe = (campoClave) => {
-        const conteoPorValor = new Map(); // valor -> cantidad
-        const valoresPosibles = new Set(opciones.campos[campoClave]?.values || []);
-
-        const pasaOtrosFiltros = (productoItem) => {
-            for (const [campoIterado, listaSeleccion] of Object.entries(filtros)) {
-                if (campoIterado === campoClave) continue; // ignoro el campo que estoy contando
-                if (listaSeleccion?.length) {
-                    const valorProducto = String(productoItem?.[campoIterado] ?? "").trim();
-                    if (!listaSeleccion.includes(valorProducto)) return false;
-                }
-            }
-            const precioProducto = Number(productoItem.price) || 0;
-            const precioMinimoSeleccion = rangoPrecio.min !== "" ? Number(rangoPrecio.min) : -Infinity;
-            const precioMaximoSeleccion = rangoPrecio.max !== "" ? Number(rangoPrecio.max) : Infinity;
-            if (!(precioProducto >= precioMinimoSeleccion && precioProducto <= precioMaximoSeleccion)) return false;
-
-            return true;
-        };
-
-        for (const productoItem of productosBase) {
-            if (!pasaOtrosFiltros(productoItem)) continue;
-            const valorCampo = String(productoItem?.[campoClave] ?? "").trim();
-            if (!valorCampo || !valoresPosibles.has(valorCampo)) continue;
-            conteoPorValor.set(valorCampo, (conteoPorValor.get(valorCampo) || 0) + 1);
+  useEffect(() => {
+    const filtrados = (productosBase || []).filter((p) => {
+      for (const [k, sel] of Object.entries(filtros)) {
+        if (sel?.length) {
+          const val = String(p?.[k] ?? "").trim();
+          if (!sel.includes(val)) return false;
         }
+      }
+      const price = Number(p.price) || 0;
+      const min = rangoPrecio.min !== "" ? Number(rangoPrecio.min) : -Infinity;
+      const max = rangoPrecio.max !== "" ? Number(rangoPrecio.max) : Infinity;
+      if (!(price >= min && price <= max)) return false;
+      return true;
+    });
+    setProductosFiltrados(filtrados);
+  }, [productosBase, filtros, rangoPrecio]);
 
-        return Object.fromEntries(conteoPorValor.entries());
+  const toggleCheck = (k, val) => {
+    setFiltros((prev) => {
+      const set = new Set(prev[k] || []);
+      if (set.has(val)) set.delete(val);
+      else set.add(val);
+      return { ...prev, [k]: Array.from(set) };
+    });
+  };
+
+  const limpiarFiltros = () => {
+    setFiltros(Object.fromEntries(Object.keys(opciones.campos).map((k) => [k, []])));
+    setRangoPrecio({ min: "", max: "" });
+  };
+
+  const contarOpcionesDe = (campoClave) => {
+    const counts = new Map();
+    const allowed = new Set(opciones.campos[campoClave]?.values || []);
+    const pasaOtros = (p) => {
+      for (const [k, sel] of Object.entries(filtros)) {
+        if (k === campoClave) continue;
+        if (sel?.length) {
+          const val = String(p?.[k] ?? "").trim();
+          if (!sel.includes(val)) return false;
+        }
+      }
+      const price = Number(p.price) || 0;
+      const min = rangoPrecio.min !== "" ? Number(rangoPrecio.min) : -Infinity;
+      const max = rangoPrecio.max !== "" ? Number(rangoPrecio.max) : Infinity;
+      return price >= min && price <= max;
     };
+    for (const p of productosBase) {
+      if (!pasaOtros(p)) continue;
+      const val = String(p?.[campoClave] ?? "").trim();
+      if (!val || !allowed.has(val)) continue;
+      counts.set(val, (counts.get(val) || 0) + 1);
+    }
+    return Object.fromEntries(counts.entries());
+  };
 
-    return (
-        <div className="container py-4">
-            <div className="d-flex align-items-center justify-content-between mb-3">
-                <h1 className="mb-0">Catálogo: {tituloCategoria}</h1>
+  const labelSort = (key) =>
+    key === "name_asc" ? "Nombre, A a Z" :
+    key === "name_desc" ? "Nombre, Z a A" :
+    key === "price_asc" ? "Precio: de más bajo a más alto" :
+    key === "price_desc" ? "Precio: de más alto a más bajo" :
+    "Relevancia";
 
+  const sortItems = (arr, key) => {
+    const list = arr.slice();
+    if (key === "name_asc" || key === "name_desc") {
+      list.sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
+      if (key === "name_desc") list.reverse();
+    } else if (key === "price_asc" || key === "price_desc") {
+      list.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+      if (key === "price_desc") list.reverse();
+    }
+    return list;
+  };
 
-                <button
-                    type="button"
-                    className="btn btn-outline-secondary d-flex align-items-center gap-2"
-                    onClick={() => setPanelAbierto(true)}
-                >
-                    <span className="bi bi-funnel" aria-hidden="true" />
-                    Filtrar
-                </button>
+  const orderedItems = sortItems(productosFiltrados, sortBy);
+
+  return (
+    <div className="container py-4">
+      <div className="d-flex align-items-center justify-content-between mb-3">
+        <h1 className="mb-0">Catálogo: {tituloCategoria}</h1>
+
+        <div className="d-flex align-items-center gap-3">
+          <div className="d-flex align-items-center gap-2">
+            <span className="text-muted">Ordenar por:</span>
+
+            <div className="dropdown" data-bs-auto-close="true">
+              <button
+                id="sortMenuBtn"
+                type="button"
+                className="btn btn-outline-secondary dropdown-toggle"
+                data-bs-toggle="dropdown"
+                data-bs-display="static"
+                aria-expanded="false"
+              >
+                {labelSort(sortBy)}
+              </button>
+              <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="sortMenuBtn">
+                <li className="dropdown-header text-muted">Los más vendidos</li>
+                <li>
+                  <button
+                    className={`dropdown-item ${sortBy === "relevance" ? "active" : ""}`}
+                    onClick={() => setSortBy("relevance")}
+                  >
+                    Relevancia
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={`dropdown-item ${sortBy === "name_asc" ? "active" : ""}`}
+                    onClick={() => setSortBy("name_asc")}
+                  >
+                    Nombre, A a Z
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={`dropdown-item ${sortBy === "name_desc" ? "active" : ""}`}
+                    onClick={() => setSortBy("name_desc")}
+                  >
+                    Nombre, Z a A
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={`dropdown-item ${sortBy === "price_asc" ? "active" : ""}`}
+                    onClick={() => setSortBy("price_asc")}
+                  >
+                    Precio: de más bajo a más alto
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={`dropdown-item ${sortBy === "price_desc" ? "active" : ""}`}
+                    onClick={() => setSortBy("price_desc")}
+                  >
+                    Precio: de más alto a más bajo
+                  </button>
+                </li>
+              </ul>
             </div>
-            
-            {cargando && <LoadingSpinner />}
+          </div>
 
-            {!cargando && errorTexto && (
-                <div className="alert alert-danger">{errorTexto}</div>
-            )}
-
-            {!cargando && !errorTexto && productosFiltrados.length === 0 && (
-                <div className="alert alert-warning">No hay productos que coincidan con los filtros.</div>
-            )}
-
-            {!cargando && productosFiltrados.length > 0 && (
-                <div className="row g-3">
-                    {productosFiltrados.map((productoItem) => (
-                        <div
-                            className="col-12 col-sm-6 col-md-4 col-lg-3"
-                            key={productoItem?.id ?? `${productoItem?.slug ?? "sin-id"}`}
-                        >
-                            <div
-                                className="card h-100 position-relative"
-                                role="button"
-                                tabIndex={0}
-                                style={{ cursor: "pointer" }}
-                                onClick={() => abrirProducto(productoItem)}
-                                onKeyDown={(eventoTeclado) => eventoTeclado.key === "Enter" && abrirProducto(productoItem)}
-                            >
-                                <img
-                                    src={productoItem?.url_image}
-                                    alt={productoItem?.name || "Producto"}
-                                    className="card-img-top"
-                                    style={{ objectFit: "cover", height: 200 }}
-                                    onError={(eventoImagen) => {
-                                        eventoImagen.currentTarget.src =
-                                            "https://via.placeholder.com/600x400?text=Sin+imagen";
-                                    }}
-                                />
-                                <div className="card-body d-flex flex-column">
-                                    <h5 className="card-title">{productoItem?.name || "Sin nombre"}</h5>
-                                    <p className="card-text small text-muted mb-2">
-                                        {productoItem?.description || "Sin descripción."}
-                                    </p>
-                                    <div className="mt-auto">
-                                        <div className="fw-bold">{formatearPrecio(productoItem?.price)}</div>
-                                        <button
-                                            className="btn btn-primary w-100 mt-2"
-                                            onClick={(eventoBoton) => {
-                                                eventoBoton.stopPropagation();
-                                                console.log("[Catalogo] Añadir al carrito:", productoItem?.id);
-                                            }}
-                                        >
-                                            Añadir
-                                        </button>
-                                    </div>
-                                </div>
-                                {productoItem?.highlighted && (
-                                    <span
-                                        className="badge text-bg-warning"
-                                        style={{ position: "absolute", top: 8, right: 8 }}
-                                    >
-                                        Destacado
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-
-            {panelAbierto && (
-                <>
-                    <div className="filtro-overlay" onClick={() => setPanelAbierto(false)} />
-                    <aside className="filtro-drawer filtro-left" aria-label="Panel de filtros">
-                        <div className="filtro-header">
-                            <h2 className="h5 mb-0">Filtros</h2>
-                            <button
-                                className="btn btn-sm btn-outline-secondary"
-                                onClick={() => setPanelAbierto(false)}
-                                aria-label="Cerrar"
-                            >
-                                ✕
-                            </button>
-                        </div>
-
-                        <div className="filtro-body">
-
-                            {Object.entries(opciones.campos).map(([campoClave, infoCampo]) => {
-                                const conteosCampo = contarOpcionesDe(campoClave); // números por opción
-                                return (
-                                    <details key={campoClave} open={["metal", "brand"].includes(campoClave)}>
-                                        <summary className="filtro-summary">{infoCampo.label}</summary>
-                                        {infoCampo.values.map((valorOpcion) => {
-                                            const cantidadCoincidente = conteosCampo[valorOpcion] || 0;
-                                            return (
-                                                <label key={valorOpcion} className="filtro-check">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={(filtros[campoClave] || []).includes(valorOpcion)}
-                                                        onChange={() => toggleCheck(campoClave, valorOpcion)}
-                                                    />
-                                                    <span>
-                                                        {valorOpcion}{" "}
-                                                        <small className="text-muted">({cantidadCoincidente})</small>
-                                                    </span>
-                                                </label>
-                                            );
-                                        })}
-                                    </details>
-                                );
-                            })}
-
-
-                            {productosBase.length > 0 && (
-                                <details>
-                                    <summary className="filtro-summary">Precio</summary>
-                                    <div className="d-flex gap-2 align-items-center">
-                                        <input
-                                            type="number"
-                                            className="form-control"
-                                            placeholder={`mín. ${opciones.precioMin || 0}`}
-                                            value={rangoPrecio.min}
-                                            onChange={(eventoCambio) =>
-                                                setRangoPrecio((rangoActual) => ({ ...rangoActual, min: eventoCambio.target.value }))
-                                            }
-                                            min={0}
-                                        />
-                                        <span>—</span>
-                                        <input
-                                            type="number"
-                                            className="form-control"
-                                            placeholder={`máx. ${opciones.precioMax || 0}`}
-                                            value={rangoPrecio.max}
-                                            onChange={(eventoCambio) =>
-                                                setRangoPrecio((rangoActual) => ({ ...rangoActual, max: eventoCambio.target.value }))
-                                            }
-                                            min={0}
-                                        />
-                                    </div>
-                                </details>
-                            )}
-                        </div>
-
-                        <div className="filtro-footer">
-                            <button className="btn btn-light" onClick={limpiarFiltros}>
-                                Limpiar
-                            </button>
-                            <button
-                                className="btn btn-dark ms-auto"
-                                onClick={() => setPanelAbierto(false)}
-                            >
-                                Ver resultados
-                            </button>
-                        </div>
-                    </aside>
-                </>
-            )}
+          <button
+            type="button"
+            className="btn btn-outline-secondary d-flex align-items-center gap-2"
+            onClick={() => setPanelAbierto(true)}
+          >
+            <span className="bi bi-funnel" aria-hidden="true" />
+            Filtrar
+          </button>
         </div>
-    );
+      </div>
+
+      {cargando && <LoadingSpinner />}
+
+      {!cargando && errorTexto && <div className="alert alert-danger">{errorTexto}</div>}
+
+      {!cargando && orderedItems.length === 0 && (
+        <div className="alert alert-warning">No hay productos que coincidan con los filtros.</div>
+      )}
+
+      {!cargando && orderedItems.length > 0 && (
+        <div className="row g-3">
+          {orderedItems.map((productoItem) => (
+            <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={productoItem?.id ?? `${productoItem?.slug ?? "sin-id"}`}>
+              <div
+                className="card h-100 position-relative catalog-card"
+                role="button"
+                tabIndex={0}
+                style={{ cursor: "pointer" }}
+                onClick={() => abrirProducto(productoItem)}
+                onKeyDown={(e) => e.key === "Enter" && abrirProducto(productoItem)}
+              >
+                <img
+                  src={productoItem?.url_image}
+                  alt={productoItem?.name || "Producto"}
+                  className="card-img-top"
+                  style={{ objectFit: "cover", height: 200 }}
+                  onError={(ev) => { ev.currentTarget.src = "https://via.placeholder.com/600x400?text=Sin+imagen"; }}
+                />
+                <div className="card-body d-flex flex-column">
+                  <h5 className="card-title">{productoItem?.name || "Sin nombre"}</h5>
+                  <p className="card-text small text-muted mb-2">{productoItem?.description || "Sin descripción."}</p>
+                  <div className="mt-auto">
+                    <div className="fw-bold">{formatearPrecio(productoItem?.price)}</div>
+                    <button
+                      className="btn btn-primary w-100 mt-2 add-btn"
+                      onClick={(ev) => { ev.stopPropagation(); console.log("[Catalogo] Añadir:", productoItem?.id); }}
+                    >
+                      Añadir
+                    </button>
+                  </div>
+                </div>
+                {productoItem?.highlighted && (
+                  <span className="badge text-bg-warning" style={{ position: "absolute", top: 8, right: 8 }}>
+                    Destacado
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {panelAbierto && (
+        <>
+          <div className="filtro-overlay" onClick={() => setPanelAbierto(false)} />
+          <aside className="filtro-drawer filtro-left" aria-label="Panel de filtros">
+            <div className="filtro-header">
+              <h2 className="h5 mb-0">Filtros</h2>
+              <button className="btn btn-sm btn-outline-secondary" onClick={() => setPanelAbierto(false)} aria-label="Cerrar">✕</button>
+            </div>
+
+            <div className="filtro-body">
+              {Object.entries(opciones.campos).map(([campoClave, infoCampo]) => {
+                const conteosCampo = contarOpcionesDe(campoClave);
+                return (
+                  <details key={campoClave} open={["metal", "brand"].includes(campoClave)}>
+                    <summary className="filtro-summary">{infoCampo.label}</summary>
+                    {infoCampo.values.map((valorOpcion) => {
+                      const cantidad = conteosCampo[valorOpcion] || 0;
+                      return (
+                        <label key={valorOpcion} className="filtro-check">
+                          <input
+                            type="checkbox"
+                            checked={(filtros[campoClave] || []).includes(valorOpcion)}
+                            onChange={() => toggleCheck(campoClave, valorOpcion)}
+                          />
+                          <span>{valorOpcion} <small className="text-muted">({cantidad})</small></span>
+                        </label>
+                      );
+                    })}
+                  </details>
+                );
+              })}
+
+              {productosBase.length > 0 && (
+                <details>
+                  <summary className="filtro-summary">Precio</summary>
+                  <div className="d-flex gap-2 align-items-center">
+                    <input
+                      type="number" className="form-control"
+                      placeholder={`mín. ${opciones.precioMin || 0}`}
+                      value={rangoPrecio.min}
+                      onChange={(e) => setRangoPrecio((r) => ({ ...r, min: e.target.value }))}
+                      min={0}
+                    />
+                    <span>—</span>
+                    <input
+                      type="number" className="form-control"
+                      placeholder={`máx. ${opciones.precioMax || 0}`}
+                      value={rangoPrecio.max}
+                      onChange={(e) => setRangoPrecio((r) => ({ ...r, max: e.target.value }))}
+                      min={0}
+                    />
+                  </div>
+                </details>
+              )}
+            </div>
+
+            <div className="filtro-footer">
+              <button className="btn btn-light" onClick={limpiarFiltros}>Limpiar</button>
+              <button className="btn btn-dark ms-auto" onClick={() => setPanelAbierto(false)}>Ver resultados</button>
+            </div>
+          </aside>
+        </>
+      )}
+    </div>
+  );
 };
