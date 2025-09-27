@@ -12,8 +12,8 @@ export const Profile = () => {
         <div className="position-relative text-end">
             <button
                 className="btn btn-outline-dark mt-2"
-                onClick={() => setOpen(!open)}
                 style={{ width: 50, height: 50 }}
+                onClick={() => setOpen(!open)}
             >
                 <i className="fa-sharp fa-regular fa-circle-user text-warning"></i>
             </button>
