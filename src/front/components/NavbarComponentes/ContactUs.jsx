@@ -20,11 +20,6 @@ export const ContactUs = () => {
                     >Galeria
                     </Link>
                 </li>
-                <li className="nav-item pt-4 ">
-                    <Link className="nav-link fs-5" 
-                    style={{color: "#5C3D2E"}}>Agendar Cita
-                    </Link>
-                </li>
                 <li className="nav-item pt-4">
                     <Link className="nav-link fs-5" aria-disabled="true"
                     style={{color: "#5C3D2E"}}
