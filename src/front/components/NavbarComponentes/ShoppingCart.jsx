@@ -25,42 +25,39 @@ export const ShoppingCart = () => {
                 }
         }, [cartItems, setFinalAmount]);
 
-  const handleRemove = async (id) => {
-    await removeCartItem(id);
-    await fetchCart();
-  };
+        const handleRemove = async (id) => {
+                await removeCartItem(id);
+                await fetchCart();
+        };
 
-  return (
-    <div className="mt-2">
-      <button
-        className="btn btn-outline-dark"
-        type="button"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#cartPanel"
-        aria-controls="cartPanel"
-        style={{ width: "50px", height: "50px" }}
-      >
-        <i className="fa-solid fa-cart-shopping text-warning"></i>
-      </button>
+        return (
+                <div className="mt-2">
+                        <button
+                                className="btn btn-outline-dark"
+                                type="button"
+                                data-bs-toggle="offcanvas"
+                                data-bs-target="#cartPanel"
+                                aria-controls="cartPanel"
+                                style={{ width: "50px", height: "50px" }}
+                        >
+                                <i className="fa-solid fa-cart-shopping text-warning"></i>
+                        </button>
 
-      {/* Offcanvas (una sola) */}
-      <div
-        className="offcanvas offcanvas-end"
-        tabIndex="-1"
-        id="cartPanel"
-        aria-labelledby="cartPanelLabel"
-      >
-        <div className="offcanvas-header">
-          <h5 className="offcanvas-title" id="cartPanelLabel">
-            Tu carrito
-          </h5>
-          <button
-            type="button"
-            className="btn-close"
-            data-bs-dismiss="offcanvas"
-            aria-label="Cerrar"
-          ></button>
-        </div>
+                        <div
+                                className="offcanvas offcanvas-end"
+                                tabIndex="-1"
+                                id="cartPanel"
+                                aria-labelledby="cartPanelLabel"
+                        >
+                                <div className="offcanvas-header">
+                                        <h5 className="offcanvas-title" id="cartPanelLabel">Tu carrito</h5>
+                                        <button
+                                                type="button"
+                                                className="btn-close"
+                                                data-bs-dismiss="offcanvas"
+                                                aria-label="Cerrar"
+                                        ></button>
+                                </div>
 
                                 <div className="offcanvas-body">
                                         {!cartItems || cartItems.length === 0 ? (
