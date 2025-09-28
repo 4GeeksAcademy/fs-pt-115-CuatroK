@@ -56,7 +56,6 @@ export const router = createBrowserRouter(
         <Route path="calculadora" element={<CalculadoraMetales />} />
         <Route path="gallery" element={<Gallery />} />
         <Route path="/" element={<Products />} />
-
         <Route path="resultados/:busqueda" element={<SearchResults />} />
 
         <Route path="/catalogo/:category" element={<Catalogo />} />
