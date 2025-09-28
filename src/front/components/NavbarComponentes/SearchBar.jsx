@@ -10,25 +10,30 @@ export const SearchBar = () => {
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && busqueda.trim() !== "") {
       navigate(`/resultados/${encodeURIComponent(busqueda.trim())}`);
-
+      setShowSearch(false); // Oculta el input después de buscar
+      setBusqueda(""); // Limpia el campo
     }
   };
 
   return (
-    <div>
-      <div className="input-group mt-2">
-        <span className="input-group-text bg-white border-end-0">
-          <i className="fa-sharp fa-solid fa-magnifying-glass text-warning"></i>
-        </span>
-        <input
-          type="text"
-          className="form-control border-start-0"
-          placeholder="Buscar joyas"
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
+    <div
+      className="search-wrapper d-flex align-items-center"
+      onMouseEnter={() => setShowSearch(true)}
+      onMouseLeave={() => busqueda === "" && setShowSearch(false)}
+    >
+      <div className="search-icon-only">
+        <i className="fa-sharp fa-solid fa-magnifying-glass text-warning"></i>
       </div>
+
+      <input
+        type="text"
+        className={`form-control search-input ms-2 ${showSearch ? "visible" : "hidden"}`}
+        placeholder="Buscar joyas"
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
+        onKeyDown={handleKeyDown}
+        autoFocus={showSearch}
+      />
     </div>
   );
 };

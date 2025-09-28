@@ -37,7 +37,7 @@ export const Login = () => {
     }, [token, user])
 
     return (
-        <div>
+        <div className="min-vh-100 d-flex align-items-center justify-content-center">
             <div className="container products-card">
 
                 <div className="row">
