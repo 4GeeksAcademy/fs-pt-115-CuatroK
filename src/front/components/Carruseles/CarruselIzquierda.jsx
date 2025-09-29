@@ -1,57 +1,62 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getJoyasSearch, addFavorite, removeFavorite } from "../../services/serviceApi";
 import { useAuth } from "../../hooks/useAuth";
 import "./CarruselEdges.css";
 
-const CARDS_PER_VIEW = 5;
-const STEP = 2;
+const STEP_CARDS = 2;
+const CARD_W = 288;
+const CARD_H = 420;
+const GAP = 16;
 
-function buildSlides(data, perView, step) {
-  const out = [];
-  const n = data.length;
-  if (!n) return out;
-  for (let start = 0; start < n; start += step) {
-    const group = [];
-    for (let k = 0; k < perView; k++) group.push(data[(start + k) % n]);
-    out.push(group);
-  }
-  return out;
-}
-
-export function CarruselIzquierda({ category, highlighted, panelTitle = "Colección destacada" }) {
+export function CarruselIzquierda({ category, highlighted }) {
   const [items, setItems] = useState([]);
-  const [favs, setFavs] = useState(() => new Set());
+  const [fav, setFav] = useState(() => new Set());
   const { token } = useAuth();
   const navigate = useNavigate();
+  const listRef = useRef(null);
+  const autoplayRef = useRef(null);
+
+  const [cardW, setCardW] = useState(CARD_W);
+  const [cardH, setCardH] = useState(CARD_H);
+  const [step, setStep] = useState(STEP_CARDS);
+
+  useEffect(() => {
+    const xs = window.matchMedia("(max-width: 575.98px)");
+    const sm = window.matchMedia("(max-width: 767.98px)");
+    const apply = () => {
+      if (xs.matches) { setCardW(220); setCardH(360); setStep(1); return; }
+      if (sm.matches) { setCardW(260); setCardH(400); setStep(1); return; }
+      setCardW(CARD_W); setCardH(CARD_H); setStep(STEP_CARDS);
+    };
+    apply();
+    xs.addEventListener("change", apply);
+    sm.addEventListener("change", apply);
+    return () => { xs.removeEventListener("change", apply); sm.removeEventListener("change", apply); };
+  }, []);
 
   useEffect(() => {
     (async () => {
       try {
         const data = await getJoyasSearch();
         setItems(Array.isArray(data) ? data : (data?.items ?? []));
-      } catch (e) {
-        console.error("No se pudo cargar", e);
-      }
+      } catch { setItems([]); }
     })();
   }, []);
 
-  const euro = new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" });
-
+  const passHighlight = (it) => (typeof it?.highlighted === "boolean" ? it.highlighted : !!it?.destacado);
   const cat = (category || "").toLowerCase();
-  const passHighlight = (it) =>
-    typeof it?.highlighted === "boolean" ? it.highlighted : !!it?.destacado;
 
-  const filtered = items.filter((it) => {
-    const sameCat = (it?.category || "").toLowerCase() === cat;
-    if (!sameCat) return false;
-    return typeof highlighted === "boolean" ? passHighlight(it) === highlighted : true;
-  });
+  const filtered = useMemo(() => {
+    const arr = (items || []).filter((it) => {
+      const sameCat = (it?.category || "").toLowerCase() === cat;
+      if (!sameCat) return false;
+      return typeof highlighted === "boolean" ? passHighlight(it) === highlighted : true;
+    });
+    return arr.length ? [...arr, ...arr, ...arr] : [];
+  }, [items, category, highlighted]);
 
-  const slides = buildSlides(filtered, CARDS_PER_VIEW, STEP);
-  if (slides.length === 0) {
-    return <p className="text-center text-muted my-4">No hay productos para esta categoría.</p>;
-  }
+  const euro = useMemo(() => new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }), []);
 
   const abrir = (p) => {
     const idOSlug = p?.slug ? p.slug : String(p?.id ?? "");
@@ -61,99 +66,113 @@ export function CarruselIzquierda({ category, highlighted, panelTitle = "Colecci
   const toggleFav = async (id) => {
     if (!token) return;
     try {
-      if (favs.has(id)) await removeFavorite(token, id);
+      if (fav.has(id)) await removeFavorite(token, id);
       else await addFavorite(token, id);
-      setFavs((prev) => {
-        const next = new Set(prev);
-        next.has(id) ? next.delete(id) : next.add(id);
-        return next;
+      setFav((prev) => {
+        const n = new Set(prev);
+        n.has(id) ? n.delete(id) : n.add(id);
+        return n;
       });
-    } catch (e) {
-      console.error("Error favorito:", e);
+    } catch {}
+  };
+
+  const scrollByCards = (dir = 1) => {
+    const viewport = listRef.current?.parentElement;
+    if (!viewport) return;
+    const delta = dir * (step * (cardW + GAP));
+    const atEnd = viewport.scrollLeft + viewport.clientWidth + delta >= viewport.scrollWidth - 2;
+    if (atEnd && delta > 0) {
+      viewport.scrollTo({ left: 0, behavior: "auto" });
+      requestAnimationFrame(() => viewport.scrollBy({ left: delta, behavior: "smooth" }));
+    } else if (viewport.scrollLeft + delta <= 0 && dir < 0) {
+      viewport.scrollTo({ left: viewport.scrollWidth, behavior: "auto" });
+      requestAnimationFrame(() => viewport.scrollBy({ left: delta, behavior: "smooth" }));
+    } else {
+      viewport.scrollBy({ left: delta, behavior: "smooth" });
     }
   };
 
-  const carouselId = `crs-left-${cat}-${highlighted ? "hi" : "all"}`;
+  const stopAutoplay = useCallback(() => {
+    clearInterval(autoplayRef.current);
+  }, []);
+
+  const startAutoplay = useCallback(() => {
+    clearInterval(autoplayRef.current);
+    if (filtered.length) autoplayRef.current = setInterval(() => scrollByCards(1), 3000);
+  }, [filtered.length, cardW, step]);
+
+  useEffect(() => {
+    startAutoplay();
+    return () => clearInterval(autoplayRef.current);
+  }, [startAutoplay]);
+
+  if (!filtered.length) return null;
 
   return (
     <div
-      id={carouselId}
-      className="carousel slide my-3 carousel-edge fade-left"
-      data-bs-ride="carousel"
-      data-bs-interval="3000"
-      data-bs-pause="hover"
-      data-bs-touch="true"
-      data-bs-wrap="true"
+      className="ce-row"
+      onMouseEnter={stopAutoplay}
+      onMouseLeave={startAutoplay}
+      onTouchStart={stopAutoplay}
+      onTouchEnd={startAutoplay}
     >
-      {/* Panel fijo IZQUIERDA */}
-      <div className="promo-panel promo-left">
-        <div className="text-center px-3">
-          <small className="text-muted d-block mb-1">Descubre lo nuevo</small>
-          <h5 className="mb-0">{panelTitle}</h5>
+      <button className="ce-nav ce-prev" onClick={() => scrollByCards(-1)} aria-label="Anterior">
+        <i className="fa-solid fa-chevron-left" />
+      </button>
+
+      <div className="ce-viewport">
+        <div ref={listRef} className="ce-list" style={{ display: "flex", gap: GAP, padding: 0, scrollBehavior: "smooth" }}>
+          {filtered.map((item, i) => {
+            const isFav = fav.has(item.id);
+            return (
+              <div
+                key={`${item.id}-${i}`}
+                className="card ce-card position-relative"
+                role="button"
+                onClick={() => abrir(item)}
+                style={{ width: cardW, minWidth: cardW, height: cardH }}
+              >
+                <img
+                  src={item.url_image}
+                  alt={item.name || "Producto"}
+                  className="card-img-top"
+                  loading="lazy"
+                  onError={(e) => (e.currentTarget.src = "https://via.placeholder.com/600x400?text=Sin+imagen")}
+                />
+                <div className="card-body">
+                  <h5 className="card-title">{item.name || "Sin nombre"}</h5>
+                  <p className="card-text small">{item.description || "Sin descripción."}</p>
+                  <div className="mt-auto price">{euro.format(item.price)}</div>
+                </div>
+
+                {passHighlight(item) && <span className="badge top-right">Destacado</span>}
+
+                {token && (
+                  <button
+                    className="btn-like"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFav(item.id);
+                    }}
+                    aria-pressed={isFav}
+                    aria-label={isFav ? "Quitar de favoritos" : "Añadir a favoritos"}
+                    title={isFav ? "Quitar de favoritos" : "Añadir a favoritos"}
+                  >
+                    <i className={isFav ? "fa-solid fa-heart" : "fa-regular fa-heart"} style={{ color: isFav ? "#e0182d" : "#9aa1ac", fontSize: 18 }} />
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      <div className="carousel-inner">
-        {slides.map((group, i) => (
-          <div key={i} className={`carousel-item ${i === 0 ? "active" : ""}`}>
-            <div className="cards-row">
-              {group.map((item) => {
-                const isFav = favs.has(item.id);
-                return (
-                  <div
-                    key={item.id}
-                    className="card h-100 position-relative"
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => abrir(item)}
-                    onKeyDown={(e) => e.key === "Enter" && abrir(item)}
-                  >
-                    <img
-                      src={item.url_image}
-                      alt={item.name || "Producto"}
-                      className="card-img-top"
-                      loading="lazy"
-                      onError={(e) => (e.currentTarget.src = "https://via.placeholder.com/600x400?text=Sin+imagen")}
-                    />
-                    <div className="card-body d-flex flex-column">
-                      <h5 className="card-title">{item.name || "Sin nombre"}</h5>
-                      <p className="card-text small text-muted mb-2">{item.description || "Sin descripción."}</p>
-                      <div className="mt-auto fw-bold">{euro.format(item.price)}</div>
-                    </div>
-
-                    {token && (
-                      <button
-                        className="btn-like"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleFav(item.id);
-                        }}
-                        aria-pressed={isFav}
-                        aria-label={isFav ? "Quitar de favoritos" : "Añadir a favoritos"}
-                        title={isFav ? "Quitar de favoritos" : "Añadir a favoritos"}
-                      >
-                        <i
-                          className={isFav ? "fa-solid fa-heart" : "fa-regular fa-heart"}
-                          style={{ color: isFav ? "#e0182d" : "#9aa1ac", fontSize: 18 }}
-                        />
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ))}
+      <div className="ce-panel left" style={{ width: cardW, height: cardH }}>
+        <img src="/publicidad.png" alt="Colección destacada" />
       </div>
 
-      {/* Flechas en ambos lados */}
-      <button className="carousel-control-prev" type="button" data-bs-target={`#${carouselId}`} data-bs-slide="prev">
-        <span className="carousel-control-prev-icon" aria-hidden="true" />
-        <span className="visually-hidden">Anterior</span>
-      </button>
-      <button className="carousel-control-next" type="button" data-bs-target={`#${carouselId}`} data-bs-slide="next">
-        <span className="carousel-control-next-icon" aria-hidden="true" />
-        <span className="visually-hidden">Siguiente</span>
+      <button className="ce-nav ce-next" onClick={() => scrollByCards(1)} aria-label="Siguiente">
+        <i className="fa-solid fa-chevron-right" />
       </button>
     </div>
   );
