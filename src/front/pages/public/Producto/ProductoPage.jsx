@@ -34,7 +34,7 @@ export const ProductoPage = () => {
    const { addToCart } = useCart();
 
    const navigate = useNavigate();
-   const { token, logoutUser } = useAuth()
+   const { token } = useAuth();
    const usuarioAutenticado = token;
 
 
