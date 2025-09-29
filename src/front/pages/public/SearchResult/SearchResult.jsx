@@ -4,6 +4,8 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import "../Catalogo/Style_Catalogo.css";
 import { getJoyasSearch } from "../../../services/jewellsService";
 import LoadingSpinner from "../../../components/public/LoadingSpinner";
+import { useAuth } from "../../../hooks/useAuth";
+import { useCart } from "../../../hooks/useFetch";
 
 function normalizeText(originalText) {
     return String(originalText || "")
@@ -37,6 +39,10 @@ const CANDIDATE_FIELDS = [
 export function SearchResults() {
     const { busqueda } = useParams();
     const navigate = useNavigate();
+    const { token } = useAuth();
+    const usuarioAutenticado = token;
+
+    const [mensajePorProducto, setMensajePorProducto] = useState({});
 
     const decodedQuery = decodeURIComponent(busqueda || "");
     const normalizedTerm = normalizeText(decodedQuery);
@@ -208,7 +214,7 @@ export function SearchResults() {
     };
 
     const orderedItems = sortItems(finalItems, sortBy);
-
+    const { addToCart } = useCart();
     return (
         <div className="container py-4">
             <div className="d-flex align-items-center justify-content-between mb-3">
@@ -278,10 +284,42 @@ export function SearchResults() {
                                         <div className="fw-bold">{formatPrice(productItem?.price)}</div>
                                         <button
                                             className="btn btn-primary w-100 mt-2 add-btn"
-                                            onClick={(ev) => { ev.stopPropagation(); console.log("[SearchResults] Añadir:", productItem?.id); }}
+                                            onClick={(ev) => {
+                                                ev.stopPropagation();
+                                                console.log("[SearchResults] Añadir:", productItem?.id);
+
+                                                if (!usuarioAutenticado) {
+                                                    setMensajePorProducto((prev) => ({
+                                                        ...prev,
+                                                        [productItem.id]: "Debes iniciar sesión para añadir productos 🛑",
+                                                    }));
+
+                                                    setTimeout(() => {
+                                                        navigate("/login");
+                                                    }, 1500);
+                                                } else {
+                                                    addToCart(productItem?.id);
+                                                    setMensajePorProducto((prev) => ({
+                                                        ...prev,
+                                                        [productItem.id]: "Producto añadido al carrito ✅",
+                                                    }));
+                                                }
+
+                                                setTimeout(() => {
+                                                    setMensajePorProducto((prev) => ({
+                                                        ...prev,
+                                                        [productItem.id]: false,
+                                                    }));
+                                                }, 3000);
+                                            }}
                                         >
                                             Añadir
                                         </button>
+                                        {mensajePorProducto[productItem.id] && (
+                                            <div className="alert alert-warning text-center mt-3">
+                                                {mensajePorProducto[productItem.id]}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
