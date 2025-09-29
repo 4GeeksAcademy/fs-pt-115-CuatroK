@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "");
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 export async function getJoyasSearch() {
   try {
@@ -8,6 +8,7 @@ export async function getJoyasSearch() {
         Accept: "application/json",
       },
     });
+    console.log(res);
 
     if (!res.ok) {
       throw new Error(`Error HTTP: ${res.status}`);
