@@ -30,7 +30,6 @@ export const ProductoPage = () => {
 
    const { addToCart } = useCart();
 
-
    const [relatedProducts, setRelatedProducts] = useState([]);
 
    useEffect(() => {

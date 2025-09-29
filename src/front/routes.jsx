@@ -41,6 +41,7 @@ import { SalesList } from "./pages/admin/isAdmin/SalesList";
 import { UserList } from "./pages/admin/isAdmin/UserList";
 import { InactiveAccount } from "./pages/public/InactiveAccount";
 import { PedidoDetailAdminMode } from "./components/admin/historialDePedidosComponents/PedidoDetailAdminMode";
+import { ProductPageAdmin } from "./pages/admin/isAdmin/ProductPageAdmin";
 
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
@@ -90,6 +91,7 @@ export const router = createBrowserRouter(
 
       <Route element={<AdminLayout />}>
         <Route path="/sale-detail/:id" element={<PedidoDetailAdminMode />}></Route>
+        <Route path="/product-detail/:idOrSlug" element={<ProductPageAdmin />}></Route>
         <Route path="admin-home" element={<AdminHome />}></Route>
         <Route path="post-product" element={<PostProduct />}></Route>
         <Route path="product-list" element={<ProductList />}></Route>
