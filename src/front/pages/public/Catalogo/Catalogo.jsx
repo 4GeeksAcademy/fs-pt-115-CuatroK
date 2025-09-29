@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { getJoyasSearch } from "../../../services/jewellsService";
 import "./Style_Catalogo.css";
 import LoadingSpinner from "../../../components/public/LoadingSpinner";
@@ -7,6 +7,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Dropdown } from "bootstrap";
+import { useCart } from "../../../hooks/useFetch";
+import { useAuth } from "../../../hooks/useAuth";
 
 const LABELS = {
   brand: "Marca", metal: "Metal", coating: "Recubrimiento", gender: "Género",
@@ -17,13 +19,16 @@ const LABELS = {
 };
 
 const CANDIDATE_FIELDS = [
-  "brand","metal","coating","gender","gem","ring_type","earring_type","bracelet",
-  "watch","watch_bracelet_material","water_resistance","caja","clasp",
+  "brand", "metal", "coating", "gender", "gem", "ring_type", "earring_type", "bracelet",
+  "watch", "watch_bracelet_material", "water_resistance", "caja", "clasp",
 ];
 
 export const Catalogo = () => {
   const { category } = useParams();
+  const { token, logoutUser } = useAuth()
   const navigate = useNavigate();
+
+  const usuarioAutenticado = token;
 
   const [cargando, setCargando] = useState(false);
   const [errorTexto, setErrorTexto] = useState("");
@@ -34,6 +39,8 @@ export const Catalogo = () => {
   const [opciones, setOpciones] = useState({ campos: {}, precioMin: 0, precioMax: 0 });
   const [productosFiltrados, setProductosFiltrados] = useState([]);
   const [sortBy, setSortBy] = useState("relevance");
+  const [mensajePorProducto, setMensajePorProducto] = useState({});
+
 
   useEffect(() => {
     const triggers = document.querySelectorAll('[data-bs-toggle="dropdown"]');
@@ -42,7 +49,7 @@ export const Catalogo = () => {
   }, []);
 
   let tituloCategoria = category || "";
-  try { tituloCategoria = decodeURIComponent(tituloCategoria); } catch {}
+  try { tituloCategoria = decodeURIComponent(tituloCategoria); } catch { }
 
   const abrirProducto = (productoItem) => {
     const idOSlug = productoItem?.slug ? productoItem.slug : String(productoItem?.id ?? "");
@@ -176,10 +183,10 @@ export const Catalogo = () => {
 
   const labelSort = (key) =>
     key === "name_asc" ? "Nombre, A a Z" :
-    key === "name_desc" ? "Nombre, Z a A" :
-    key === "price_asc" ? "Precio: de más bajo a más alto" :
-    key === "price_desc" ? "Precio: de más alto a más bajo" :
-    "Relevancia";
+      key === "name_desc" ? "Nombre, Z a A" :
+        key === "price_asc" ? "Precio: de más bajo a más alto" :
+          key === "price_desc" ? "Precio: de más alto a más bajo" :
+            "Relevancia";
 
   const sortItems = (arr, key) => {
     const list = arr.slice();
@@ -194,7 +201,7 @@ export const Catalogo = () => {
   };
 
   const orderedItems = sortItems(productosFiltrados, sortBy);
-
+  const { addToCart } = useCart();
   return (
     <div className="container py-4">
       <div className="d-flex align-items-center justify-content-between mb-3">
@@ -306,10 +313,43 @@ export const Catalogo = () => {
                     <div className="fw-bold">{formatearPrecio(productoItem?.price)}</div>
                     <button
                       className="btn btn-primary w-100 mt-2 add-btn"
-                      onClick={(ev) => { ev.stopPropagation(); console.log("[Catalogo] Añadir:", productoItem?.id); }}
+                      onClick={(ev) => {
+                        ev.stopPropagation();
+
+                        if (!usuarioAutenticado) {
+                          setMensajePorProducto((prev) => ({
+                            ...prev,
+                            [productoItem.id]: "Debes iniciar sesión para añadir productos 🛑",
+                          }));
+
+                          // Redirige al login después de un breve delay (opcional)
+                          setTimeout(() => {
+                            navigate("/login");
+                          }, 1500);
+                        } else {
+                          addToCart(productoItem?.id);
+                          setMensajePorProducto((prev) => ({
+                            ...prev,
+                            [productoItem.id]: "Producto añadido al carrito ✅",
+                          }));
+                        }
+
+                        setTimeout(() => {
+                          setMensajePorProducto((prev) => ({
+                            ...prev,
+                            [productoItem.id]: false,
+                          }));
+                        }, 4000);
+                      }}
                     >
                       Añadir
                     </button>
+
+                    {mensajePorProducto[productoItem.id] && (
+                      <div className="alert alert-warning text-center mt-2">
+                        {mensajePorProducto[productoItem.id]}
+                      </div>
+                    )}
                   </div>
                 </div>
                 {productoItem?.highlighted && (

@@ -1,9 +1,10 @@
 // src/front/pages/public/Producto/ProductoPage.jsx
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { getJoyasSearch } from "../../../services/jewellsService";
 import "./ProductoPage_style.css";
 import { useCart } from "../../../hooks/useFetch";
+import { useAuth } from "../../../hooks/useAuth";
 
 const SPEC_LABELS = {
    brand: "Marca",
@@ -27,9 +28,13 @@ export const ProductoPage = () => {
    const [currentItem, setCurrentItem] = useState(null);
    const [loadStatus, setLoadStatus] = useState("loading");
    const [activeImageIndex, setActiveImageIndex] = useState(0);
+   const [mensajeCarrito, setMensajeCarrito] = useState("");
+   const [mostrarMensaje, setMostrarMensaje] = useState(false);
 
    const { addToCart } = useCart();
-
+   const navigate = useNavigate();
+   const { token, logoutUser } = useAuth()
+   const usuarioAutenticado = token;
 
    const [relatedProducts, setRelatedProducts] = useState([]);
 
@@ -245,10 +250,35 @@ export const ProductoPage = () => {
                         <button
                            className="btn btn-dark btn-lg"
                            disabled={!hasInventory}
-                           onClick={() => addToCart(currentItem.id)}
+                           onClick={(ev) => {
+                              ev.stopPropagation();
+
+                              if (!usuarioAutenticado) {
+                                 setMensajeCarrito("Debes iniciar sesión para añadir productos 🛑");
+                                 setMostrarMensaje(true);
+
+                                 setTimeout(() => {
+                                    navigate("/login");
+                                 }, 1500); // redirige después de mostrar el mensaje
+                              } else {
+                                 addToCart(currentItem.id);
+                                 setMensajeCarrito("Producto añadido al carrito ✅");
+                                 setMostrarMensaje(true);
+                              }
+
+                              setTimeout(() => {
+                                 setMostrarMensaje(false);
+                              }, 3000);
+                           }}
                         >
                            Añadir al carrito
                         </button>
+
+                        {mostrarMensaje && (
+                           <div className="alert alert-warning text-center mt-3">
+                              {mensajeCarrito}
+                           </div>
+                        )}
                      </div>
 
                      {specList.length > 0 && (
