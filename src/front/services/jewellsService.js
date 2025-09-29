@@ -1,8 +1,4 @@
-const API_BASE_URL = (
-  import.meta.env.VITE_API_URL ||
-  import.meta.env.VITE_BACKEND_URL ||
-  "http://localhost:3001"
-).replace(/\/$/, "");
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "");
 
 export async function getJoyasSearch() {
   try {
@@ -41,3 +37,45 @@ export async function getJoyasSearch() {
     return [];
   }
 }
+
+export const postJewell = async (jewell, setLoading, setSuccessful) => {
+  try {
+    setLoading(true);
+    const response = await fetch(`${API_BASE_URL}/api/jewells`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(jewell),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `Error HTTP: ${response.status}`);
+    }
+    setSuccessful("Joya creada satisfactoriamente");
+    return await response.json();
+  } catch (error) {
+    console.error("❌ postJewell error:", error.message);
+    throw error;
+  } finally {
+    setLoading(false);
+  }
+};
+
+export const updateJewell = async (idOrSlug, formData, setSaving) => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/jewells/${idOrSlug}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+    if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+    alert("Producto actualizado ✅");
+  } catch (err) {
+    console.error(err);
+    alert("Error al actualizar producto ❌");
+  } finally {
+    setSaving(false);
+  }
+};

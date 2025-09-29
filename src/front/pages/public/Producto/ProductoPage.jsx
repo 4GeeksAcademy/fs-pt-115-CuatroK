@@ -32,9 +32,11 @@ export const ProductoPage = () => {
    const [mostrarMensaje, setMostrarMensaje] = useState(false);
 
    const { addToCart } = useCart();
+
    const navigate = useNavigate();
    const { token, logoutUser } = useAuth()
    const usuarioAutenticado = token;
+
 
    const [relatedProducts, setRelatedProducts] = useState([]);
 

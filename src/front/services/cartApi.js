@@ -75,7 +75,7 @@ export const GetCartProducts = async () => {
       },
     });
     if (!response.ok) throw new Error("Error al obtener el carrito");
-    return await response.json(); 
+    return await response.json();
   } catch (error) {
     console.error(error.message);
     return [];
@@ -90,11 +90,22 @@ export const addCart = async (jewell_id) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({jewell_id: jewell_id})
+      body: JSON.stringify({ jewell_id: jewell_id }),
     });
     if (!response.ok) throw new Error("Error al obtener el carrito");
-    return await response.json(); 
+    return await response.json();
   } catch (error) {
     console.error(error.message);
-    return []};
-}
+    return [];
+  }
+};
+
+export const getAllSales = async () => {
+  try {
+    const response = await fetch(`${url}/sale`);
+    if (!response.ok) throw new Error("Error al obtener las ventas");
+    return await response.json();
+  } catch (error) {
+    console.error(error.message);
+  }
+};

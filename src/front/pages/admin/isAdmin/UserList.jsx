@@ -30,7 +30,8 @@ export const UserList = () => {
     }
 
     return (
-        <div className=" min-vh-100 py-4">
+        <div className=" min-vh-100">
+            <h2 className="text-center my-3">Lista de usuario</h2>
             {/* Overlay de carga */}
             {loading && (
                 <div className="loading-overlay d-flex justify-content-center align-items-center">
@@ -39,6 +40,7 @@ export const UserList = () => {
                     </div>
                 </div>
             )}
+
             <div className="container">
                 <div className="d-flex flex-column gap-4">
                     {users.map((user) => (
@@ -87,7 +89,7 @@ export const UserList = () => {
                                         <ul className="ps-3">
                                             {user.address.map((addr, i) => (
                                                 <li key={i}>
-                                                    {addr.street}, {addr.city} ({addr.zipcode})
+                                                    {addr.first_address}, {addr.city} ({addr.postal_code})
                                                 </li>
                                             ))}
                                         </ul>
