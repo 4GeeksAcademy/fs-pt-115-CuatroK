@@ -40,18 +40,18 @@ def create_user():
     db.session.add(new_user)
     db.session.commit()
 
-    frontend_url = os.getenv("VITE_STRIPE_RETURN_URL")
-    body_message = render_template(
-        "welcome_message.html",
-        username=new_user.username,
-        reset_link=frontend_url,
-        now=datetime.utcnow())
-    message = Message(
-        subject="Bienvenido joven",
-        recipients=[data.get("email")],
-        html=body_message
-    )
-    mail.send(message)
+    # frontend_url = os.getenv("VITE_STRIPE_RETURN_URL")
+    # body_message = render_template(
+    #     "welcome_message.html",
+    #     username=new_user.username,
+    #     reset_link=frontend_url,
+    #     now=datetime.utcnow())
+    # message = Message(
+    #     subject="Bienvenido joven",
+    #     recipients=[data.get("email")],
+    #     html=body_message
+    # )
+    # mail.send(message)
 
     return jsonify({'msg': 'user created successfully',
                     'new user': new_user.serialize()}), 200
