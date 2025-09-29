@@ -109,7 +109,7 @@ def get_user():
 
 @user_bp.route("/convert_admin", methods=["POST"])
 def convert_client_to_admin():
-    user_id = 1  # CAMBIAR ÉSTE NÚMERO EL CUAL ES UN ID AL NUMERO ID DEL USUARIO QUE SE QUIERE CONVERTIR EN ADMIN
+    user_id = 4  # CAMBIAR ÉSTE NÚMERO EL CUAL ES UN ID AL NUMERO ID DEL USUARIO QUE SE QUIERE CONVERTIR EN ADMIN
     if not user_id:
         return jsonify({'MSG': 'LEAVE RAT'}), 400
     user = db.session.get(User, user_id)
