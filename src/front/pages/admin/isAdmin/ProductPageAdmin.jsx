@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getJoyasSearch, updateJewell } from "../../../services/jewellsService";
 import LoadingSpinner from "../../../components/public/LoadingSpinner";
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "");
 
 export const ProductPageAdmin = () => {
     const [formData, setFormData] = useState(null);
