@@ -6,10 +6,13 @@ import { SearchBar } from "./NavbarComponentes/SearchBar";
 import { ShoppingCart } from "./NavbarComponentes/ShoppingCart";
 import { NavAndTabs } from "./NavbarComponentes/NavAndTabs";
 import "./navbarStyles.css";
+import { useAuth } from "../hooks/useAuth";
+import { Favorites } from "./NavbarComponentes/Favorites";
 
 export const Navbar = () => {
   const [menuAbierto, setMenuAbierto] = useState(false);
-  
+  const { token } = useAuth();
+  const usuarioAutenticado = token;
 
 
   return (
@@ -41,6 +44,7 @@ export const Navbar = () => {
 
           <div className="d-flex align-items-center gap-2 fixed-nav-tools">
             <SearchBar/>
+            {usuarioAutenticado && <Favorites />}
             <ShoppingCart />
             <Profile />
           </div>
