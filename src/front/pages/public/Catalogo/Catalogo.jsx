@@ -73,7 +73,7 @@ export const Catalogo = () => {
   let tituloCategoria = category || "";
   try {
     tituloCategoria = decodeURIComponent(tituloCategoria);
-  } catch {}
+  } catch { }
 
   const abrirProducto = (productoItem) => {
     const idOSlug = productoItem?.slug
@@ -222,12 +222,12 @@ export const Catalogo = () => {
     key === "name_asc"
       ? "Nombre, A a Z"
       : key === "name_desc"
-      ? "Nombre, Z a A"
-      : key === "price_asc"
-      ? "Precio: de más bajo a más alto"
-      : key === "price_desc"
-      ? "Precio: de más alto a más bajo"
-      : "Relevancia";
+        ? "Nombre, Z a A"
+        : key === "price_asc"
+          ? "Precio: de más bajo a más alto"
+          : key === "price_desc"
+            ? "Precio: de más alto a más bajo"
+            : "Relevancia";
 
   const sortItems = (arr, key) => {
     const list = arr.slice();
@@ -291,9 +291,8 @@ export const Catalogo = () => {
                 <li className="dropdown-header text-muted">Los más vendidos</li>
                 <li>
                   <button
-                    className={`dropdown-item ${
-                      sortBy === "relevance" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${sortBy === "relevance" ? "active" : ""
+                      }`}
                     onClick={() => setSortBy("relevance")}
                   >
                     Relevancia
@@ -301,9 +300,8 @@ export const Catalogo = () => {
                 </li>
                 <li>
                   <button
-                    className={`dropdown-item ${
-                      sortBy === "name_asc" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${sortBy === "name_asc" ? "active" : ""
+                      }`}
                     onClick={() => setSortBy("name_asc")}
                   >
                     Nombre, A a Z
@@ -311,9 +309,8 @@ export const Catalogo = () => {
                 </li>
                 <li>
                   <button
-                    className={`dropdown-item ${
-                      sortBy === "name_desc" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${sortBy === "name_desc" ? "active" : ""
+                      }`}
                     onClick={() => setSortBy("name_desc")}
                   >
                     Nombre, Z a A
@@ -321,9 +318,8 @@ export const Catalogo = () => {
                 </li>
                 <li>
                   <button
-                    className={`dropdown-item ${
-                      sortBy === "price_asc" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${sortBy === "price_asc" ? "active" : ""
+                      }`}
                     onClick={() => setSortBy("price_asc")}
                   >
                     Precio: de más bajo a más alto
@@ -331,9 +327,8 @@ export const Catalogo = () => {
                 </li>
                 <li>
                   <button
-                    className={`dropdown-item ${
-                      sortBy === "price_desc" ? "active" : ""
-                    }`}
+                    className={`dropdown-item ${sortBy === "price_desc" ? "active" : ""
+                      }`}
                     onClick={() => setSortBy("price_desc")}
                   >
                     Precio: de más alto a más bajo
@@ -399,9 +394,8 @@ export const Catalogo = () => {
                   <img
                     src={productoItem?.url_image}
                     alt={productoItem?.name || "Producto"}
-                    className={`card-img-top ${
-                      estado.out ? "out-of-stock" : ""
-                    }`}
+                    className={`card-img-top ${estado.out ? "out-of-stock" : ""
+                      }`}
                     style={{ objectFit: "cover", height: 200 }}
                     onError={(ev) => {
                       ev.currentTarget.src =
@@ -425,12 +419,41 @@ export const Catalogo = () => {
                         onClick={(ev) => {
                           ev.stopPropagation();
                           console.log("[Catalogo] Añadir:", productoItem?.id);
+                          if (!usuarioAutenticado) {
+                            setMensajePorProducto((prev) => ({
+                              ...prev,
+                              [productoItem?.id]: "Debes iniciar sesión para añadir productos 🛑",
+                            }));
+
+                            setTimeout(() => {
+                              navigate("/login");
+                            }, 1500);
+                          } else {
+                            addToCart(productoItem?.id);
+                            setMensajePorProducto((prev) => ({
+                              ...prev,
+                              [productoItem?.id]: "Producto añadido al carrito ✅",
+                            }));
+                          }
+
+                          setTimeout(() => {
+                            setMensajePorProducto((prev) => ({
+                              ...prev,
+                              [productoItem?.id]: false,
+                            }));
+                          }, 3000);
                         }}
                         disabled={estado.out}
                         title={estado.out ? "Sin stock" : "Añadir"}
+
                       >
                         Añadir
                       </button>
+                      {mensajePorProducto[productoItem?.id] && (
+                        <div className="alert alert-warning text-center mt-3">
+                          {mensajePorProducto[productoItem?.id]}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
