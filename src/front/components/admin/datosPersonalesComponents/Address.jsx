@@ -72,78 +72,136 @@ export const Address = ({ id, user, getUserApi }) => {
     }, [user])
 
     return (
-        <div className="mb-3" style={{ position: "relative" }}>
-
+        <div className="mb-3 ">
             {/* 🔹 Overlay de cargando */}
-            {isBeingDeleted && (
-                <DeleteText />
-            )}
-            <div className="d-flex justify-content-end mb-2">
-                <i className="fa-solid fa-pen-to-square fa-2x " onClick={() => HandleIconOnClick()}></i>
+            {isBeingDeleted && <DeleteText />}
 
+            <div className="d-flex justify-content-end mb-2">
+                <i
+                    className="fa-solid fa-pen-to-square fa-2x"
+                    onClick={() => HandleIconOnClick()}
+                ></i>
             </div>
 
-            {
-                <form className={`products-card container py-4 px-4 ${!isEditing ? "disabled-section" : ""}`} onSubmit={e => HandleOnSubmit(e)}>
-                    <div className="row px-4">
-                        <div className="col-6">
-                            <h3>Línea de dirección 1. *</h3>
-                            <div className="input-group input-group-sm mb-3">
-                                <input type="text" className={`form-control ${errorMsg && !addressInfo.first_address ? "input-data-missing" : ""}`} name="first_address" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={addressInfo.first_address ?? ""} onChange={HandleOnChange} disabled={!isEditing} />
-                            </div>
-                        </div>
-
-                    </div>
-                    <div className="row px-4">
-                        <div className="col-6">
-                            <h3>Línea de dirección 2.</h3>
-                            <div className="input-group input-group-sm mb-3">
-                                <input type="text" className="form-control" name="second_address" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={addressInfo.second_address ?? ""} onChange={HandleOnChange} disabled={!isEditing} />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row px-4">
-                        <div className="col-6">
-                            <h3>Código postal. *</h3>
-                            <div className="input-group input-group-sm mb-3">
-                                <input type="text" className={`form-control ${errorMsg && !addressInfo.postal_code ? "input-data-missing" : ""}`} name="postal_code" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={addressInfo.postal_code ?? ""} onChange={HandleOnChange} disabled={!isEditing} />
-                            </div>
-                        </div>
-                        <div className="col-6 ms-auto">
-                            <h3>Ciudad. *</h3>
-                            <div className="input-group input-group-sm mb-3">
-                                <input type="text" className={`form-control ${errorMsg && !addressInfo.city ? "input-data-missing" : ""}`} name="city" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={addressInfo.city ?? ""} onChange={HandleOnChange} disabled={!isEditing} />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row  px-4">
-                        <div className="col-6">
-                            <h3>Provincia. *</h3>
-                            <div className="input-group input-group-sm mb-3">
-                                <input type="text" className={`form-control ${errorMsg && !addressInfo.province ? "input-data-missing" : ""}`} name="province" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={addressInfo.province ?? ""} onChange={HandleOnChange} disabled={!isEditing} />
-                            </div>
-                        </div>
-                        <div className="col-6 ms-auto">
-                            <h3>Teléfono. *</h3>
-                            <div className="input-group input-group-sm mb-3">
-                                <input type="text" className={`form-control ${errorMsg && !addressInfo.phone ? "input-data-missing" : ""}`} name="phone" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={addressInfo.phone ?? ""} onChange={HandleOnChange} disabled={!isEditing} />
-                            </div>
-                        </div>
-                        {errorMsg && (
-                            <div className="alert alert-danger text-danger mt-2 text-center" role="alert">{errorMsg}</div>
-                        )}
-                        <div className="d-flex justify-content-between mt-3">
-
-
-                            <button type="submit" className="btn btn-warning fs-5 " disabled={!isEditing}>Guardar</button>
-                            <DeleteButton
-                                DeleteAddress={DeleteAddress}
+            <form
+                className={`profile-form ${!isEditing ? "disabled-section" : ""} px-3`}
+                onSubmit={(e) => HandleOnSubmit(e)}
+            >
+                <div className="row px-4">
+                    <div className="col-6">
+                        <h4>Línea de dirección 1. *</h4>
+                        <div className="input-group input-group-sm mb-3">
+                            <input
+                                type="text"
+                                className={`form-control ${errorMsg && !addressInfo.first_address ? "input-data-missing" : ""
+                                    }`}
+                                name="first_address"
+                                value={addressInfo.first_address ?? ""}
+                                onChange={HandleOnChange}
+                                disabled={!isEditing}
                             />
                         </div>
                     </div>
-                </form>
+                </div>
 
-            }
+                <div className="row px-4">
+                    <div className="col-6">
+                        <h4>Línea de dirección 2.</h4>
+                        <div className="input-group input-group-sm mb-3">
+                            <input
+                                type="text"
+                                className="form-control"
+                                name="second_address"
+                                value={addressInfo.second_address ?? ""}
+                                onChange={HandleOnChange}
+                                disabled={!isEditing}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row px-4">
+                    <div className="col-6">
+                        <h4>Código postal. *</h4>
+                        <div className="input-group input-group-sm mb-3">
+                            <input
+                                type="text"
+                                className={`form-control ${errorMsg && !addressInfo.postal_code ? "input-data-missing" : ""
+                                    }`}
+                                name="postal_code"
+                                value={addressInfo.postal_code ?? ""}
+                                onChange={HandleOnChange}
+                                disabled={!isEditing}
+                            />
+                        </div>
+                    </div>
+                    <div className="col-6 ms-auto">
+                        <h4>Ciudad. *</h4>
+                        <div className="input-group input-group-sm mb-3">
+                            <input
+                                type="text"
+                                className={`form-control ${errorMsg && !addressInfo.city ? "input-data-missing" : ""
+                                    }`}
+                                name="city"
+                                value={addressInfo.city ?? ""}
+                                onChange={HandleOnChange}
+                                disabled={!isEditing}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row px-4">
+                    <div className="col-6">
+                        <h4>Provincia. *</h4>
+                        <div className="input-group input-group-sm mb-3">
+                            <input
+                                type="text"
+                                className={`form-control ${errorMsg && !addressInfo.province ? "input-data-missing" : ""
+                                    }`}
+                                name="province"
+                                value={addressInfo.province ?? ""}
+                                onChange={HandleOnChange}
+                                disabled={!isEditing}
+                            />
+                        </div>
+                    </div>
+                    <div className="col-6 ms-auto">
+                        <h4>Teléfono. *</h4>
+                        <div className="input-group input-group-sm mb-3">
+                            <input
+                                type="text"
+                                className={`form-control ${errorMsg && !addressInfo.phone ? "input-data-missing" : ""
+                                    }`}
+                                name="phone"
+                                value={addressInfo.phone ?? ""}
+                                onChange={HandleOnChange}
+                                disabled={!isEditing}
+                            />
+                        </div>
+                    </div>
+
+                    {errorMsg && (
+                        <div
+                            className="error-tooltip text-center mt-2"
+                            role="alert"
+                        >
+                            {errorMsg}
+                        </div>
+                    )}
+
+                    <div className="d-flex justify-content-between mt-3">
+                        <button
+                            type="submit"
+                            className="btn btn-warning fs-5"
+                            disabled={!isEditing}
+                        >
+                            Guardar
+                        </button>
+                        <DeleteButton DeleteAddress={DeleteAddress} />
+                    </div>
+                </div>
+            </form>
         </div>
     )
 }

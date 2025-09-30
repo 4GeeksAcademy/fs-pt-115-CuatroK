@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "./historialDePedidos.css"
+import "../profile.css"
 import { useAuth } from "../../../hooks/useAuth";
 
 export const HistorialDePedidosCard = ({
@@ -24,22 +25,29 @@ export const HistorialDePedidosCard = ({
     }).format(total)
     console.log(user)
     return (
-        <Link to={!user.is_admin ? `/sale/${id}` : `/sale-detail/${id}`} className="no-style-link">
-            <article className="product-card mb-1">
-                <div className="product-info">
-                    <div className="product-header">
-                        <h2 className="product-name">Pedido ID. {id}</h2>
-                        <p className="product-price">Precio total:</p>
+        <Link
+            to={!user.is_admin ? `/sale/${id}` : `/sale-detail/${id}`}
+            className="no-style-link"
+        >
+            <article className="profile-card mb-3">
+                <div className="profile-form ">
+
+                    {/* Encabezado */}
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                        <h2 className="card-title fw-bold fs-4">Pedido ID. {id}</h2>
+                        <p className="info fs-5">Precio total:</p>
                     </div>
 
-                    <div className="product-footer mt-2">
-                        <p className="product-price">Cantidad total: {quantity}</p>
-                        <p className="product-date">Fecha {legible}</p>
+                    {/* Pie con detalles */}
+                    <div className="product-footer mt-3 text-center">
+                        <p className="info mt-3">Cantidad total: {quantity}</p>
+                        <p className="info mt-3">Fecha {legible}</p>
 
-                        <div className="product-actions">
-                            <div className="subtotal">{totalAmount}</div>
+                        <div className="highlight mt-3 py-2 px-3 fs-4 rounded">
+                            {totalAmount}
                         </div>
                     </div>
+
                 </div>
             </article>
         </Link>

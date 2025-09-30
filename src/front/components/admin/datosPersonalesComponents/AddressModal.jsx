@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { createAddress } from "../../../services/serviceApi"
 import "../../../index.css"
+import "../profile.css"
 
 export const AddressModal = ({ getUserApi }) => {
     const [addressInfo, setAddressInfo] = useState({
@@ -74,10 +75,10 @@ export const AddressModal = ({ getUserApi }) => {
     }, [])
 
     return (
-        <div className="w-100 products-card p-4">
+        <div className="w-100 products-card p-4 profile-form">
             <button
                 type="button"
-                className="btn btn-warning btn-warning-custom fs-5 mt-3 modal-body w-50 mx-auto d-block"
+                className="btn btn-warning btn-warning-custom fs-5 mt-3 modal-body w-50 mx-auto d-block "
                 onClick={() => bsModalRef.current?.show()}
             >
                 Agregar nueva dirección

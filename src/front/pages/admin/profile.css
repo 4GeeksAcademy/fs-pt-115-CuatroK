@@ -1,23 +1,52 @@
-.profile-options-background {
-  background-color: #ffe0ff;
+.sidebar {
+  background-color: rgba(245, 240, 230, 0.5); /* beige translúcido */
+  backdrop-filter: blur(12px); /* difuminado del fondo */
+  -webkit-backdrop-filter: blur(12px); /* Safari */
+  border-radius: 12px;
+  min-height: 80vh;
+  font-family: "Inter", sans-serif;
+  color: #4a4a4a; /* texto gris oscuro */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border: 1px solid rgba(194, 161, 93, 0.3); /* borde dorado suave */
 }
 
-.list-group-item.profile-options-background {
-  background-color: #ffe0ff !important;
-  color: #000 !important;
+/* Título */
+.sidebar-title {
+  font-weight: 600;
+  font-size: 1.7rem;
+  color: #c2a15d; /* dorado */
+  margin-bottom: 1.5rem;
 }
 
-.list-group-item.profile-options-background:hover {
-  background-color: #a495b6 !important;
-  color: #fff !important;
+/* Items */
+.sidebar-item {
+  background: none;
+  border: none;
+  outline: none;
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #6b5e57; /* beige oscuro */
+  width: 100%;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.list-group-item.profile-options-background:active {
-  background-color: #000 !important;
-  color: #fff !important;
+/* Hover */
+.sidebar-item:hover {
+  background-color: rgba(194, 161, 93, 0.1); /* dorado suave translúcido */
+  color: #c2a15d;
+  padding-left: 20px;
 }
 
-.list-group-item.profile-options-background.active {
-  background-color: #6f42c1 !important;
-  color: #fff !important;
+/* Activo */
+.sidebar-item.active {
+  background-color: rgba(122, 31, 61, 0.6); /* burdeos translúcido */
+  color: #fff;
+  font-weight: 600;
+  border-left: 4px solid #c2a15d;
 }
+

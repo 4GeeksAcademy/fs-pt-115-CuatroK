@@ -54,6 +54,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-top: 1px solid #f1e0b3; /* dorado suave */
+  padding-top: 1rem;
 }
 
 .quantity-controls {
@@ -137,7 +139,7 @@
 .pedido-header h1 {
   margin-bottom: 0.5rem;
   font-size: 2rem;
-  color: #333;
+  color: #c2a15d;
 }
 
 .pedido-date,

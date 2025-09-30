@@ -58,25 +58,25 @@ def create_discount():
         active=True
     )
 
-    if new_discount:
-        frontend_url = os.getenv("VITE_STRIPE_RETURN_URL")
+    # if new_discount:
+    #     frontend_url = os.getenv("VITE_STRIPE_RETURN_URL")
 
-        body_message = render_template(
-            "coupon_message.html",
-            username=user_obj.username,
-            discount_code=new_discount.discount_code,
-            expiration_date=new_discount.expiration_date.strftime("%d/%m/%Y"),
-            total=data.get("total"),
-            reset_link=frontend_url,
-            now=datetime.utcnow()
-        )
+    #     body_message = render_template(
+    #         "coupon_message.html",
+    #         username=user_obj.username,
+    #         discount_code=new_discount.discount_code,
+    #         expiration_date=new_discount.expiration_date.strftime("%d/%m/%Y"),
+    #         total=data.get("total"),
+    #         reset_link=frontend_url,
+    #         now=datetime.utcnow()
+    #     )
 
-        message = Message(
-            subject="¡Has recibido un cupon! — CuatroK",
-            recipients=[user_obj.email],
-            html=body_message
-        )
-        mail.send(message)
+    #     message = Message(
+    #         subject="¡Has recibido un cupon! — CuatroK",
+    #         recipients=[user_obj.email],
+    #         html=body_message
+    #     )
+    #     mail.send(message)
 
     db.session.add(new_discount)
     db.session.commit()

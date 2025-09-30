@@ -4,6 +4,7 @@ import CarritoProfileCard from "../admin/carritoComponents/CarritoProfileCard";
 import { getDiscount } from "../../services/serviceApi";
 import { useAuth } from "../../hooks/useAuth";
 import { useCart } from "../../hooks/useFetch";
+import { removeCartItem } from "../../services/cartApi";
 
 export const Carrito = () => {
     const { token, setDiscount, discount, setFinalAmount, finalAmount } = useAuth();
@@ -60,8 +61,11 @@ export const Carrito = () => {
         currency: "EUR",
     }).format(finalAmount || totalAmount);
 
-    console.log(finalAmount)
-    console.log(totalAmount)
+    const handleRemove = async (id) => {
+        await removeCartItem(id);
+        await fetchCart();
+    };
+
 
     return (
         <div>
@@ -74,7 +78,6 @@ export const Carrito = () => {
             ) : (
                 <div className="container-fluid">
                     <div className="row">
-                        {/* Lista de productos */}
                         <div className="col-7 me-5 mb-5 products-card p-4">
                             {[...cartItems]
                                 .sort((a, b) => a.id - b.id)
@@ -86,6 +89,7 @@ export const Carrito = () => {
                                         image={item.jewell.url_image}
                                         price={item.jewell.price}
                                         quantity={item.quantity}
+                                        onRemove={() => handleRemove(item.id)}
                                     />
                                 ))}
                         </div>

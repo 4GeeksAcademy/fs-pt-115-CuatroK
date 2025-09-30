@@ -5,6 +5,7 @@ import LoadingSpinner from "../../public/LoadingSpinner";
 import { useParams } from "react-router-dom";
 import "./historialDePedidos.css"
 import { getHistory } from "../../../services/serviceApi";
+import "../profile.css"
 
 export const PedidoDetail = () => {
     const { id } = useParams();
@@ -42,41 +43,48 @@ export const PedidoDetail = () => {
 
 
     return (
-        <div className="pedido-detail">
-            <header className="pedido-header">
-                <h1>Detalles del pedido</h1>
-                <p className="pedido-date"> {fecha}</p>
-                <p className="pedido-total">
-                    Total: {totalAmount}
-                </p>
-            </header>
+        <div className="profile-card pedido-detail">
+            <div className="card-body">
 
-            <section className="pedido-items">
-                <h2>Artículos comprados</h2>
-                <div className="pedido-items-grid">
-                    {pedido.items.map((item) => (
-                        <div className="pedido-item-card" key={item.id}>
-                            <img
-                                src={item.jewell.url_image}
-                                alt={item.jewell.name}
-                                className="pedido-item-image"
-                            />
-                            <div className="pedido-item-info">
-                                <h3>{item.jewell.name}</h3>
-                                <p className="pedido-item-brand">{item.jewell.brand}</p>
-                                <p>
-                                    Precio:{" "}
-                                    {new Intl.NumberFormat("es-ES", {
-                                        style: "currency",
-                                        currency: "EUR",
-                                    }).format(item.jewell.price)}
-                                </p>
-                                <p>Cantidad: {item.quantity}</p>
+                {/* Encabezado del pedido */}
+                <header className="text-center mb-4">
+                    <h1 className="pedido-header">Detalles del pedido</h1>
+                    <p className="info">{fecha}</p>
+                    <p className="highlight">Total: {totalAmount}</p>
+                </header>
+
+                {/* Lista de artículos */}
+                <section className="pedido-items">
+                    <h2 className="card-title">Artículos comprados</h2>
+
+                    <div className="pedido-items-grid mt-3">
+                        {pedido.items.map((item) => (
+                            <div className="profile-form pedido-item-card" key={item.id}>
+                                <img
+                                    src={item.jewell.url_image}
+                                    alt={item.jewell.name}
+                                    className="pedido-item-image mb-3"
+                                    style={{ borderRadius: "0.5rem", maxHeight: "150px", objectFit: "cover" }}
+                                />
+
+                                <div className="pedido-item-info text-center">
+                                    <h3 className="info ">{item.jewell.name}</h3>
+                                    <p className="info text-start">{item.jewell.brand}</p>
+                                    <p className="info text-start">
+                                        Precio:{" "}
+                                        {new Intl.NumberFormat("es-ES", {
+                                            style: "currency",
+                                            currency: "EUR",
+                                        }).format(item.jewell.price)}
+                                    </p>
+                                    <p className="info text-start">Cantidad: {item.quantity}</p>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
-            </section>
+                        ))}
+                    </div>
+                </section>
+
+            </div>
         </div>
     );
 };
