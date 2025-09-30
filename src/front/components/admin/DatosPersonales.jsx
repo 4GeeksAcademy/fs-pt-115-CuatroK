@@ -105,7 +105,6 @@ export const DatosPersonales = ({ user, getUserApi }) => {
         }
     }, [user]);
 
-
     return (
         <>
             <div className="profile-form container py-4 px-3">
