@@ -9,7 +9,7 @@ import "./navbarStyles.css";
 
 export const Navbar = () => {
   const [menuAbierto, setMenuAbierto] = useState(false);
-  
+
 
 
   return (
@@ -40,7 +40,7 @@ export const Navbar = () => {
 
 
           <div className="d-flex align-items-center gap-2 fixed-nav-tools">
-            <SearchBar/>
+            <SearchBar />
             <ShoppingCart />
             <Profile />
           </div>

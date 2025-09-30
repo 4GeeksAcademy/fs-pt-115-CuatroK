@@ -1,0 +1,139 @@
+/* Card principal del profile */
+.profile-card {
+  background-color: #f5f0e6; /* beige cálido */
+  border: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  color: #4a4a4a;
+}
+
+/* Contenido de la card */
+.profile-card .card-body {
+  padding: 0.5rem;
+}
+
+/* Título "Codigo:" u otros títulos */
+.profile-card .card-title {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #c2a15d; /* dorado elegante */
+}
+
+/* Código o dato destacado */
+.profile-card .highlight {
+  text-align: center;
+  border-radius: 0.5rem;
+  background-color: #7a1f3d; /* burdeos profundo */
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+/* Información adicional */
+.profile-card .info {
+  margin-bottom: 0.25rem;
+  text-align: center;
+  color: #6b5e57;
+}
+
+/* Información en rojo (por ejemplo fecha de vencimiento) */
+.profile-card .info.expiration {
+  color: #e05c5c;
+  margin-bottom: 0;
+}
+
+/* Contenedor principal del formulario de profile */
+.profile-form {
+  background-color: #f9f5f0; /* beige suave */
+  padding: 2rem;
+  border-radius: 0.75rem;
+  border: 1px solid #f1e0b3; /* borde dorado suave */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  color: #4a4a4a;
+}
+
+/* Títulos de secciones */
+.profile-form h3,
+.profile-form h4 {
+  font-weight: 600;
+  color: #c2a15d; /* dorado elegante */
+  margin-bottom: 0.5rem;
+}
+
+/* Inputs de texto */
+.profile-form .form-control {
+  background-color: #fff;
+  color: #4a4a4a;
+  border-radius: 0.5rem;
+  border: 1px solid #d4b97a; /* dorado suave */
+  transition: all 0.2s ease-in-out;
+}
+
+/* Input enfocado */
+.profile-form .form-control:focus {
+  border-color: #c2a15d; /* dorado */
+  box-shadow: 0 0 0 0.2rem rgba(194, 161, 93, 0.2);
+}
+
+/* Input con error */
+.profile-form .input-data-missing {
+  border-color: #e05c5c !important;
+  box-shadow: 0 0 0 0.2rem rgba(224, 92, 92, 0.3);
+}
+
+/* Mensajes de error */
+.profile-form .error-tooltip {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  white-space: nowrap;
+  background-color: #e05c5c;
+  color: #fff;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
+
+/* Selects */
+.profile-form select.form-control {
+  background-color: #fff;
+  color: #4a4a4a;
+  border-radius: 0.5rem;
+  border: 1px solid #d4b97a;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Select enfocado */
+.profile-form select.form-control:focus {
+  border-color: #c2a15d;
+  box-shadow: 0 0 0 0.2rem rgba(194, 161, 93, 0.2);
+}
+
+/* Botón Guardar */
+.profile-form button.btn-warning {
+  background-color: #c2a15d; /* dorado */
+  border-color: #c2a15d;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Hover del botón */
+.profile-form button.btn-warning:hover {
+  background-color: #b8954f; /* dorado más oscuro */
+  border-color: #b8954f;
+  color: #fff;
+}
+
+/* Contenedor de direcciones */
+.profile-addresses h2 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #c2a15d; /* dorado */
+  font-weight: 600;
+}

@@ -3,15 +3,32 @@
 }
 
 .page-background-color {
-  background-color: #fbe8e7;
+  background-color: #e8e3dc; /* beige grisáceo, neutro y cálido */
+  background-image: radial-gradient(
+    circle at top left,
+    rgba(111, 66, 193, 0.03),
+    /* morado muy suave para detalle */ transparent 80%
+  );
+  color: #4a4a4a; /* texto gris oscuro */
 }
-
 .products-card {
   background-color: #eed9c4;
 }
 
+/* html,
 body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
   background-color: #fbe8e7;
+} */
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #fdf6f0;
 }
 
 .main-text {

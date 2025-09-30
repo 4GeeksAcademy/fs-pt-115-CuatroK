@@ -3,6 +3,7 @@ import { DatosPersonales } from "../../components/admin/DatosPersonales";
 import { Seguridad } from "../../components/admin/Seguridad";
 import "../../index.css";
 import "./profile.css";
+import "../../components/admin/profile.css"
 import { getUser } from "../../services/serviceApi";
 import { useAuth } from "../../hooks/useAuth";
 import LoadingSpinner from "../../components/public/LoadingSpinner";
@@ -32,71 +33,70 @@ export const Profile = ({ textOption }) => {
             return navigate("/")
         }
         console.log(user)
-    }, [token, user]);
+    }, [token]);
 
     if (!user) {
         return <LoadingSpinner />;
     }
 
     return (
-        <div className="mt-5 container-fluid ">
-            <h1 className="text-center my-5">Hello, {user.username ?? ""} </h1>
-            <div className="row justify-content-center gap-5 ">
-                <div
-                    className="list-group  col-3 border border-dark p-0"
-                    style={{ height: "100%" }}
-                >
+        <div className=" container-fluid">
+
+            <div className="row justify-content-between ">
+                <div className="sidebar col-3 d-flex flex-column justify-content-center align-items-start p-4 shadow-sm h-100 ms-5 mt-5">
+                    <h2 className="sidebar-title mb-4 w-100  border-bottom border-dark pb-4 profile-form">Mi Perfil</h2>
+
                     <button
                         type="button"
                         onClick={(e) => setIsActive(e.target.innerText)}
-                        className={`list-group-item list-group-item-action border-bottom border-end-0 border-start-0 border-secondary fs-3 profile-options-background ${isActive == "Datos personales" ? "active" : ""
-                            }`}
+                        className={`sidebar-item ${isActive == "Datos personales" ? "active" : ""}`}
                     >
                         Datos personales
                     </button>
+
                     <button
                         type="button"
                         onClick={(e) => setIsActive(e.target.innerText)}
-                        className={`list-group-item list-group-item-action border-bottom border-end-0 border-start-0 border-secondary fs-3 profile-options-background ${isActive == "Seguridad" ? "active" : ""
-                            }`}
+                        className={`sidebar-item ${isActive == "Seguridad" ? "active" : ""}`}
                     >
                         Seguridad
                     </button>
+
                     <button
                         type="button"
                         onClick={(e) => setIsActive(e.target.innerText)}
-                        className={`list-group-item list-group-item-action border-bottom border-end-0 border-start-0 border-secondary fs-3 profile-options-background ${isActive == "Historial de pedidos" ? "active" : ""
-                            }`}
+                        className={`sidebar-item ${isActive == "Historial de pedidos" ? "active" : ""}`}
                     >
                         Historial de pedidos
                     </button>
+
                     <button
                         type="button"
                         onClick={(e) => setIsActive(e.target.innerText)}
-                        className={`list-group-item list-group-item-action border-bottom border-end-0 border-start-0 border-secondary fs-3 profile-options-background ${isActive == "Carrito" ? "active" : ""
-                            }`}
+                        className={`sidebar-item ${isActive == "Carrito" ? "active" : ""}`}
                     >
                         Carrito
                     </button>
+
                     <button
                         type="button"
                         onClick={(e) => setIsActive(e.target.innerText)}
-                        className={`list-group-item list-group-item-action border-bottom border-end-0 border-start-0 border-secondary fs-3 profile-options-background ${isActive == "Cupones" ? "active" : ""
-                            }`}
+                        className={`sidebar-item ${isActive == "Cupones" ? "active" : ""}`}
                     >
                         Cupones
                     </button>
+
                     <button
                         type="button"
                         onClick={(e) => setIsActive(e.target.innerText)}
-                        className={`list-group-item list-group-item-action fs-3 profile-options-background ${isActive == "Favoritos" ? "active" : ""
-                            }`}
+                        className={`sidebar-item ${isActive == "Favoritos" ? "active" : ""}`}
                     >
                         Favoritos
                     </button>
                 </div>
 
-                <div className="col-8 ">
+                <div className="col-8 me-5">
+                    <h1 className="text-center my-5 profile-form">Hello, {user.username ?? ""} </h1>
                     {isActive == "Datos personales" ? (
                         <DatosPersonales
                             user={user}
