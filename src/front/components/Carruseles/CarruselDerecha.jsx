@@ -73,7 +73,7 @@ export function CarruselDerecha({ category, highlighted }) {
         n.has(id) ? n.delete(id) : n.add(id);
         return n;
       });
-    } catch {}
+    } catch { }
   };
 
   const scrollByCards = (dir = 1) => {

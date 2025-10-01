@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { substractCartProduct, SumCartProduct } from "../../../services/cartApi";
 import "./carritoProfile.css";
+import "../profile.css"
 import { useCart } from "../../../hooks/useFetch";
 
 export default function CarritoProfileCard({
