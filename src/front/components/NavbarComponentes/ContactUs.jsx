@@ -9,20 +9,20 @@ export const ContactUs = () => {
                 >
                 <li className="nav-item pt-4">
                     <Link className="nav-link active fs-5" aria-current="page" to="/about"
-                    style={{color: "#5C3D2E"}} 
+                    style={{color: "#000000ff"}} 
                     >Sobre Nosotros
                     </Link>
                 </li>
                 <li className="nav-item pt-4">
                     <Link className="nav-link fs-5" 
-                    style={{color: "#5C3D2E"}}
+                    style={{color: "#040100ff"}}
                     to="gallery"
                     >Galeria
                     </Link>
                 </li>
                 <li className="nav-item pt-4">
-                    <Link className="nav-link fs-5" aria-disabled="true"
-                    style={{color: "#5C3D2E"}}
+                    <Link className="nav-link fs-5" aria-disabled="true" to="contactanos"
+                    style={{color: "#000000ff"}}
                     >Contactanos
                     </Link>
                 </li>

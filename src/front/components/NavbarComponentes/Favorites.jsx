@@ -74,10 +74,11 @@ export const Favorites = () => {
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
+
         <i className="bi bi-heart text-warning" style={{ fontSize: 20, lineHeight: 1 }} />
         <p className="m-0 ms-2 d-none d-md-inline text-warning">Favoritos</p>
         <p className="m-0 ms-2 fw-bold text-warning">{favIds.length}</p>
-      </button>
+
 
       <ul
         className="dropdown-menu dropdown-menu-end"
