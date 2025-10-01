@@ -40,7 +40,7 @@ export const Profile = ({ textOption }) => {
     }
 
     return (
-        <div className=" container-fluid">
+        <div className="vh-100 container-fluid">
 
             <div className="row justify-content-between ">
                 <div className="sidebar col-3 d-flex flex-column justify-content-center align-items-start p-4 shadow-sm h-100 ms-5 mt-5">

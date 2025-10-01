@@ -3,7 +3,6 @@ import { useAuth } from "../../../hooks/useAuth";
 import { postJewell } from "../../../services/jewellsService";
 
 export const PostProduct = () => {
-
     const [formData, setFormData] = useState({
         name: "",
         description: "",
@@ -26,29 +25,34 @@ export const PostProduct = () => {
         highlighted: false,
         quantity: 1,
     });
-    const [loading, setLoading] = useState()
-    const [inputsMissing, setInputsMissing] = useState()
-    const [successful, setSuccessful] = useState()
+    const [loading, setLoading] = useState(false);
+    const [inputsMissing, setInputsMissing] = useState(false);
+    const [successful, setSuccessful] = useState("");
+    const [categorySelected, setCategorySelected] = useState("");
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+        if (name === "category") {
+            setCategorySelected(value);
+        }
         setFormData({
             ...formData,
             [name]: type === "checkbox" ? checked : value,
         });
     };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setSuccessful("")
+        setSuccessful("");
 
         if (!formData.name || !formData.description || !formData.price || !formData.quantity) {
-            setInputsMissing(true)
+            setInputsMissing(true);
             return;
         }
-        setInputsMissing(false)
+        setInputsMissing(false);
+
         try {
             await postJewell(formData, setLoading, setSuccessful);
-
             setFormData({
                 name: "",
                 description: "",
@@ -71,9 +75,49 @@ export const PostProduct = () => {
                 highlighted: false,
                 quantity: 1,
             });
+            setCategorySelected("");
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
+    };
+
+    // Configuración de qué campos mostrar por categoría
+    const fieldsByCategory = {
+        relojes: ["brand", "gender", "water_resistance", "caja", "watch_bracelet_material"],
+        colgantes: ["coating", "brand", "gender", "clasp", "metal", "gem"],
+        pulseras: ["coating", "brand", "gender", "clasp", "metal", "gem", "bracelet"],
+        pendientes: ["coating", "brand", "gender", "metal", "gem", "earring_type"],
+        anillo: ["coating", "brand", "gender", "metal", "gem", "ring_type"],
+    };
+
+    const renderField = (field) => {
+        const labels = {
+            coating: "Baño / Recubrimiento",
+            brand: "Marca",
+            gender: "Género",
+            clasp: "Cierre",
+            water_resistance: "Resistencia al Agua",
+            caja: "Caja",
+            metal: "Metal",
+            gem: "Piedra Preciosa",
+            ring_type: "Tipo de Anillo",
+            earring_type: "Tipo de Arete",
+            bracelet: "Brazalete",
+            watch_bracelet_material: "Material del Brazalete del Reloj",
+        };
+
+        return (
+            <div key={field}>
+                <label>{labels[field]}</label>
+                <input
+                    type="text"
+                    name={field}
+                    value={formData[field]}
+                    onChange={handleChange}
+                    className="input"
+                />
+            </div>
+        );
     };
 
     return (
@@ -87,227 +131,99 @@ export const PostProduct = () => {
                 </div>
             )}
 
-
             <form
                 onSubmit={handleSubmit}
                 className="products-card"
                 style={{
-                    maxWidth: "900px",
-                    margin: "auto",
+                    backgroundColor: "#f5f0e6",
                     padding: "30px",
                     borderRadius: "12px",
-                    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+                    bordeRadius: "0.75rem",
+                    border: "1px solid #f1e0b3",
+                    maxWidth: "800px",
+                    margin: "auto",
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                 }}
             >
                 <h2 style={{ textAlign: "center", marginBottom: "25px", color: "#333" }}>
                     ➕ Agregar nueva joya
                 </h2>
 
-                <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
-                        gap: "20px",
-                    }}
+                {/* Campos obligatorios */}
+                <label>
+                    Nombre <span style={{ color: "red", fontWeight: "bold" }}>*</span>
+                </label>
+                <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="input"
+                />
+
+                <label>
+                    Descripción <span style={{ color: "red", fontWeight: "bold" }}>*</span>
+                </label>
+                <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    className="input"
+                    rows={3}
+                />
+
+                <label>
+                    Precio <span style={{ color: "red", fontWeight: "bold" }}>*</span>
+                </label>
+                <input
+                    type="number"
+                    step="0.01"
+                    name="price"
+                    value={formData.price}
+                    onChange={handleChange}
+                    className="input"
+                />
+
+                <label>
+                    URL de Imagen <span style={{ color: "red", fontWeight: "bold" }}>*</span>
+                </label>
+                <input
+                    type="text"
+                    name="url_image"
+                    value={formData.url_image}
+                    onChange={handleChange}
+                    className="input"
+                />
+
+                <label>
+                    Categoría <span style={{ color: "red", fontWeight: "bold" }}>*</span>
+                </label>
+                <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                    className="input"
+                    required
                 >
-                    {/* Columna 1 */}
-                    <div>
-                        <label>Nombre <span style={{ color: "red", fontWeight: "bold" }}>*</span></label>
-                        <input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            className="input"
-                        />
+                    <option value="" disabled hidden>
+                        -- Selecciona una categoría --
+                    </option>
+                    <option value="relojes">Relojes</option>
+                    <option value="colgantes">Colgantes</option>
+                    <option value="pulseras">Pulseras</option>
+                    <option value="pendientes">Pendientes</option>
+                    <option value="anillo">Anillo</option>
+                </select>
 
-                        <label>Descripción <span style={{ color: "red", fontWeight: "bold" }}>*</span></label>
-                        <textarea
-                            name="description"
-                            value={formData.description}
-                            onChange={handleChange}
-                            className="input"
-                            rows={3}
-                        />
-
-                        <label>Precio <span style={{ color: "red", fontWeight: "bold" }}>*</span></label>
-                        <input
-                            type="number"
-                            step="0.01"
-                            name="price"
-                            value={formData.price}
-                            onChange={handleChange}
-                            className="input"
-                        />
-
-                        <label>URL de Imagen <span style={{ color: "red", fontWeight: "bold" }}>*</span></label>
-                        <input
-                            type="text"
-                            name="url_image"
-                            value={formData.url_image}
-                            onChange={handleChange}
-                            className="input"
-                        />
-
-                        <label>
-                            Categoría <span style={{ color: "red", fontWeight: "bold" }}>*</span>
-                        </label>
-                        <select
-                            name="category"
-                            value={formData.category}
-                            onChange={handleChange}
-                            className="input"
-                            required
-                        >
-                            <option value="" disabled hidden>
-                                -- Selecciona una categoría --
-                            </option>
-                            <option value="relojes">Relojes</option>
-                            <option value="colgantes">Colgantes</option>
-                            <option value="pulseras">Pulseras</option>
-                            <option value="pendientes">Pendientes</option>
-                            <option value="anillo">Anillo</option>
-                        </select>
-
-                        <label>Baño / Recubrimiento</label>
-                        <input
-                            type="text"
-                            name="coating"
-                            value={formData.coating}
-                            onChange={handleChange}
-                            className="input"
-                        />
-
-                        <label>Marca</label>
-                        <input
-                            type="text"
-                            name="brand"
-                            value={formData.brand}
-                            onChange={handleChange}
-                            className="input"
-                        />
+                {/* Campos dinámicos */}
+                {categorySelected && (
+                    <div style={{ marginTop: "20px" }}>
+                        <h4 style={{ color: "#333" }}>Detalles adicionales</h4>
+                        {fieldsByCategory[categorySelected]?.map((field) => renderField(field))}
                     </div>
+                )}
 
-                    {/* Columna 2 */}
-                    <div>
-                        <label>Género</label>
-                        <input
-                            type="text"
-                            name="gender"
-                            value={formData.gender}
-                            onChange={handleChange}
-                            className="input"
-                        />
-
-                        <label>Cierre</label>
-                        <input
-                            type="text"
-                            name="clasp"
-                            value={formData.clasp}
-                            onChange={handleChange}
-                            className="input"
-                        />
-
-                        <label>Resistencia al Agua</label>
-                        <input
-                            type="text"
-                            name="water_resistance"
-                            value={formData.water_resistance}
-                            onChange={handleChange}
-                            className="input"
-                        />
-
-                        <label>Caja</label>
-                        <input
-                            type="text"
-                            name="caja"
-                            value={formData.caja}
-                            onChange={handleChange}
-                            className="input"
-                        />
-
-                        <label>Metal</label>
-                        <input
-                            type="text"
-                            name="metal"
-                            value={formData.metal}
-                            onChange={handleChange}
-                            className="input"
-                        />
-
-                        <label>Piedra Preciosa</label>
-                        <input
-                            type="text"
-                            name="gem"
-                            value={formData.gem}
-                            onChange={handleChange}
-                            className="input"
-                        />
-
-                        <label>Tipo de Anillo</label>
-                        <input
-                            type="text"
-                            name="ring_type"
-                            value={formData.ring_type}
-                            onChange={handleChange}
-                            className="input"
-                        />
-
-                        <label>Tipo de Arete</label>
-                        <input
-                            type="text"
-                            name="earring_type"
-                            value={formData.earring_type}
-                            onChange={handleChange}
-                            className="input"
-                        />
-                    </div>
-                </div>
-
-                {/* Fila adicional */}
-                <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr 1fr",
-                        gap: "20px",
-                        marginTop: "20px",
-                    }}
-                >
-                    <div>
-                        <label>Brazalete</label>
-                        <input
-                            type="text"
-                            name="bracelet"
-                            value={formData.bracelet}
-                            onChange={handleChange}
-                            className="input"
-                        />
-                    </div>
-
-                    <div>
-                        <label>Reloj</label>
-                        <input
-                            type="text"
-                            name="watch"
-                            value={formData.watch}
-                            onChange={handleChange}
-                            className="input"
-                        />
-                    </div>
-
-                    <div>
-                        <label>Material del Brazalete del Reloj</label>
-                        <input
-                            type="text"
-                            name="watch_bracelet_material"
-                            value={formData.watch_bracelet_material}
-                            onChange={handleChange}
-                            className="input"
-                        />
-                    </div>
-                </div>
-
-                {/* Opciones finales */}
+                {/* Extras */}
                 <div style={{ marginTop: "20px" }}>
                     <label>
                         <input
@@ -333,17 +249,24 @@ export const PostProduct = () => {
                         className="input"
                     />
                 </div>
+
+                {/* Mensajes de validación */}
                 {inputsMissing && (
                     <div className="alert alert-danger text-center" role="alert">
                         ¡Te faltan datos importantes por rellenar!
-                    </div>)
-                }
+                    </div>
+                )}
 
-                {successful && (
+                {successful && successful === "Joya creada satisfactoriamente" && (
                     <div className="alert alert-success text-center" role="alert">
                         {successful}
-                    </div>)
-                }
+                    </div>
+                )}
+                {successful && successful === "Hubo un error en la creación de la joya" && (
+                    <div className="alert alert-danger text-center" role="alert">
+                        {successful}
+                    </div>
+                )}
 
                 <button
                     type="submit"

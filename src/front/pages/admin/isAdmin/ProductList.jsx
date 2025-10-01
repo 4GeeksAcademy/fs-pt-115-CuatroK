@@ -298,9 +298,8 @@ export const ProductList = () => {
                                         <div className="fw-bold">{formatearPrecio(productoItem?.price)}</div>
                                         <button
                                             className="btn btn-primary w-100 mt-2 add-btn"
-                                            onClick={(ev) => { ev.stopPropagation(); console.log("[Catalogo] Añadir:", productoItem?.id); }}
                                         >
-                                            Añadir
+                                            Editar
                                         </button>
                                     </div>
                                 </div>

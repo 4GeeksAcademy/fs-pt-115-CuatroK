@@ -106,8 +106,8 @@ export const DatosPersonales = ({ user, getUserApi }) => {
     }, [user]);
 
     return (
-        <>
-            <div className="profile-form container py-4 px-3">
+        <div>
+            <div className=" profile-form container py-4 px-3">
                 <div className="row  px-4">
                     <div className="col-6">
                         <h4>Nombre completo</h4>
@@ -298,6 +298,6 @@ export const DatosPersonales = ({ user, getUserApi }) => {
                     />
                 ))}
             </div>
-        </>
+        </div>
     );
 };
