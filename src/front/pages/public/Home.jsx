@@ -11,7 +11,7 @@ function VPTitle({ text, as: Tag = "h1", className = "text-center my-4" }) {
   const containerRef = useRef(null);
   return (
     <div ref={containerRef}>
-      <Tag className={className}>
+      <Tag className={className} style={{ color: '#c2a15d' }}>
         <VariableProximity
           label={text}
           className="display-6"

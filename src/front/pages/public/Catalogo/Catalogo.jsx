@@ -9,6 +9,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { Dropdown } from "bootstrap";
 import { useCart } from "../../../hooks/useFetch";
 import { useAuth } from "../../../hooks/useAuth";
+import FavoriteButton from "../../../components/public/FavoriteButton.jsx";
 
 const LABELS = {
   brand: "Marca",
@@ -73,7 +74,7 @@ export const Catalogo = () => {
   let tituloCategoria = category || "";
   try {
     tituloCategoria = decodeURIComponent(tituloCategoria);
-  } catch { }
+  } catch {}
 
   const abrirProducto = (productoItem) => {
     const idOSlug = productoItem?.slug
@@ -89,12 +90,8 @@ export const Catalogo = () => {
   };
 
   const coincideCategoria = (catProd, catElegida) => {
-    const a = String(catProd || "")
-      .trim()
-      .toLowerCase();
-    const b = String(catElegida || "")
-      .trim()
-      .toLowerCase();
+    const a = String(catProd || "").trim().toLowerCase();
+    const b = String(catElegida || "").trim().toLowerCase();
     const plural = b.endsWith("s") ? b : b + "s";
     const singular = b.endsWith("s") ? b.slice(0, -1) : b;
     return a === b || a === plural || a === singular;
@@ -131,9 +128,9 @@ export const Catalogo = () => {
 
   useEffect(() => {
     const uniqueSorted = (arr) =>
-      [
-        ...new Set(arr.filter((v) => v != null && String(v).trim() !== "")),
-      ].sort((a, b) => String(a).localeCompare(String(b)));
+      [...new Set(arr.filter((v) => v != null && String(v).trim() !== ""))].sort(
+        (a, b) => String(a).localeCompare(String(b))
+      );
 
     const campos = {};
     CANDIDATE_FIELDS.forEach((key) => {
@@ -222,12 +219,12 @@ export const Catalogo = () => {
     key === "name_asc"
       ? "Nombre, A a Z"
       : key === "name_desc"
-        ? "Nombre, Z a A"
-        : key === "price_asc"
-          ? "Precio: de más bajo a más alto"
-          : key === "price_desc"
-            ? "Precio: de más alto a más bajo"
-            : "Relevancia";
+      ? "Nombre, Z a A"
+      : key === "price_asc"
+      ? "Precio: de más bajo a más alto"
+      : key === "price_desc"
+      ? "Precio: de más alto a más bajo"
+      : "Relevancia";
 
   const sortItems = (arr, key) => {
     const list = arr.slice();
@@ -291,8 +288,9 @@ export const Catalogo = () => {
                 <li className="dropdown-header text-muted">Los más vendidos</li>
                 <li>
                   <button
-                    className={`dropdown-item ${sortBy === "relevance" ? "active" : ""
-                      }`}
+                    className={`dropdown-item ${
+                      sortBy === "relevance" ? "active" : ""
+                    }`}
                     onClick={() => setSortBy("relevance")}
                   >
                     Relevancia
@@ -300,8 +298,9 @@ export const Catalogo = () => {
                 </li>
                 <li>
                   <button
-                    className={`dropdown-item ${sortBy === "name_asc" ? "active" : ""
-                      }`}
+                    className={`dropdown-item ${
+                      sortBy === "name_asc" ? "active" : ""
+                    }`}
                     onClick={() => setSortBy("name_asc")}
                   >
                     Nombre, A a Z
@@ -309,8 +308,9 @@ export const Catalogo = () => {
                 </li>
                 <li>
                   <button
-                    className={`dropdown-item ${sortBy === "name_desc" ? "active" : ""
-                      }`}
+                    className={`dropdown-item ${
+                      sortBy === "name_desc" ? "active" : ""
+                    }`}
                     onClick={() => setSortBy("name_desc")}
                   >
                     Nombre, Z a A
@@ -318,8 +318,9 @@ export const Catalogo = () => {
                 </li>
                 <li>
                   <button
-                    className={`dropdown-item ${sortBy === "price_asc" ? "active" : ""
-                      }`}
+                    className={`dropdown-item ${
+                      sortBy === "price_asc" ? "active" : ""
+                    }`}
                     onClick={() => setSortBy("price_asc")}
                   >
                     Precio: de más bajo a más alto
@@ -327,8 +328,9 @@ export const Catalogo = () => {
                 </li>
                 <li>
                   <button
-                    className={`dropdown-item ${sortBy === "price_desc" ? "active" : ""
-                      }`}
+                    className={`dropdown-item ${
+                      sortBy === "price_desc" ? "active" : ""
+                    }`}
                     onClick={() => setSortBy("price_desc")}
                   >
                     Precio: de más alto a más bajo
@@ -391,17 +393,25 @@ export const Catalogo = () => {
                     {isNew && <span className="badge bg-dark">Nuevo</span>}
                   </div>
 
-                  <img
-                    src={productoItem?.url_image}
-                    alt={productoItem?.name || "Producto"}
-                    className={`card-img-top ${estado.out ? "out-of-stock" : ""
-                      }`}
-                    style={{ objectFit: "cover", height: 200 }}
-                    onError={(ev) => {
-                      ev.currentTarget.src =
-                        "https://via.placeholder.com/600x400?text=Sin+imagen";
-                    }}
-                  />
+                  {/* Contenedor de imagen + botón de favorito dentro, abajo-derecha */}
+                  <div className="position-relative">
+                    <img
+                      src={productoItem?.url_image}
+                      alt={productoItem?.name || "Producto"}
+                      className={`card-img-top ${estado.out ? "out-of-stock" : ""}`}
+                      style={{ objectFit: "cover", height: 200 }}
+                      onError={(ev) => {
+                        ev.currentTarget.src =
+                          "https://via.placeholder.com/600x400?text=Sin+imagen";
+                      }}
+                    />
+                    <div
+                      style={{ position: "absolute", right: 8, bottom: 8, zIndex: 2 }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <FavoriteButton itemId={productoItem?.id} />
+                    </div>
+                  </div>
 
                   <div className="card-body d-flex flex-column">
                     <h5 className="card-title">
@@ -422,7 +432,8 @@ export const Catalogo = () => {
                           if (!usuarioAutenticado) {
                             setMensajePorProducto((prev) => ({
                               ...prev,
-                              [productoItem?.id]: "Debes iniciar sesión para añadir productos 🛑",
+                              [productoItem?.id]:
+                                "Debes iniciar sesión para añadir productos 🛑",
                             }));
 
                             setTimeout(() => {
@@ -432,7 +443,8 @@ export const Catalogo = () => {
                             addToCart(productoItem?.id);
                             setMensajePorProducto((prev) => ({
                               ...prev,
-                              [productoItem?.id]: "Producto añadido al carrito ✅",
+                              [productoItem?.id]:
+                                "Producto añadido al carrito ✅",
                             }));
                           }
 
@@ -445,7 +457,6 @@ export const Catalogo = () => {
                         }}
                         disabled={estado.out}
                         title={estado.out ? "Sin stock" : "Añadir"}
-
                       >
                         Añadir
                       </button>

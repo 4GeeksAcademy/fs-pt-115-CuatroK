@@ -148,14 +148,16 @@ export const Carrito = () => {
                             </div>
 
                             {/* Botón de compra */}
-                            <Link to="/payment">
-                                <button
-                                    type="button"
-                                    className="btn btn-warning btn-warning-custom fs-5 mt-3 w-75 mx-auto d-block"
-                                >
-                                    Realizar compra
-                                </button>
-                            </Link>
+                            <div className="coupon-content d-flex justify-content-center">
+                                <Link to="/payment">
+                                    <button
+                                        type="button"
+                                        className="btn btn-warning btn-warning-custom fs-5 mt-3 w-75"
+                                    >
+                                        Realizar compra
+                                    </button>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -6,12 +6,12 @@ export const Carrusel_principal = () => {
 
     return (
         <>
-            <div className="container-fluid w-100" style={{ backgroundColor: 'brown' }}>
+            <div className="container-fluid w-100" style={{ backgroundColor: '#e8e3dc' }}>
                 <div className="container py-4">
                     <div className="row align-items-center g-4">
                         <div className="col-12 col-lg-4 text-white d-flex justify-content-center align-items-center">
                             <div ref={containerRef} style={{ position: 'relative' }}>
-                                <h3 className="mb-0 text-center">
+                                <h3 className="mb-0 text-center" style={{ color: '#c2a15d' }}>
                                     <VariableProximity
                                         label="Sube la nota con 4K y deja que la luz haga"
                                         className="display-6"
@@ -22,7 +22,7 @@ export const Carrusel_principal = () => {
                                         toFontVariationSettings='"wght" 900, "opsz" 36'
                                     />
                                 </h3>
-                                 <h3 className="mb-0 text-center">
+                                 <h3 className="mb-0 text-center"  style={{ color: '#c2a15dff' }}>
                                     <VariableProximity
                                         label="su trabajo"
                                         className="display-6"
