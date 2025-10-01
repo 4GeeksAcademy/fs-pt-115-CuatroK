@@ -63,22 +63,6 @@ export function CarruselDerecha({ category, highlighted }) {
     navigate(`/producto/${encodeURIComponent(idOSlug)}`);
   };
 
-<<<<<<< HEAD
-  const toggleFav = async (id) => {
-    if (!token) return;
-    try {
-      if (fav.has(id)) await removeFavorite(token, id);
-      else await addFavorite(token, id);
-      setFav((prev) => {
-        const n = new Set(prev);
-        n.has(id) ? n.delete(id) : n.add(id);
-        return n;
-      });
-    } catch { }
-  };
-
-=======
->>>>>>> 901c1b81862db4db5c7b214a6bb67495289372ca
   const scrollByCards = (dir = 1) => {
     const viewport = listRef.current?.parentElement;
     if (!viewport) return;
