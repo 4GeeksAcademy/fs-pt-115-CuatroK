@@ -1,4 +1,3 @@
-// src/front/components/public/Favorites.jsx
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
@@ -60,7 +59,7 @@ export const Favorites = () => {
   const onRemove = async (id) => {
     try {
       if (token) await removeFavorite(token, id);
-    } catch {}
+    } catch { }
     setFavIds((prev) => prev.filter((x) => String(x) !== String(id)));
     window.dispatchEvent(new CustomEvent("favorites:changed", { detail: { changedId: id, isFav: false } }));
   };
@@ -74,11 +73,10 @@ export const Favorites = () => {
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-
         <i className="bi bi-heart text-warning" style={{ fontSize: 20, lineHeight: 1 }} />
         <p className="m-0 ms-2 d-none d-md-inline text-warning">Favoritos</p>
         <p className="m-0 ms-2 fw-bold text-warning">{favIds.length}</p>
-
+      </button>
 
       <ul
         className="dropdown-menu dropdown-menu-end"
@@ -87,7 +85,7 @@ export const Favorites = () => {
       >
         {favItems.length === 0 ? (
           <li>
-            <p className="dropdown-item text-muted m-0">No hay favoritos aún</p>
+            <p className="dropdown-item text-muted m-0">No hay favoritos aÃºn</p>
           </li>
         ) : (
           favItems.slice(0, 8).map((p) => {

@@ -2,19 +2,20 @@
   display: flex;
   gap: 16px;
   align-items: center;
-  border: 1px solid #e6e6e6;
-  border-radius: 8px;
+  border-radius: 0.75rem;
+  border: 1px solid #f1e0b3 !important; /* borde dorado suave */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   padding: 12px;
   max-width: 720px;
-  background: #fff;
+  background: #f9f5f0 !important; /* beige suave */
+  color: #4a4a4a;
 }
 
 .product-img {
   width: 96px;
   height: 96px;
   object-fit: cover;
-  border-radius: 8px;
-  background: #f5f5f5;
+  background: #fff;
 }
 
 .product-info {
@@ -35,11 +36,12 @@
   font-size: 16px;
   font-weight: 600;
   margin: 0;
+  color: #c2a15d; /* dorado elegante */
 }
 
 .product-price {
   font-size: 14px;
-  color: #333;
+  color: #4a4a4a;
   margin: 0;
 }
 
@@ -56,19 +58,21 @@
 }
 
 .qty-btn {
-  border: 1px solid #ccc;
+  border: 1px solid #d4b97a !important; /* dorado suave */
   background: #fff;
   padding: 6px 10px;
   border-radius: 6px;
   cursor: pointer;
   min-width: 36px;
   text-align: center;
-  transition: background 0.2s, border-color 0.2s;
+  font-weight: 600;
+  color: #4a4a4a;
+  transition: all 0.2s ease-in-out;
 }
 
 .qty-btn:hover:not(:disabled) {
-  background: #f0f0f0;
-  border-color: #999;
+  background: #fdf8ef;
+  border-color: #c2a15d; /* dorado más fuerte */
 }
 
 .qty-btn:disabled {
@@ -80,6 +84,7 @@
   min-width: 40px;
   text-align: center;
   font-weight: 600;
+  color: #4a4a4a;
 }
 
 .product-actions {
@@ -91,12 +96,13 @@
 
 .subtotal {
   font-weight: 700;
+  color: #c2a15d; /* dorado */
 }
 
 .remove-btn {
   border: none;
   background: transparent;
-  color: #d9534f;
+  color: #e05c5c; /* rojo error del form */
   cursor: pointer;
   font-size: 14px;
   transition: color 0.2s;
@@ -105,3 +111,63 @@
 .remove-btn:hover {
   color: #b52b27;
 }
+
+.coupon-container {
+  margin-top: 1rem;
+  max-width: 720px;
+}
+
+.coupon-box {
+  display: block; /* evita que se encoga como inline-block */
+  width: 100%; /* ocupa todo el contenedor padre */
+  box-sizing: border-box; /* padding no aumenta el width */
+  background: #f9f5f0;
+  border: 1px solid #f1e0b3;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  max-height: 40px;
+  padding: 0.5rem 1rem;
+}
+
+.coupon-box.expanded {
+  max-height: 200px; /* suficiente para mostrar input y botón */
+  padding: 1rem;
+}
+
+.coupon-header {
+  font-weight: 600;
+  color: #c2a15d; /* dorado elegante */
+}
+
+.coupon-content {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.coupon-content input.form-control {
+  background: #fff;
+  border: 1px solid #d4b97a;
+  border-radius: 0.5rem;
+  color: #4a4a4a;
+}
+
+.coupon-content input.form-control:focus {
+  border-color: #c2a15d;
+  box-shadow: 0 0 0 0.2rem rgba(194, 161, 93, 0.2);
+}
+
+.coupon-content button.btn-warning {
+  background-color: #c2a15d;
+  border-color: #c2a15d;
+  color: #fff;
+}
+
+.coupon-content button.btn-warning:hover {
+  background-color: #b8954f;
+  border-color: #b8954f;
+}
+

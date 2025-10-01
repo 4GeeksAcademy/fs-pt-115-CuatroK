@@ -96,7 +96,7 @@ export const Profile = ({ textOption }) => {
                 </div>
 
                 <div className="col-8 me-5">
-                    <h1 className="text-center my-5 profile-form">Hello, {user.username ?? ""} </h1>
+                    <h1 className={`text-center my-5 profile-form ${user.gender == "Demagogo" ? "text-danger" : ""}`}>Hello, {user.gender == "Demagogo" ? user.gender + "..." : user.username ? user.username : ""} </h1>
                     {isActive == "Datos personales" ? (
                         <DatosPersonales
                             user={user}
