@@ -17,12 +17,12 @@ export const SearchBar = () => {
 
   return (
     <div
-      className="search-wrapper d-flex align-items-center"
+      className="search-wrapper d-flex align-items-center mt-2"
       onMouseEnter={() => setShowSearch(true)}
       onMouseLeave={() => busqueda === "" && setShowSearch(false)}
     >
       <div className="search-icon-only">
-        <i className="fa-sharp fa-solid fa-magnifying-glass text-warning"></i>
+        <i className="fa-sharp fa-solid fa-magnifying-glass text-dark"></i>
       </div>
 
       <input

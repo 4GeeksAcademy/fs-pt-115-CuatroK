@@ -30,7 +30,7 @@ export const Products = () => {
       img: "https://i.pinimg.com/736x/04/29/88/042988b4462a5a957f748684e08eac38.jpg",
     },
   ];
-
+  
   const [hovered, setHovered] = useState(null);
 
   return (
@@ -68,7 +68,7 @@ export const Products = () => {
 
         <Link to="/calculadora">
           <button
-            className="btn btn-warning mb-3 color-buttons category-button mt-3"
+            className={`btn btn-danger mb-3 category-button mt-3`}
             style={{ borderRadius: "12px" }}
           >
             Calculadora de Metales

@@ -10,8 +10,8 @@ export const Favorites = () => {
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        <span className="bi bi-heart text-warning" />
-        <span className="ms-1 d-none d-md-inline text-warning">Favoritos</span>
+        <span className="bi bi-heart text-dark" />
+        <span className="ms-1 d-none d-md-inline text-dark">Favoritos</span>
       </button>
 
       <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="favoritesDropdown">
