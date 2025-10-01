@@ -17,7 +17,7 @@ export const Navbar = () => {
 
   return (
     <div>
-      <nav className="navbar" style={{ backgroundColor: "#5C3D2E" }}>
+      <nav className="navbar" style={{ backgroundColor: "#e8e3dc" }}>
         <div className="d-flex justify-content-between align-items-center w-100 px-3">
 
 

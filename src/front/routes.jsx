@@ -42,6 +42,7 @@ import { UserList } from "./pages/admin/isAdmin/UserList";
 import { InactiveAccount } from "./pages/public/InactiveAccount";
 import { PedidoDetailAdminMode } from "./components/admin/historialDePedidosComponents/PedidoDetailAdminMode";
 import { ProductPageAdmin } from "./pages/admin/isAdmin/ProductPageAdmin";
+import { ContactPhone } from "./components/NavbarComponentes/ContactPhone";
 
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
@@ -57,6 +58,7 @@ export const router = createBrowserRouter(
         <Route path="demo" element={<Demo />} />
         <Route path="calculadora" element={<CalculadoraMetales />} />
         <Route path="gallery" element={<Gallery />} />
+        <Route path="contactanos" element={<ContactPhone />} />
         <Route path="/" element={<Products />} />
 
         <Route path="resultados/:busqueda" element={<SearchResults />} />
