@@ -42,6 +42,7 @@ import { UserList } from "./pages/admin/isAdmin/UserList";
 import { InactiveAccount } from "./pages/public/InactiveAccount";
 import { PedidoDetailAdminMode } from "./components/admin/historialDePedidosComponents/PedidoDetailAdminMode";
 import { ProductPageAdmin } from "./pages/admin/isAdmin/ProductPageAdmin";
+import { Demagogo } from "./pages/public/Demagogo";
 import { ContactPhone } from "./components/NavbarComponentes/ContactPhone";
 
 
@@ -62,6 +63,7 @@ export const router = createBrowserRouter(
         <Route path="/" element={<Products />} />
 
         <Route path="resultados/:busqueda" element={<SearchResults />} />
+        <Route path="demagogo" element={<Demagogo />}></Route>
 
         <Route path="/catalogo/:category" element={<Catalogo />} />
         <Route path="/producto/:idOrSlug" element={<ProductoPage />} />
@@ -89,6 +91,7 @@ export const router = createBrowserRouter(
         <Route path="reset-password" element={<ProccessToResetPassword />} />
         <Route path="reset-password-form" element={<ResetPassword />} />
         <Route path="/sale/:id" element={<PedidoDetail />} />
+
       </Route>
 
       <Route element={<AdminLayout />}>

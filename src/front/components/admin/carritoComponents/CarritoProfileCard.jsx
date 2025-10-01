@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { substractCartProduct, SumCartProduct } from "../../../services/cartApi";
 import "./carritoProfile.css";
+import "../profile.css"
+import { useCart } from "../../../hooks/useFetch";
 
 export default function CarritoProfileCard({
     id,
@@ -10,6 +12,7 @@ export default function CarritoProfileCard({
     quantity,
     onRemove,
 }) {
+    const { fetchCart } = useCart()
     const total = quantity * price
 
     const priceAmount = new Intl.NumberFormat("de-DE", {
@@ -24,10 +27,12 @@ export default function CarritoProfileCard({
 
     const sumQuantity = async () => {
         await SumCartProduct(id)
+        await fetchCart()
     }
 
     const substractQuantity = async () => {
         await substractCartProduct(id)
+        await fetchCart()
     }
 
     return (

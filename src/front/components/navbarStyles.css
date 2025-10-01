@@ -8,7 +8,7 @@
   cursor: pointer;
   padding: 6px 10px;
   border-radius: 5px;
-  background-color: transparent; 
+  background-color: transparent;
   transition: background-color 0.3s ease;
 }
 .search-icon-only:hover {
@@ -34,7 +34,7 @@
 }
 
 .fixed-nav-tools {
-  position: absolute; 
+  position: absolute;
   top: 0;
   right: 1rem;
   display: flex;

@@ -8,13 +8,14 @@ import { NavAndTabs } from "./NavbarComponentes/NavAndTabs";
 import "./navbarStyles.css";
 import { useAuth } from "../hooks/useAuth";
 import { Favorites } from "./NavbarComponentes/Favorites";
+import FuzzyText from './effects/FuzzyText.jsx';
 
 export const Navbar = () => {
   const [menuAbierto, setMenuAbierto] = useState(false);
-  const { token } = useAuth();
+  const { user, token } = useAuth();
   const usuarioAutenticado = token;
 
-
+  console.log(user)
   return (
     <div>
       <nav className="navbar" style={{ backgroundColor: "#4a4a4a" }}>
@@ -30,20 +31,35 @@ export const Navbar = () => {
             <span >☰</span>
           </button>
 
-
-          <div className="navbar-logo d-none d-lg-block">
-            <Link to="/">
-              <img
-                src="/logo4k.png"
-                alt="Logo"
-                style={{ width: 50, height: 44 }}
-              />
-            </Link>
-          </div>
+          {
+            user ? (
+              user.gender === "Demagogo" ? (
+                <div className="navbar-logo d-none d-lg-block text-danger my-auto">
+                  <Link to={"/demagogo"}>
+                    <FuzzyText baseIntensity={0.2} hoverIntensity={0.5} enableHover={true}>
+                      Sé un demagogo...
+                    </FuzzyText>
+                  </Link>
+                </div>
+              ) : (
+                <div className="navbar-logo d-none d-lg-block">
+                  <Link to="/">
+                    <img src="/logo4k.png" alt="Logo" style={{ width: 50, height: 44 }} />
+                  </Link>
+                </div>
+              )
+            ) : (
+              <div className="navbar-logo d-none d-lg-block">
+                <Link to="/">
+                  <img src="/logo4k.png" alt="Logo" style={{ width: 50, height: 44 }} />
+                </Link>
+              </div>
+            )
+          }
 
 
           <div className="d-flex align-items-center gap-2 fixed-nav-tools">
-            <SearchBar/>
+            <SearchBar />
             {usuarioAutenticado && <Favorites />}
             <ShoppingCart />
             <Profile />
@@ -51,17 +67,19 @@ export const Navbar = () => {
         </div>
 
 
-        {menuAbierto && (
-          <div className="d-lg-none px-3 py-2">
-            <NavAndTabs />
-          </div>
-        )}
+        {
+          menuAbierto && (
+            <div className="d-lg-none px-3 py-2">
+              <NavAndTabs />
+            </div>
+          )
+        }
 
         {/* Menú visible directamente en pantallas grandes */}
         <div className="d-none d-lg-flex justify-content-between align-items-center">
           <NavAndTabs />
         </div>
-      </nav>
-    </div>
+      </nav >
+    </div >
   );
 };

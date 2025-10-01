@@ -4,6 +4,8 @@ import CarritoProfileCard from "../admin/carritoComponents/CarritoProfileCard";
 import { getDiscount } from "../../services/serviceApi";
 import { useAuth } from "../../hooks/useAuth";
 import { useCart } from "../../hooks/useFetch";
+import { removeCartItem } from "../../services/cartApi";
+import "./carritoComponents/carritoProfile.css"
 
 export const Carrito = () => {
     const { token, setDiscount, discount, setFinalAmount, finalAmount } = useAuth();
@@ -60,38 +62,43 @@ export const Carrito = () => {
         currency: "EUR",
     }).format(finalAmount || totalAmount);
 
-    console.log(finalAmount)
-    console.log(totalAmount)
+    const handleRemove = async (id) => {
+        await removeCartItem(id);
+        await fetchCart();
+    };
+
 
     return (
         <div>
             <h2>Carrito</h2>
 
             {cartItems.length === 0 ? (
-                <h3 className="products-card text-center py-5 my-3">
+                <h3 className="products-card text-center py-5 my-3 profile-card">
                     Tu carrito está vacío...
                 </h3>
             ) : (
-                <div className="container-fluid">
+                <div className="container-fluid ">
                     <div className="row">
-                        {/* Lista de productos */}
-                        <div className="col-7 me-5 mb-5 products-card p-4">
-                            {[...cartItems]
-                                .sort((a, b) => a.id - b.id)
-                                .map((item) => (
-                                    <CarritoProfileCard
-                                        key={item.id}
-                                        id={item.id}
-                                        name={item.jewell.name}
-                                        image={item.jewell.url_image}
-                                        price={item.jewell.price}
-                                        quantity={item.quantity}
-                                    />
-                                ))}
+                        <div className="col-7 me-5 mb-5 p-4 profile-card">
+                            <div className="card-body">
+                                {[...cartItems]
+                                    .sort((a, b) => a.id - b.id)
+                                    .map((item) => (
+                                        <CarritoProfileCard
+                                            key={item.id}
+                                            id={item.id}
+                                            name={item.jewell.name}
+                                            image={item.jewell.url_image}
+                                            price={item.jewell.price}
+                                            quantity={item.quantity}
+                                            onRemove={() => handleRemove(item.id)}
+                                        />
+                                    ))}
+                            </div>
                         </div>
 
                         {/* Resumen */}
-                        <div className="col-4 products-card p-4">
+                        <div className="col-4 p-4 profile-card ">
                             <h4>Total</h4>
                             {discount > 0 && (
                                 <p>
@@ -105,17 +112,16 @@ export const Carrito = () => {
                             <h5>{formattedTotal}</h5>
 
                             {/* Cupón */}
-                            <div className="mt-3">
-                                <button
-                                    type="button"
-                                    className="btn btn-link p-0 text-center"
+                            <div className="mt-3 coupon-container">
+                                <div
+                                    className={`coupon-box ${showCouponInput ? "expanded" : ""}`}
                                     onClick={() => setShowCouponInput(!showCouponInput)}
                                 >
-                                    ¿Tienes un cupón?
-                                </button>
+                                    <div className="coupon-header text-center">
+                                        ¿Tienes un cupón?
+                                    </div>
 
-                                {showCouponInput && (
-                                    <div className="mt-2 bg-light border border-top p-3">
+                                    <div className="coupon-content">
                                         <input
                                             type="text"
                                             className="form-control mb-2"
@@ -125,7 +131,10 @@ export const Carrito = () => {
                                         />
                                         <button
                                             className="btn btn-warning btn-sm"
-                                            onClick={handleApplyCoupon}
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // evita que el click cierre el bloque
+                                                handleApplyCoupon();
+                                            }}
                                         >
                                             Aplicar
                                         </button>
@@ -135,18 +144,20 @@ export const Carrito = () => {
                                             </p>
                                         )}
                                     </div>
-                                )}
+                                </div>
                             </div>
 
                             {/* Botón de compra */}
-                            <Link to="/payment">
-                                <button
-                                    type="button"
-                                    className="btn btn-warning btn-warning-custom fs-5 mt-3 w-75 mx-auto d-block"
-                                >
-                                    Realizar compra
-                                </button>
-                            </Link>
+                            <div className="coupon-content d-flex justify-content-center">
+                                <Link to="/payment">
+                                    <button
+                                        type="button"
+                                        className="btn btn-warning btn-warning-custom fs-5 mt-3 w-75"
+                                    >
+                                        Realizar compra
+                                    </button>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>

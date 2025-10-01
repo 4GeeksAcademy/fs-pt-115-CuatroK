@@ -14,7 +14,6 @@ export function ProfileLayout() {
     }, [user, navigate])
     return (
         <>
-
             <Navbar />
             <Outlet />
         </>

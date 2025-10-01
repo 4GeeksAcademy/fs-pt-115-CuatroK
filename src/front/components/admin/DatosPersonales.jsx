@@ -5,6 +5,7 @@ import "../button.css";
 import { Address } from "./datosPersonalesComponents/Address";
 import { AddressModal } from "./datosPersonalesComponents/AddressModal";
 
+
 export const DatosPersonales = ({ user, getUserApi }) => {
     const [userInfo, setUserInfo] = useState({
         full_name: user.full_name ?? "",
@@ -12,24 +13,30 @@ export const DatosPersonales = ({ user, getUserApi }) => {
         gender: user.gender ?? "",
         birth_date: user.birth_date ?? "",
     });
+    const [birth, setBirth] = useState({ day: "", month: "", year: "" });
     const [dataMissingError, setDataMissingError] = useState(false);
     const [dataToSubmit, setDataToSubmit] = useState(false);
 
-    const SendDataUpdated = async (userInfo) => {
+    const SendDataUpdated = async () => {
         if (userInfo.username.trim().length < 3) {
-            setDataMissingError(true)
+            setDataMissingError(true);
             return;
         }
 
-        setDataMissingError(false)
+        setDataMissingError(false);
+
+        const birth_date =
+            birth.day && birth.month && birth.year
+                ? `${birth.year}-${String(birth.month).padStart(2, "0")}-${String(birth.day).padStart(2, "0")}`
+                : "";
+
         const dataToSend = {
             username: userInfo.username,
             full_name: userInfo.full_name,
             gender: userInfo.gender,
-            birth_date: userInfo.birth_date,
+            birth_date,
         };
 
-        setUserInfo(dataToSend);
         try {
             await updateUserData(dataToSend, getUserApi);
         } catch (error) {
@@ -38,14 +45,14 @@ export const DatosPersonales = ({ user, getUserApi }) => {
     };
 
     const HandleProfileKeyDown = (e) => {
-        if (e.key == "Enter") {
-            SendDataUpdated(userInfo);
+        if (e.key === "Enter") {
+            SendDataUpdated();
             setDataToSubmit(false);
         }
     };
 
     const HandleOnClick = () => {
-        SendDataUpdated(userInfo);
+        SendDataUpdated();
         setDataToSubmit(false);
     };
 
@@ -63,25 +70,18 @@ export const DatosPersonales = ({ user, getUserApi }) => {
 
     const HandleBirthDate = (e) => {
         const { name, value } = e.target;
-        let updatedUser = { ...userInfo, [name]: value };
+        setBirth((prev) => {
+            const updated = { ...prev, [name]: value };
 
-        if (["day", "month", "year"].includes(name)) {
-            const { day, month, year } = updatedUser;
-
-            if (day && month && year) {
-                updatedUser.birth_date = `${year}-${String(month).padStart(
-                    2,
-                    "0"
-                )}-${String(day).padStart(2, "0")}`;
+            if (updated.day && updated.month && updated.year) {
                 setDataMissingError(false);
-                SendDataUpdated(updatedUser);
             } else {
-                updatedUser.birth_date = "";
                 setDataMissingError(true);
             }
-        }
 
-        setUserInfo(updatedUser);
+            setDataToSubmit(true);
+            return updated;
+        });
     };
 
     useEffect(() => {
@@ -92,30 +92,25 @@ export const DatosPersonales = ({ user, getUserApi }) => {
                 username: user.username ?? "",
                 gender: user.gender ?? "",
                 birth_date: user.birth_date,
-                day,
-                month,
-                year,
             });
+            setBirth({ day, month, year });
         } else {
             setUserInfo({
                 full_name: user.full_name ?? "",
                 username: user.username ?? "",
                 gender: user.gender ?? "",
                 birth_date: "",
-                day: "",
-                month: "",
-                year: "",
             });
+            setBirth({ day: "", month: "", year: "" });
         }
     }, [user]);
 
-
     return (
         <>
-            <div className="products-card container py-4 px-4">
+            <div className="profile-form container py-4 px-3">
                 <div className="row  px-4">
                     <div className="col-6">
-                        <h3>Nombre completo</h3>
+                        <h4>Nombre completo</h4>
                         <div className="input-group input-group-sm mb-3">
                             <input
                                 type="text"
@@ -131,7 +126,7 @@ export const DatosPersonales = ({ user, getUserApi }) => {
                         </div>
                     </div>
                     <div className="col-6 ms-auto">
-                        <h3>Nombre de usuario</h3>
+                        <h4>Nombre de usuario</h4>
                         <div className="input-group input-group-sm mb-3">
                             <input
                                 type="text"
@@ -166,7 +161,7 @@ export const DatosPersonales = ({ user, getUserApi }) => {
                 </div>
                 <div className="row  px-4">
                     <div className="col-6">
-                        <h3>Género</h3>
+                        <h4>Género</h4>
                         <div className="input-group input-group-sm mb-3">
                             <select
                                 className="form-control"
@@ -202,15 +197,15 @@ export const DatosPersonales = ({ user, getUserApi }) => {
                         </div>
                     </div>
                     <div className="col-6 ms-auto">
-                        <h3>Fecha de nacimiento</h3>
+                        <h4>Fecha de nacimiento</h4>
 
                         <div className="d-flex gap-2">
                             <select
-                                className={`form-control ${dataMissingError && !userInfo.day ? "input-data-missing" : ""
+                                className={`form-control ${dataMissingError && !birth.day ? "input-data-missing" : ""
                                     }`}
                                 name="day"
                                 onChange={HandleBirthDate}
-                                value={userInfo.day ?? ""}
+                                value={birth.day ?? ""}
                             >
                                 <option value="" disabled hidden>
                                     Día
@@ -226,13 +221,13 @@ export const DatosPersonales = ({ user, getUserApi }) => {
                             </select>
 
                             <select
-                                className={`form-control ${dataMissingError && !userInfo.month
+                                className={`form-control ${dataMissingError && !birth.month
                                     ? "input-data-missing"
                                     : ""
                                     }`}
                                 name="month"
                                 onChange={HandleBirthDate}
-                                value={userInfo.month ?? ""}
+                                value={birth.month ?? ""}
                             >
                                 <option value="" disabled hidden>
                                     Mes
@@ -261,11 +256,11 @@ export const DatosPersonales = ({ user, getUserApi }) => {
                             </select>
 
                             <select
-                                className={`form-control ${dataMissingError && !userInfo.year ? "input-data-missing" : ""
+                                className={`form-control ${dataMissingError && !birth.year ? "input-data-missing" : ""
                                     }`}
                                 name="year"
                                 onChange={HandleBirthDate}
-                                value={userInfo.year ?? ""}
+                                value={birth.year ?? ""}
                             >
                                 <option value="" disabled hidden>
                                     Año
@@ -288,17 +283,21 @@ export const DatosPersonales = ({ user, getUserApi }) => {
                     </button>
                 )}
             </div>
-            <h2 className="mt-5">Direcciones</h2>
-            <AddressModal getUserApi={getUserApi} />
-            {user.address?.map((a, index) => (
-                <Address
-                    key={a.id}
-                    id={index}
-                    user={user}
-                    updateAddressData={updateAddressData}
-                    getUserApi={getUserApi}
-                />
-            ))}
+            <div className="profile-addresses">
+
+                <h2 className="mt-5">Direcciones</h2>
+                <AddressModal getUserApi={getUserApi} />
+                {user.address?.map((a, index) => (
+                    <Address
+
+                        key={a.id}
+                        id={index}
+                        user={user}
+                        updateAddressData={updateAddressData}
+                        getUserApi={getUserApi}
+                    />
+                ))}
+            </div>
         </>
     );
 };
