@@ -4,14 +4,14 @@ export const Favorites = () => {
   return (
     <div className="dropdown mt-2">
       <button
-        className="btn btn-outline-light dropdown-toggle border-dark"
+        className="btn btn-outline-dark dropdown-toggle border-light"
         type="button"
         id="favoritesDropdown"
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        <span className="bi bi-heart text-dark" />
-        <span className="ms-1 d-none d-md-inline text-dark">Favoritos</span>
+        <span className="bi bi-heart text-light" />
+        <span className="ms-1 d-none d-md-inline text-light">Favoritos</span>
       </button>
 
       <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="favoritesDropdown">
