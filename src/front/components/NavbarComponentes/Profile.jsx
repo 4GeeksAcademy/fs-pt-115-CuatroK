@@ -6,16 +6,16 @@ export const Profile = () => {
     const { token, logoutUser } = useAuth()
     const [open, setOpen] = useState(false)
 
-    if (!token) return <Link to="/login" className="text-white">Iniciar Sesión</Link>
+    if (!token) return <Link to="/login" className="text-dark">Iniciar Sesión</Link>
 
     return (
         <div className="position-relative text-end">
             <button
-                className="btn btn-outline-dark mt-2"
+                className="btn btn-outline-light mt-2 border-dark"
                 style={{ width: 50, height: 50 }}
                 onClick={() => setOpen(!open)}
             >
-                <i className="fa-sharp fa-regular fa-circle-user text-warning"></i>
+                <i className="fa-sharp fa-regular fa-circle-user text-dark"></i>
             </button>
 
             {open && (

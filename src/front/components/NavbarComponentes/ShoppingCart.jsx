@@ -33,14 +33,14 @@ export const ShoppingCart = () => {
         return (
                 <div className="mt-2">
                         <button
-                                className="btn btn-outline-dark"
+                                className="btn btn-outline-light border-dark"
                                 type="button"
                                 data-bs-toggle="offcanvas"
                                 data-bs-target="#cartPanel"
                                 aria-controls="cartPanel"
                                 style={{ width: "50px", height: "50px" }}
                         >
-                                <i className="fa-solid fa-cart-shopping text-warning"></i>
+                                <i className="fa-solid fa-cart-shopping text-dark"></i>
                         </button>
 
                         <div
