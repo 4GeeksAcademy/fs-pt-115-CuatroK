@@ -22,7 +22,7 @@ export const SearchBar = () => {
       onMouseLeave={() => busqueda === "" && setShowSearch(false)}
     >
       <div className="search-icon-only">
-        <i className="fa-sharp fa-solid fa-magnifying-glass text-dark"></i>
+        <i className="fa-sharp fa-solid fa-magnifying-glass text-light"></i>
       </div>
 
       <input
