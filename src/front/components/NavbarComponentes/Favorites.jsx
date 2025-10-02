@@ -67,15 +67,15 @@ export const Favorites = () => {
   return (
     <div className="dropdown mt-2">
       <button
-        className="btn btn-outline-light dropdown-toggle border-dark d-inline-flex align-items-center"
+        className="btn btn-outline-dark dropdown-toggle border-light d-inline-flex align-items-center"
         type="button"
         id="favoritesDropdown"
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        <i className="bi bi-heart text-warning" style={{ fontSize: 20, lineHeight: 1 }} />
-        <p className="m-0 ms-2 d-none d-md-inline text-warning">Favoritos</p>
-        <p className="m-0 ms-2 fw-bold text-warning">{favIds.length}</p>
+        <i className="bi bi-heart text-light" style={{ fontSize: 20, lineHeight: 1 }} />
+        <p className="m-0 ms-2 d-none d-md-inline text-light">Favoritos</p>
+        <p className="m-0 ms-2 fw-bold text-light">{favIds.length}</p>
       </button>
 
       <ul
