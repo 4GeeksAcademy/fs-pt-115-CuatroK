@@ -64,7 +64,7 @@ export const router = createBrowserRouter(
 
         <Route path="resultados/:busqueda" element={<SearchResults />} />
         <Route path="demagogo" element={<Demagogo />}></Route>
-
+        
         <Route path="/catalogo/:category" element={<Catalogo />} />
         <Route path="/producto/:idOrSlug" element={<ProductoPage />} />
 
