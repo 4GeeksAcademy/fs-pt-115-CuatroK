@@ -1,44 +1,93 @@
-.category-container {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
-  padding: 20px;
-}
-
 .category-button {
   width: 150px;
-  height: 150px;
-  transition: all 0.3s ease;
-  border-radius: 12px;
+  height: 100px;
+  transition: all 0.4s ease;
+  border-radius: 16px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #b8954f;
-  color: white;
+  background: linear-gradient(145deg, #caa85f, #a07c3a);
+  color: #fff8e7;
   cursor: pointer;
   font-size: 18px;
+  font-family: 'Cormorant Garamond', serif;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e3c78f;
   position: relative;
-}
-
-.compact {
-  width: 120px;
-  height: 60px;
-  font-size: 16px;
-}
-
-.expanded {
-  width: 200px;
-  height: 200px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .category-button:hover {
   background-color: transparent;
+  border: 1px solid #d4af37;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  transform: scale(1.05);
 }
+
 
 .category-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 16px;
+  border: 2px solid #d4af37;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.btn-danger.category-button {
+  background: linear-gradient(135deg, #a94442, #d9534f);
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-danger.category-button:hover {
+  background: #fff;
+  color: #a94442;
+  border: 1px solid #a94442;
+  transform: scale(1.05);
+}
+.calculator-button {
+  width: 150px;
+  height: 100px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  padding: 12px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #b03e3e, #d9534f);
+  color: #fff;
+  font-weight: bold;
+  border: 1px solid #e3c78f;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+  transition: all 0.4s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.calculator-button:hover {
+  background: linear-gradient(135deg, #a2550d, #f5e6c4);
+  color: #a94442;
+  border: 1px solid #a94442;
+  transform: scale(1.05);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+}
+
+.calculator-label {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  word-break: break-word;
+  white-space: normal;
+  color: inherit;
+  padding: 4px;
 }
