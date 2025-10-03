@@ -152,7 +152,7 @@ export const Carrito = () => {
                                 <Link to="/payment">
                                     <button
                                         type="button"
-                                        className="btn btn-warning btn-warning-custom fs-5 mt-3 w-75"
+                                        className="btn btn-warning btn-warning-custom fs-5 mt-3 w-75 ms-5"
                                     >
                                         Realizar compra
                                     </button>

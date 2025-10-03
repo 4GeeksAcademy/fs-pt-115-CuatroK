@@ -57,6 +57,7 @@ export const postJewell = async (jewell, setLoading, setSuccessful) => {
     setSuccessful("Joya creada satisfactoriamente");
     return await response.json();
   } catch (error) {
+    setSuccessful("Hubo un error en la creación de la joya");
     console.error("❌ postJewell error:", error.message);
     throw error;
   } finally {
@@ -64,7 +65,12 @@ export const postJewell = async (jewell, setLoading, setSuccessful) => {
   }
 };
 
-export const updateJewell = async (idOrSlug, formData, setSaving) => {
+export const updateJewell = async (
+  idOrSlug,
+  formData,
+  setSaving,
+  setUpdateSuccessfull
+) => {
   try {
     const res = await fetch(`${API_BASE_URL}/api/jewells/${idOrSlug}`, {
       method: "PUT",
@@ -72,11 +78,28 @@ export const updateJewell = async (idOrSlug, formData, setSaving) => {
       body: JSON.stringify(formData),
     });
     if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
-    alert("Producto actualizado ✅");
+    setUpdateSuccessfull("Se actualizo la joya correctamente");
   } catch (err) {
+    setUpdateSuccessfull(
+      "No se pudo actualizar la joya, verifica los datos colocados"
+    );
     console.error(err);
-    alert("Error al actualizar producto ❌");
   } finally {
     setSaving(false);
+  }
+};
+
+export const deleteJewell = async (jewell_id, setDeleting) => {
+  setDeleting(true);
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/jewells/${jewell_id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+  } catch (error) {
+    console.error(err);
+  } finally {
+    setDeleting(false);
   }
 };

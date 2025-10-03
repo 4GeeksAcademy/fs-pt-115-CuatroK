@@ -1,11 +1,11 @@
 from flask import jsonify, Blueprint, request, render_template
 from flask_cors import CORS
-from api.extentions import db, mail
+from api.extentions import db
 from api.models.discount_model import Discount
 from api.models.user_model import User
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from datetime import datetime, timedelta
-from flask_mail import Message
+from api.mail_config import send_email, EmailError
 import os
 import secrets
 import string
@@ -58,25 +58,25 @@ def create_discount():
         active=True
     )
 
-    # if new_discount:
-    #     frontend_url = os.getenv("VITE_STRIPE_RETURN_URL")
-
-    #     body_message = render_template(
-    #         "coupon_message.html",
-    #         username=user_obj.username,
-    #         discount_code=new_discount.discount_code,
-    #         expiration_date=new_discount.expiration_date.strftime("%d/%m/%Y"),
-    #         total=data.get("total"),
-    #         reset_link=frontend_url,
-    #         now=datetime.utcnow()
-    #     )
-
-    #     message = Message(
-    #         subject="¡Has recibido un cupon! — CuatroK",
-    #         recipients=[user_obj.email],
-    #         html=body_message
-    #     )
-    #     mail.send(message)
+    if new_discount:
+        frontend_url = os.getenv("VITE_STRIPE_RETURN_URL")
+        body_message = render_template(
+            "coupon_message.html",
+            username=user_obj.username,
+            discount_code=new_discount.discount_code,
+            expiration_date=new_discount.expiration_date.strftime("%d/%m/%Y"),
+            total=data.get("total"),
+            reset_link=frontend_url,
+            now=datetime.utcnow()
+        )
+        try:
+            send_email(
+                subject="¡Has recibido un cupon! — CuatroK",
+                to_email=user_obj.email,
+                html=body_message
+            )
+        except EmailError as e:
+            print(f'[email] error enviando bienvenida: {e}')
 
     db.session.add(new_discount)
     db.session.commit()

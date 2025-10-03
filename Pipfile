@@ -25,7 +25,8 @@ flask-cors = "*"
 flask = "*"
 python-dotenv = "*"
 tomli = "*"
-
+requests = "*"
+sendgrid = "*"
 
 [requires]
 python_version = "3.13"

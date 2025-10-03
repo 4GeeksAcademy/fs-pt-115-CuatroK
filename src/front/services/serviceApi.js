@@ -147,14 +147,18 @@ export const ChangePassword = async (userEmail, setAlert) => {
         email: userEmail,
       }),
     });
-    setAlert(
-      "Si tenemos un correo registrado le enviaremos un link para reestablecer su contraseña"
-    );
+    if (setAlert) {
+      setAlert(
+        "Si tenemos un correo registrado le enviaremos un link para reestablecer su contraseña"
+      );
+    }
   } catch (error) {
     console.error(error);
-    setAlert(
-      "Si tenemos un correo registrado le enviaremos un link para reestablecer su contraseña"
-    );
+    if (setAlert) {
+      setAlert(
+        "Si tenemos un correo registrado le enviaremos un link para reestablecer su contraseña"
+      );
+    }
   }
 };
 

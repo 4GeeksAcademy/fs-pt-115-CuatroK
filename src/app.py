@@ -3,7 +3,7 @@ import os
 from flask import Flask, jsonify, send_from_directory
 from flask_migrate import Migrate
 from api.utils import APIException, generate_sitemap
-from api.extentions import db, mail
+from api.extentions import db
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
@@ -80,15 +80,6 @@ def serve_any_other_file(path):
     response.cache_control.max_age = 0
     return response
 
-
-app.config["MAIL_SERVER"] = "smtp.gmail.com"
-app.config["MAIL_PORT"] = 587
-app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USE_SSL"] = False
-app.config["MAIL_USERNAME"] = "empresacuatroksupreme@gmail.com"
-app.config["MAIL_PASSWORD"] = "odms gqiu pkak hhin"
-app.config["MAIL_DEFAULT_SENDER"] = "empresacuatroksupreme@gmail.com"
-mail.init_app(app)
 
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))

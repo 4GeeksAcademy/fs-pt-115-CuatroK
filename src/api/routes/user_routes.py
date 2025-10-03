@@ -1,10 +1,10 @@
-from flask import Flask, request, jsonify, Blueprint, render_template, url_for
+from flask import Flask, request, jsonify, Blueprint, render_template
 from flask_cors import CORS
 from api.models.user_model import User, UserDirection
 from api.models.models_joyas import Jewell
-from api.extentions import db, mail
+from api.extentions import db
+from api.mail_config import send_email, EmailError
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt
-from flask_mail import Message
 from datetime import date, timedelta, datetime
 import os
 
@@ -40,18 +40,20 @@ def create_user():
     db.session.add(new_user)
     db.session.commit()
 
-    # frontend_url = os.getenv("VITE_STRIPE_RETURN_URL")
-    # body_message = render_template(
-    #     "welcome_message.html",
-    #     username=new_user.username,
-    #     reset_link=frontend_url,
-    #     now=datetime.utcnow())
-    # message = Message(
-    #     subject="Bienvenido joven",
-    #     recipients=[data.get("email")],
-    #     html=body_message
-    # )
-    # mail.send(message)
+    frontend_url = os.getenv("VITE_STRIPE_RETURN_URL")
+    body_message = render_template(
+        "welcome_message.html",
+        username=new_user.username,
+        reset_link=frontend_url,
+        now=datetime.utcnow())
+    try:
+        send_email(
+            subject="Bienvenido joven",
+            to_email=data.get("email"),
+            html=body_message
+        )
+    except EmailError as e:
+        print(f'[email] error enviando bienvenida: {e}')
 
     return jsonify({'msg': 'user created successfully',
                     'new user': new_user.serialize()}), 200
@@ -109,7 +111,7 @@ def get_user():
 
 @user_bp.route("/convert_admin", methods=["POST"])
 def convert_client_to_admin():
-    user_id = 4  # CAMBIAR ÉSTE NÚMERO EL CUAL ES UN ID AL NUMERO ID DEL USUARIO QUE SE QUIERE CONVERTIR EN ADMIN
+    user_id = 3  # CAMBIAR ÉSTE NÚMERO EL CUAL ES UN ID AL NUMERO ID DEL USUARIO QUE SE QUIERE CONVERTIR EN ADMIN
     if not user_id:
         return jsonify({'MSG': 'LEAVE RAT'}), 400
     user = db.session.get(User, user_id)
@@ -284,18 +286,21 @@ def email_change_password():
             expires_delta=timedelta(minutes=15),
             additional_claims={'type': "pw_reset"}
         )
-        frontend_url = f'https://musical-robot-g44jp7xjvrwj299vr-3000.app.github.dev/reset-password-form?token={reset_token}'
+        frontend_url = f'https://sample-service-name-jk84.onrender.com?token={reset_token}'
         body_message = render_template(
             "email_change_password.html",
             username=user.username,
             reset_link=frontend_url
         )
-        message = Message(
-            subject="Restablece tu contraseña — CuatroK",
-            recipients=[user.email],
-            html=body_message
-        )
-        mail.send(message)
+        try:
+            send_email(
+                subject="Restablece tu contraseña — CuatroK",
+                to_email=email,
+                html=body_message
+            )
+        except EmailError as e:
+            print(f'[email] error enviando bienvenida: {e}')
+
         return jsonify(msg='se ha enviado un correo con instrucciones'), 200
 
     return jsonify(msg='Hubo un error al enviar el correo'), 200
