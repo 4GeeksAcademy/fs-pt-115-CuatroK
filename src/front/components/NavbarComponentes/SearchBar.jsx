@@ -24,7 +24,7 @@ export const SearchBar = () => {
       <div className="search-icon-only">
         <i className="fa-sharp fa-solid fa-magnifying-glass text-light"></i>
       </div>
-
+    
       <input
         type="text"
         className={`form-control search-input ms-2 ${showSearch ? "visible" : "hidden"}`}

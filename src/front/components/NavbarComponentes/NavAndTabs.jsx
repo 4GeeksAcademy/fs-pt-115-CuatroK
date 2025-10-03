@@ -5,7 +5,7 @@ export const NavAndTabs = () => {
   const [activeTab, setActiveTab] = useState(null);
   return (
     <div>
-      <button className={`btn btn-warning me-2 text-light border-0 ${activeTab === "productos" ? "active" : ""} mt-1`}
+      <button className={`btn btn-warning me-2 text-light border-0 ms-3 ${activeTab === "productos" ? "active" : ""} mt-1`}
         onClick={() => setActiveTab("productos")}
         style={{ backgroundColor: ' #4a4a4a' }} > Productos
       </button> <button

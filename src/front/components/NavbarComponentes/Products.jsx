@@ -35,7 +35,7 @@ export const Products = () => {
 
   return (
     <div className="row" style={{ width: "100vw", margin: 0, padding: 0 }}>
-      <div className="d-flex justify-content-center align-items-center flex-nowrap overflow-auto gap-3 p-3 page-background-color">
+      <div className="d-flex justify-content-center align-items-center flex-nowrap overflow-auto gap-5 p-3 page-background-color">
         {categories.map((cat, index) => {
           const toUrl = `/catalogo/${encodeURIComponent(cat.apiName)}`;
           const isHovered = hovered === index;
@@ -68,10 +68,10 @@ export const Products = () => {
 
         <Link to="/calculadora">
           <button
-            className={`btn btn-danger mb-3 category-button mt-3`}
+            className={`btn btn-danger mb-3 calculator-button mt-3`}
             style={{ borderRadius: "12px" }}
           >
-            Calculadora de Metales
+            <span className="calculator-label">Calculadora de Metales</span>
           </button>  
         </Link>
       </div>
