@@ -45,6 +45,7 @@ import { ProductPageAdmin } from "./pages/admin/isAdmin/ProductPageAdmin";
 import { Demagogo } from "./pages/public/Demagogo";
 import { ContactPhone } from "./components/NavbarComponentes/ContactPhone";
 
+import TerminosCondiciones  from "./components/PaginasFooter/TerminosCondiciones"
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
@@ -62,6 +63,8 @@ export const router = createBrowserRouter(
         <Route path="contactanos" element={<ContactPhone />} />
         <Route path="/" element={<Products />} />
 
+        <Route path="/terminos" element={<TerminosCondiciones/>} />
+        
         <Route path="resultados/:busqueda" element={<SearchResults />} />
         <Route path="demagogo" element={<Demagogo />}></Route>
         

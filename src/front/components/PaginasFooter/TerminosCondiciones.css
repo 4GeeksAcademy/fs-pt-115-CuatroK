@@ -1,0 +1,121 @@
+:root {
+  --bg-beige-suave: #f9f5f0;
+  --bg-beige-calido: #f5f0e6;
+  --bg-beige-gris: #e8e3dc;
+
+  --gold: #c2a15d;
+  --gold-soft: #d4b97a;
+  --gold-dark: #b8954f;
+  --gold-border: #f1e0b3;
+
+  --burgundy: #7a1f3d;
+
+  --error: #e05c5c;
+  --error-soft: #f87171;
+  --error-strong: #ef4444;
+
+  --ink: #4a4a4a;
+  --muted: #6c6c6c;
+
+  --radius-card: 16px;
+  --shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 18px 40px rgba(0, 0, 0, 0.08);
+  --focus-ring: 0 0 0 3px rgba(210, 185, 122, 0.35);
+}
+
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+.tk-body {
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--ink);
+  background: linear-gradient(180deg, var(--bg-beige-suave), var(--bg-beige-calido));
+}
+a { color: var(--burgundy); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1, h2, h3 { color: var(--burgundy); line-height: 1.2; }
+p { line-height: 1.7; }
+
+
+.tk-container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+.tk-header {
+  position: sticky; top: 0; z-index: 20;
+  backdrop-filter: saturate(150%) blur(6px);
+  background: color-mix(in srgb, var(--bg-beige-suave) 85%, white 15%);
+  border-bottom: 1px solid var(--bg-beige-gris);
+}
+
+.tk-brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: 0.4px; }
+.tk-mark {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 60%, var(--gold-border) 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 6px 18px rgba(0,0,0,.08);
+  position: relative;
+}
+.tk-mark::after {
+  content: "K"; position: absolute; inset: 0;
+  display: grid; place-items: center; color: var(--burgundy); font-weight: 900;
+}
+.tk-crumbs { font-size: 14px; color: var(--muted); }
+
+.tk-hero { padding: 40px 0 8px; }
+.tk-hero h1 { margin: 12px 0 8px; font-size: clamp(28px, 4.2vw, 42px); }
+.tk-hero p { margin: 0; color: var(--muted); }
+
+.tk-badge { display: inline-block; padding: 6px 10px; border-radius: 999px; background: var(--bg-beige-gris); font-size: 12px; color: var(--muted); }
+
+
+.tk-card {
+  background: #fff;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--gold-border);
+  overflow: hidden;
+}
+
+.tk-toc {
+  padding: 18px 20px;
+  background: linear-gradient(180deg, #fff, var(--bg-beige-suave));
+  border-bottom: 1px solid var(--bg-beige-gris);
+}
+.tk-toc h3 { margin: 0 0 10px; font-size: 16px; color: var(--ink); }
+.tk-toc ul { margin: 0; padding: 0; list-style: none; columns: 2; gap: 24px; }
+.tk-toc li { padding: 6px 0; }
+
+.tk-content { padding: 28px; }
+.tk-content section { padding: 16px 0; border-top: 1px dashed var(--bg-beige-gris); }
+.tk-content section:first-child { border-top: 0; padding-top: 0; }
+.tk-content h2 { margin: 0 0 8px; font-size: clamp(20px, 2.6vw, 26px); }
+
+.tk-note {
+  padding: 14px 16px; border-radius: 12px;
+  background: color-mix(in srgb, var(--gold-border) 55%, white 45%);
+  border: 1px solid var(--gold-border);
+  margin: 12px 0 4px;
+}
+
+
+.tk-footer {
+  margin-top: 40px; padding: 30px 0; color: var(--muted);
+  border-top: 1px solid var(--bg-beige-gris);
+  background: color-mix(in srgb, var(--bg-beige-calido) 70%, #fff 30%);
+}
+.tk-footer-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+@media (min-width: 780px) { .tk-footer-grid { grid-template-columns: 1.2fr .8fr; } }
+
+
+details { border: 1px solid var(--bg-beige-gris); border-radius: 12px; padding: 12px 14px; background: #fff; }
+details + details { margin-top: 10px; }
+summary { cursor: pointer; font-weight: 600; color: var(--burgundy); }
+
+
+:focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: 6px; }
+
+
+@media print {
+  .tk-header, .tk-toc, .tk-footer { display: none; }
+  .tk-body { background: #fff; }
+  .tk-card { border: 0; box-shadow: none; }
+  .tk-content { padding: 0; }
+}

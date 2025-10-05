@@ -1,111 +1,99 @@
 import { useState } from "react";
 import "./Footer.css";
-
-
-import { FaFacebookF, FaInstagram, FaPinterestP, FaYoutube, FaHandshake, FaCcVisa, FaCcMastercard, FaCcAmex, FaCcPaypal } from "react-icons/fa";
-import { FiPhone, FiMail, FiBriefcase, FiHeadphones } from "react-icons/fi";
+import {
+  FaFacebookF, FaInstagram, FaPinterestP, FaYoutube,
+  FaCcVisa, FaCcMastercard, FaCcAmex, FaCcPaypal
+} from "react-icons/fa";
+import { FiPhone, FiMail, FiHeadphones } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
-	const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
+  const [agree, setAgree] = useState(false);
+  const [status, setStatus] = useState(null);
 
-	const handleSubscribe = (e) => {
-		e.preventDefault();
-		alert("Gracias por suscribirte: " + email);
-		setEmail("");
-	};
+  const submit = (e) => {
+    e.preventDefault();
+    if (!agree) return setStatus("error");
+    setStatus("ok");
+    setEmail("");
+    setAgree(false);
+    setTimeout(() => setStatus(null), 2500);
+  };
 
-	return (
-		<footer className="ft">
+  return (
+    <footer className="ft ft--dark" aria-labelledby="footer-heading">
+      <h2 id="footer-heading" className="sr-only">Información del sitio</h2>
 
+      <div className="ft-top">
+        <div className="ft-grid">
 
-			<div className="ft-wrap">
+          <section className="ft-col">
+            <h3 className="ft-title">Contacto</h3>
+            <ul className="ft-list">
+              <li><FiPhone aria-hidden="true" /> <span>Atención: </span><a href="tel:935703748">935 703 748</a></li>
+              <li><FiMail aria-hidden="true" /> <a href="mailto:CuatroK@gmail.com">CuatroK@gmail.com</a></li>
+            </ul>
 
-				<div className="col">
-					<h4>Contacto</h4>
-					<ul>
-						<li><FiPhone className="ico" /> Atención: <a href="tel:935703748">935 703 748</a></li>
-						<li><FiMail className="ico" /> <a href="mailto:CuatroK@gmail.com">CuatroK@gmail.com</a></li>
-						<li><FiBriefcase className="ico" /> <a href="/trabaja">Trabaja con nosotros</a></li>
-						<li><FaHandshake className="ico" /> <a href="/colabora">Colaboraciones</a></li>
-					</ul>
-				</div>
+            <div className="support" role="group" aria-label="Atención al cliente">
+              <div className="support-icon" aria-hidden="true"><FiHeadphones /></div>
+              <div>
+                <div className="muted">Atención al cliente</div>
+                <a className="tel" href="tel:935703748">935 703 748</a>
+              </div>
+            </div>
+          </section>
 
+          <section className="ft-col">
+            <h3 className="ft-title">Información</h3>
+            <ul className="ft-list">
+              <li><Link to="../terminos">Términos de uso</Link></li>
+              <li><a href="/cookies">Política de cookies</a></li>
+              <li><a href="/privacidad">Privacidad</a></li>
+            </ul>
+          </section>
 
-				<div className="col">
-					<h4>Información</h4>
-					<ul>
-						<li><a href="/terminos">Términos de uso</a></li>
-						<li><a href="/cookies">Política de cookies</a></li>
-						<li><a href="/envios">Gastos de envío</a></li>
-						<li><a href="/devoluciones">Devoluciones</a></li>
-						<li><a href="/privacidad">Privacidad</a></li>
-						<li><a href="/sostenibilidad">Sostenibilidad</a></li>
-					</ul>
-				</div>
+          <section className="ft-col">
+            <h3 className="ft-title">Newsletter</h3>
+            <p className="muted">Recibe ofertas y novedades (1–2/mes).</p>
 
+            <form className="newsletter" onSubmit={submit} noValidate>
+              <label htmlFor="nl-email" className="sr-only">Correo electrónico</label>
+              <input
+                id="nl-email"
+                type="email"
+                placeholder="Tu correo"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <button type="submit" disabled={!email || !agree}>Suscribirse</button>
+            </form>
 
-				<div className="col">
-					<h4>Nuestras joyerías</h4>
-					<ul className="small">
-						<li>Serrallo Plaza (GR) — <a href="tel:958164353">958 164 353</a></li>
-						<li>Carrefour Pulianas — <a href="tel:958040890">958 040 890</a></li>
-						<li>Nevada Shopping — <a href="tel:958179705">958 179 705</a></li>
-						<li>Jaén Plaza — <a href="tel:953790390">953 790 390</a></li>
-						<li>Plaza Mayor (MLG) — <a href="tel:952026033">952 026 033</a></li>
-					</ul>
-				</div>
+            {status === "ok" && <div className="nl-alert ok">¡Gracias por suscribirte!</div>}
+            {status === "error" && <div className="nl-alert error">Debes aceptar la privacidad.</div>}
 
+            <div className="payments" aria-label="Métodos de pago">
+              <span title="VISA"><FaCcVisa /></span>
+              <span title="American Express"><FaCcAmex /></span>
+              <span title="Mastercard"><FaCcMastercard /></span>
+              <span title="PayPal"><FaCcPaypal /></span>
+            </div>
+          </section>
+        </div>
+      </div>
 
-				<div className="col">
-					<h4>Newsletter</h4>
-					<p className="muted">Recibe ofertas y novedades (1–2/mes).</p>
-
-					<form className="newsletter" onSubmit={handleSubscribe}>
-						<input
-							type="email"
-							placeholder="Tu correo"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-							required
-						/>
-						<button type="submit">Suscribirse</button>
-					</form>
-
-					<label className="muted agree">
-						<input type="checkbox" required /> Acepto la política de privacidad
-					</label>
-
-					<div className="payments" aria-label="Métodos de pago">
-						<span title="VISA"><FaCcVisa /></span>
-						<span title="American Express"><FaCcAmex /></span>
-						<span title="Mastercard"><FaCcMastercard /></span>
-						<span title="PayPal"><FaCcPaypal /></span>
-						<span>Aplázame</span>
-						<span>Sequra</span>
-					</div>
-
-					<div className="support">
-						<div className="head"><FiHeadphones /></div>
-						<div>
-							<div className="muted">Atención al cliente</div>
-							<a className="tel" href="tel:935703748">935 703 748</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-
-			<div className="ft-bottom">
-				<div className="ft-bottom-wrap">
-					<div>© {new Date().getFullYear()} CuatroK</div>
-					<div className="social">
-						<a href="https://facebook.com" target="_blank" rel="noreferrer"><FaFacebookF /></a>
-						<a href="https://youtube.com" target="_blank" rel="noreferrer"><FaYoutube /></a>
-						<a href="https://pinterest.com" target="_blank" rel="noreferrer"><FaPinterestP /></a>
-						<a href="https://instagram.com" target="_blank" rel="noreferrer"><FaInstagram /></a>
-					</div>
-				</div>
-			</div>
-		</footer>
-	);
+      <div className="ft-bottom">
+        <div className="ft-bottom-wrap">
+          <div>© {new Date().getFullYear()} CuatroK</div>
+          <div className="social" aria-label="Redes sociales">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><FaFacebookF /></a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><FaYoutube /></a>
+            <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer" aria-label="Pinterest"><FaPinterestP /></a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><FaInstagram /></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
 }

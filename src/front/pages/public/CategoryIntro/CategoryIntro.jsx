@@ -1,12 +1,12 @@
-import React from "react";
+
 const normalize = (raw = "") => {
-    const s = String(raw || "")
+    const descripción_categoria = String(raw || "")
         .toLowerCase()
         .normalize("NFD")
         .replace(/\p{Diacritic}/gu, "")
         .trim();
 
-    const singular = s.endsWith("s") ? s.slice(0, -1) : s;
+    const singular = descripción_categoria.endsWith("s") ? descripción_categoria.slice(0, -1) : descripción_categoria ;
     return singular;
 };
 

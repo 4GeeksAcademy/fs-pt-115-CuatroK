@@ -172,7 +172,7 @@ export const ProductoPage = () => {
             </div>
 
             <div className="col-12 col-md-10 order-1 order-md-2">
-              {/* viewer cuadrado y contenido centrado sin estirar */}
+              
               <div className="ratio ratio-1x1 product-viewer bg-white border rounded">
                 <img
                   src={imageGallery[activeImageIndex]}
