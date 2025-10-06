@@ -20,7 +20,6 @@ export const Cupones = () => {
     return (
 
         <div>
-            <h2>Cupones</h2>
             {
                 !couponInfo ? (
                     <div className="d-flex justify-content-center align-items-center w-100 h-100">

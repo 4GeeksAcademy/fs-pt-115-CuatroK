@@ -70,7 +70,6 @@ export const Carrito = () => {
 
     return (
         <div>
-            <h2>Carrito</h2>
 
             {cartItems.length === 0 ? (
                 <h3 className="products-card text-center py-5 my-3 profile-card">

@@ -102,6 +102,7 @@ export function CarruselIzquierda({ category, highlighted }) {
       onMouseLeave={startAutoplay}
       onTouchStart={stopAutoplay}
       onTouchEnd={startAutoplay}
+      
     >
       <button className="ce-nav ce-prev" onClick={() => scrollByCards(-1)} aria-label="Anterior">
         <i className="fa-solid fa-chevron-left" />
