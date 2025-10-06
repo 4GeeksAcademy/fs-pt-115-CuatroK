@@ -1,4 +1,3 @@
-// src/front/pages/public/Producto/ProductoPage.jsx
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { getJoyasSearch } from "../../../services/jewellsService";
@@ -23,6 +22,13 @@ const SPEC_LABELS = {
   bracelet: "Tipo de pulsera",
 };
 
+const textoStock = (producto) => {
+  const qty = Number(producto?.quantity ?? 0);
+  if (qty <= 0) return { label: "Sin stock", cls: "text-bg-danger", out: true };
+  if (qty < 10) return { label: "Últimas unidades", cls: "text-bg-warning", out: false };
+  return { label: "Stock", cls: "text-bg-success", out: false };
+};
+
 export const ProductoPage = () => {
   const { idOrSlug } = useParams();
 
@@ -33,7 +39,6 @@ export const ProductoPage = () => {
   const [mostrarMensaje, setMostrarMensaje] = useState(false);
 
   const { addToCart } = useCart();
-
   const navigate = useNavigate();
   const { token } = useAuth();
   const usuarioAutenticado = token;
@@ -51,8 +56,7 @@ export const ProductoPage = () => {
         const currentProduct = (allProducts || []).find(
           (product) =>
             String(product.id) === String(idOrSlug) ||
-            String(product.slug || "").toLowerCase() ===
-              String(idOrSlug).toLowerCase()
+            String(product.slug || "").toLowerCase() === String(idOrSlug).toLowerCase()
         );
 
         if (!componentAlive) return;
@@ -65,26 +69,14 @@ export const ProductoPage = () => {
           const matchFields = ["category", "brand", "metal", "gender", "gem"];
 
           const scoredProducts = (allProducts || [])
-            .filter(
-              (product) => String(product.id) !== String(currentProduct.id)
-            )
+            .filter((product) => String(product.id) !== String(currentProduct.id))
             .map((product) => {
               let similarityScore = 0;
 
               matchFields.forEach((fieldKey) => {
-                const currentValue = (currentProduct[fieldKey] || "")
-                  .toString()
-                  .toLowerCase()
-                  .trim();
-                const candidateValue = (product[fieldKey] || "")
-                  .toString()
-                  .toLowerCase()
-                  .trim();
-                if (
-                  currentValue &&
-                  candidateValue &&
-                  currentValue === candidateValue
-                ) {
+                const currentValue = (currentProduct[fieldKey] || "").toString().toLowerCase().trim();
+                const candidateValue = (product[fieldKey] || "").toString().toLowerCase().trim();
+                if (currentValue && candidateValue && currentValue === candidateValue) {
                   similarityScore += 1;
                 }
               });
@@ -92,18 +84,14 @@ export const ProductoPage = () => {
               if (
                 currentProduct.category &&
                 product.category &&
-                String(currentProduct.category).toLowerCase() ===
-                  String(product.category).toLowerCase()
+                String(currentProduct.category).toLowerCase() === String(product.category).toLowerCase()
               ) {
                 similarityScore += 0.5;
               }
 
               return { ...product, similarityScore };
             })
-            .sort(
-              (productA, productB) =>
-                productB.similarityScore - productA.similarityScore
-            );
+            .sort((a, b) => b.similarityScore - a.similarityScore);
 
           let topRelated = scoredProducts.slice(0, 4);
 
@@ -113,14 +101,10 @@ export const ProductoPage = () => {
                 product.id !== currentProduct.id &&
                 product.category &&
                 currentProduct.category &&
-                String(product.category).toLowerCase() ===
-                  String(currentProduct.category).toLowerCase() &&
+                String(product.category).toLowerCase() === String(currentProduct.category).toLowerCase() &&
                 !topRelated.find((picked) => picked.id === product.id)
             );
-            topRelated = [
-              ...topRelated,
-              ...sameCategoryFill.slice(0, 4 - topRelated.length),
-            ];
+            topRelated = [...topRelated, ...sameCategoryFill.slice(0, 4 - topRelated.length)];
           }
 
           setRelatedProducts(topRelated);
@@ -139,8 +123,7 @@ export const ProductoPage = () => {
     };
   }, [idOrSlug]);
 
-  if (loadStatus === "loading")
-    return <div className="container py-4">Cargando…</div>;
+  if (loadStatus === "loading") return <div className="container py-4">Cargando…</div>;
 
   if (loadStatus === "error" || !currentItem) {
     return (
@@ -150,21 +133,18 @@ export const ProductoPage = () => {
     );
   }
 
+  const estado = textoStock(currentItem);
+  const hasInventory = !estado.out;
+
   const imageGallery =
     Array.isArray(currentItem.images) && currentItem.images.length > 0
       ? currentItem.images
       : [currentItem.url_image];
 
-  const specList = Object.entries(SPEC_LABELS)
+  const SPEC_LABELS_ENTRIES = Object.entries(SPEC_LABELS);
+  const specList = SPEC_LABELS_ENTRIES
     .map(([dataKey, label]) => [label, currentItem?.[dataKey]])
-    .filter(
-      ([, value]) =>
-        value !== null &&
-        value !== undefined &&
-        String(value).trim() !== ""
-    );
-
-  const hasInventory = (currentItem.quantity ?? 0) > 0;
+    .filter(([, value]) => value !== null && value !== undefined && String(value).trim() !== "");
 
   return (
     <div className="container py-4">
@@ -176,85 +156,63 @@ export const ProductoPage = () => {
                 {imageGallery.map((imageSrc, imageIndex) => (
                   <button
                     key={imageIndex}
-                    className={`thumb-btn btn p-0 border ${
-                      imageIndex === activeImageIndex ? "thumb-active" : ""
-                    }`}
+                    className={`thumb-btn btn p-0 border ${imageIndex === activeImageIndex ? "thumb-active" : ""}`}
                     onClick={() => setActiveImageIndex(imageIndex)}
                   >
                     <img
                       src={imageSrc}
                       alt={`${currentItem.name} ${imageIndex + 1}`}
                       onError={(event) => {
-                        event.currentTarget.src =
-                          "https://via.placeholder.com/300?text=Sin+imagen";
+                        event.currentTarget.src = "https://via.placeholder.com/300?text=Sin+imagen";
                       }}
                     />
                   </button>
                 ))}
               </div>
             </div>
+
             <div className="col-12 col-md-10 order-1 order-md-2">
-              <div className="ratio ratio-1x1 bg-white border rounded d-flex align-items-center justify-content-center">
+              
+              <div className="ratio ratio-1x1 product-viewer bg-white border rounded">
                 <img
                   src={imageGallery[activeImageIndex]}
                   alt={currentItem.name}
                   className="img-contain p-3"
                   onError={(event) => {
-                    event.currentTarget.src =
-                      "https://via.placeholder.com/800?text=Sin+imagen";
+                    event.currentTarget.src = "https://via.placeholder.com/800?text=Sin+imagen";
                   }}
                 />
-                <div className="position-absolute top-0 start-0 m-2 d-flex flex-column gap-2">
-                  {currentItem.highlighted && (
-                    <span className="badge bg-dark">Nuevo</span>
-                  )}
-                  {currentItem.discount && (
-                    <span className="badge bg-danger">
-                      -{currentItem.discount}%
-                    </span>
-                  )}
+
+                <div className="position-absolute top-0 start-0 m-2 d-flex align-items-start flex-column gap-2">
+                  {currentItem.highlighted && <span className="badge bg-dark">Nuevo</span>}
+                  {currentItem.discount && <span className="badge bg-danger">-{currentItem.discount}%</span>}
                 </div>
               </div>
             </div>
           </div>
         </div>
+
         <div className="col-12 col-lg-5">
-          <div
-            className="card shadow-sm sticky-lg-top sticky-buy-box position-relative"
-            style={{ zIndex: 1 }}
-          >
+          <div className="card shadow-sm sticky-lg-top sticky-buy-box position-relative" style={{ zIndex: 1 }}>
             <div className="card-body">
-              <div className="d-flex align-items-center justify-content-between mb-2">
-                <span className="badge text-bg-light">
-                  {currentItem.category ?? "Sin categoría"}
-                </span>
-                {hasInventory ? (
-                  <span className="badge text-bg-success">
-                    Stock: {currentItem.quantity}
-                  </span>
-                ) : (
-                  <span className="badge text-bg-danger">Sin stock</span>
-                )}
+              <div className="d-flex align-items-center mb-2">
+                <span className={`badge ${estado.cls} ms-auto`}>{estado.label}</span>
               </div>
 
               <h1 className="h4 fw-bold mb-1">{currentItem.name}</h1>
 
               <div className="d-flex align-items-baseline gap-2 mb-3">
-                <span className="fs-3 fw-bold text-danger">
-                  {Number(currentItem.price)?.toFixed(2)} €
-                </span>
+                <span className="fs-3 fw-bold text-danger">{Number(currentItem.price)?.toFixed(2)} €</span>
                 {currentItem.price_original && (
                   <span className="text-muted text-decoration-line-through">
                     {Number(currentItem.price_original).toFixed(2)} €
                   </span>
                 )}
-                {currentItem.discount && (
-                  <span className="badge bg-danger ms-2">
-                    -{currentItem.discount}%
-                  </span>
-                )}
+                {currentItem.discount && <span className="badge bg-danger ms-2">-{currentItem.discount}%</span>}
               </div>
+
               <p className="text-muted mb-3">{currentItem.description}</p>
+
               <div className="d-grid gap-2">
                 <button
                   className="btn btn-dark btn-lg"
@@ -263,33 +221,22 @@ export const ProductoPage = () => {
                     ev.stopPropagation();
 
                     if (!usuarioAutenticado) {
-                      setMensajeCarrito(
-                        "Debes iniciar sesión para añadir productos 🛑"
-                      );
+                      setMensajeCarrito("Debes iniciar sesión para añadir productos 🛑");
                       setMostrarMensaje(true);
-
-                      setTimeout(() => {
-                        navigate("/login");
-                      }, 1500);
+                      setTimeout(() => navigate("/login"), 1500);
                     } else {
                       addToCart(currentItem.id);
                       setMensajeCarrito("Producto añadido al carrito ✅");
                       setMostrarMensaje(true);
                     }
 
-                    setTimeout(() => {
-                      setMostrarMensaje(false);
-                    }, 3000);
+                    setTimeout(() => setMostrarMensaje(false), 3000);
                   }}
                 >
                   Añadir al carrito
                 </button>
 
-                {mostrarMensaje && (
-                  <div className="alert alert-warning text-center mt-3">
-                    {mensajeCarrito}
-                  </div>
-                )}
+                {mostrarMensaje && <div className="alert alert-warning text-center mt-3">{mensajeCarrito}</div>}
               </div>
 
               {specList.length > 0 && (
@@ -298,16 +245,9 @@ export const ProductoPage = () => {
                   <h2 className="h6 mb-3">Ficha técnica</h2>
                   <dl className="row specs-list">
                     {specList.map(([labelText, valueText]) => (
-                      <div
-                        key={labelText}
-                        className="col-12 d-flex py-1 border-bottom border-200"
-                      >
-                        <dt className="spec-label text-muted me-2">
-                          {labelText}
-                        </dt>
-                        <dd className="mb-0 spec-value">
-                          {String(valueText)}
-                        </dd>
+                      <div key={labelText} className="col-12 d-flex py-1 border-bottom border-200">
+                        <dt className="spec-label text-muted me-2">{labelText}</dt>
+                        <dd className="mb-0 spec-value">{String(valueText)}</dd>
                       </div>
                     ))}
                   </dl>
@@ -333,7 +273,7 @@ export const ProductoPage = () => {
                   ? relatedItem.images[0]
                   : relatedItem.url_image;
 
-              const relatedHasInventory = (relatedItem.quantity ?? 0) > 0;
+              const relEstado = textoStock(relatedItem);
 
               return (
                 <div key={relatedItem.id} className="col-6 col-md-4 col-lg-3">
@@ -341,41 +281,26 @@ export const ProductoPage = () => {
                     to={`/producto/${relatedItem.slug || relatedItem.id}`}
                     className="card card-related h-100 text-decoration-none"
                   >
-                    <div className="ratio ratio-1x1 bg-white">
+                    <div className="ratio ratio-1x1 product-viewer bg-white">
                       <img
                         className="img-contain p-2"
                         src={relatedImage}
                         alt={relatedItem.name}
                         onError={(event) => {
-                          event.currentTarget.src =
-                            "https://via.placeholder.com/600x600?text=Sin+imagen";
+                          event.currentTarget.src = "https://via.placeholder.com/600x600?text=Sin+imagen";
                         }}
                       />
                       {relatedItem.discount && (
-                        <span className="badge bg-danger position-absolute m-2">
-                          -{relatedItem.discount}%
-                        </span>
+                        <span className="badge bg-danger position-absolute m-2">-{relatedItem.discount}%</span>
                       )}
                     </div>
 
                     <div className="card-body">
-                      <div className="d-flex justify-content-between align-items-start mb-1">
-                        <span className="badge text-bg-light">
-                          {relatedItem.category || "—"}
-                        </span>
-                        {relatedHasInventory ? (
-                          <span className="badge text-bg-success">Stock</span>
-                        ) : (
-                          <span className="badge text-bg-danger">
-                            Sin stock
-                          </span>
-                        )}
+                      <div className="d-flex align-items-start mb-1">
+                        <span className={`badge ${relEstado.cls} ms-auto`}>{relEstado.label}</span>
                       </div>
 
-                      <h4
-                        className="card-title fs-6 text-truncate"
-                        title={relatedItem.name}
-                      >
+                      <h4 className="card-title fs-6 text-truncate" title={relatedItem.name}>
                         {relatedItem.name}
                       </h4>
 

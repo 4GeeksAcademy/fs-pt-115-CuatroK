@@ -1,66 +1,162 @@
+.product-viewer {
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-card);
+  background: #fff;
+  position: relative; 
+  overflow: hidden; 
+  
+}
+
+.product-viewer .img-contain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.badge.bg-dark {
+  background: linear-gradient(180deg, var(--burgundy), #611531) !important;
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.22rem 0.45rem;
+  border-radius: 6px;
+}
+
 .gallery-thumbs {
   max-height: 520px;
 }
 .thumb-btn {
   width: 100%;
   aspect-ratio: 1 / 1;
-  background: transparent;
+  background: #fff;
+  border: 1px solid var(--gold-border);
   border-radius: 0.5rem;
   overflow: hidden;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
+    border-color 0.15s ease;
 }
 .thumb-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  border-color: var(--gold-soft);
 }
 .thumb-btn img {
-  object-fit: cover;
   width: 100%;
   height: 100%;
+  object-fit: cover; 
 }
 .thumb-active {
-  outline: 2px solid var(--bs-dark);
+  outline: 2px solid var(--burgundy);
 }
 
-.img-contain {
-  object-fit: contain;
-  width: 100%;
-  height: 100%;
+@media (max-width: 767.98px) {
+  .gallery-thumbs {
+    display: flex !important;
+    gap: 0.5rem;
+    overflow-x: auto;
+    max-height: none;
+    padding-bottom: 0.25rem;
+  }
+  .gallery-thumbs .thumb-btn {
+    min-width: 64px; /* tamaño mínimo táctil */
+    max-width: 96px;
+  }
 }
 
+@media (max-width: 991.98px) {
+  .sticky-buy-box {
+    position: static !important; /* quita el sticky */
+    top: auto !important;
+    box-shadow: var(--shadow-soft);
+  }
+  .product-viewer {
+    border-radius: 12px;
+  }
+}
+
+@media (min-width: 992px) {
+  .product-viewer {
+    max-height: 78vh; 
+  }
+}
+
+.sticky-buy-box.card,
 .sticky-buy-box {
-  top: 1.5rem;
-  border-radius: 1rem;
+  border: 1px solid var(--gold-border) !important;
+  border-radius: var(--radius-card);
+  background: #fff;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
 }
 
-.card {
-  border-radius: 1rem;
+.btn.btn-dark,
+.btn.btn-dark:disabled {
+  background: var(--burgundy) !important;
+  border-color: var(--burgundy) !important;
+  color: #fff !important;
+  border-radius: 999px;
+  padding: 0.6rem 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  box-shadow: 0 6px 18px rgba(122, 31, 61, 0.18);
+}
+.btn.btn-dark:hover {
+  filter: brightness(1.03);
+  box-shadow: 0 10px 24px rgba(122, 31, 61, 0.22);
+}
+.btn.btn-dark:focus {
+  outline: none;
+  box-shadow: 0 10px 24px rgba(122, 31, 61, 0.22), var(--focus-ring);
 }
 
-
-.specs-list .spec-label {
-  min-width: 160px;
+.price {
+  font-weight: 800;
+  color: var(--gold-dark);
+  letter-spacing: 0.2px;
+  margin-top: 0.15rem;
 }
+.price small {
+  font-weight: 700;
+  opacity: 0.8;
+  margin-left: 1px;
+  font-size: 0.85em;
+}
+
+.badge.text-bg-success {
+  background: var(--gold-soft) !important;
+  color: #3b2a0d !important;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+.badge.text-bg-warning {
+  background: var(--gold) !important;
+  color: #fff !important;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+.badge.text-bg-danger {
+  background: var(--error-strong) !important;
+  color: #fff !important;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
 .border-200 {
   border-color: #eceff3 !important;
 }
-
-.badge.bg-danger,
-.badge.text-bg-danger {
-  font-weight: 700;
-}
-.badge.bg-dark {
-  font-weight: 700;
+.specs-list .spec-label {
+  min-width: 160px;
 }
 
-.card-related {
-  border: 1px solid #eee;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+.alert-danger {
+  background: #fff;
+  border: 1px solid var(--error-soft);
+  color: var(--error-strong);
 }
-.card-related:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
-.related-specs li {
-  line-height: 1.2;
+.alert-warning {
+  background: #fff;
+  border: 1px solid var(--gold-border);
+  color: var(--burgundy);
 }
