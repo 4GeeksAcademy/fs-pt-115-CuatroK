@@ -69,7 +69,7 @@ export const Navbar = () => {
 
         {
           menuAbierto && (
-            <div className="d-lg-none px-3 py-2">
+            <div className="d-lg-none px-3 py-2"> 
               <NavAndTabs />
             </div>
           )
