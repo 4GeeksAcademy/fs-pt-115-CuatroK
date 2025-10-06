@@ -140,7 +140,11 @@ export function CarruselDerecha({ category, highlighted }) {
 
                 {passHighlight(item) && <span className="badge top-right">Destacado</span>}
 
-                <FavoriteButton itemId={item.id} initiallyActive={isFav} />
+                {user && (
+                  <div onClick={(e) => e.stopPropagation()}>
+                    <FavoriteButton itemId={item.id} initiallyActive={isFav} />
+                  </div>
+                )}
               </div>
             );
           })}

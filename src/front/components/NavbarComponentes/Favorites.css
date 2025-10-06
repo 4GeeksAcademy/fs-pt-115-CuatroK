@@ -1,0 +1,66 @@
+.favorites-btn{
+  border-radius:999px;
+  padding:.55rem .9rem;
+  border:1px solid #caa85b;
+  background:#0f0f0f;
+  color:#ffffff;
+  box-shadow:0 0 0 1px rgba(202,168,91,.25),0 8px 18px rgba(0,0,0,.35);
+  transition:background .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+.favorites-btn .bi-heart{font-size:1.1rem;color:#ffffff}
+.fav-count{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:22px;padding:0 .4rem;border-radius:999px;
+  background:linear-gradient(180deg,#e6c682,#caa85b);color:#1a1512;font-weight:700;line-height:1
+}
+.favorites-btn:hover,
+.favorites-btn:focus{
+  background:linear-gradient(180deg,#e6c682,#caa85b);
+  color:#1a1512;border-color:#b99143;
+  box-shadow:0 0 0 1px rgba(202,168,91,.35),0 10px 22px rgba(0,0,0,.45)
+}
+.favorites-btn:hover .bi-heart{color:#1a1512}
+
+.favorites-menu{
+  border:1px solid #caa85b;
+  border-radius:14px;
+  padding:.4rem .3rem;
+  background:#0b0b0b;
+  backdrop-filter:blur(4px);
+  box-shadow:0 20px 44px rgba(0,0,0,.45)
+}
+.favorites-menu .dropdown-item{color:#ffffff}
+.favorites-menu .dropdown-item.text-muted{color:#bdbdbd}
+
+.favorites-item{
+  border:1px solid rgba(202,168,91,.28);
+  border-radius:14px;
+  padding:.45rem;
+  background:#0f0f0f;
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease, color .15s ease
+}
+.favorites-item img{border:1px solid rgba(202,168,91,.45)}
+.favorites-item .title{color:#ffffff;font-weight:600;font-size:.95rem}
+.favorites-item .price{color:#ffffff;font-size:.82rem}
+
+.favorites-item:hover{
+  background:linear-gradient(180deg,#e6c682,#caa85b);
+  border-color:#b99143;
+  box-shadow:0 6px 16px rgba(0,0,0,.25);
+  transform:translateY(-1px)
+}
+.favorites-item:hover .title,
+.favorites-item:hover .price{color:#1a1512}
+
+.remove-btn{
+  border-radius:10px;
+  border-color:#8b3a3a;
+  color:#f5e9e9;
+  background:rgba(139,58,58,.12);
+  transition:background .15s ease,color .15s ease,border-color .15s ease
+}
+.remove-btn:hover{
+  background:#8b3a3a;
+  color:#fff;
+  border-color:#8b3a3a
+}
