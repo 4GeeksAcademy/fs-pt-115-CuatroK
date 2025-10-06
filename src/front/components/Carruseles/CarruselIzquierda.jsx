@@ -102,7 +102,6 @@ export function CarruselIzquierda({ category, highlighted }) {
       onMouseLeave={startAutoplay}
       onTouchStart={stopAutoplay}
       onTouchEnd={startAutoplay}
-      
     >
       <button className="ce-nav ce-prev" onClick={() => scrollByCards(-1)} aria-label="Anterior">
         <i className="fa-solid fa-chevron-left" />
@@ -129,7 +128,10 @@ export function CarruselIzquierda({ category, highlighted }) {
                   alt={item.name || "Producto"}
                   className="card-img-top"
                   loading="lazy"
-                  onError={(e) => (e.currentTarget.src = "https://via.placeholder.com/600x400?text=Sin+imagen")}
+                  onError={(e) =>
+                    (e.currentTarget.src =
+                      "https://via.placeholder.com/600x400?text=Sin+imagen")
+                  }
                 />
                 <div className="card-body d-flex flex-column">
                   <h5 className="card-title">{item.name || "Sin nombre"}</h5>
@@ -141,7 +143,11 @@ export function CarruselIzquierda({ category, highlighted }) {
 
                 {passHighlight(item) && <span className="badge top-right">Destacado</span>}
 
-                <FavoriteButton itemId={item.id} initiallyActive={isFav} />
+                {user && (
+                  <div onClick={(e) => e.stopPropagation()}>
+                    <FavoriteButton itemId={item.id} initiallyActive={isFav} />
+                  </div>
+                )}
               </div>
             );
           })}

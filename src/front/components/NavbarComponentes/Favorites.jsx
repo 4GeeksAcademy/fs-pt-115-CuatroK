@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { getJoyasSearch } from "../../services/jewellsService";
 import { removeFavorite } from "../../services/serviceApi";
+import "./Favorites.css";
 
 const getFavId = (f) => {
   if (typeof f === "number" || typeof f === "string") return Number(f) || f;
@@ -59,7 +60,7 @@ export const Favorites = () => {
   const onRemove = async (id) => {
     try {
       if (token) await removeFavorite(token, id);
-    } catch { }
+    } catch {}
     setFavIds((prev) => prev.filter((x) => String(x) !== String(id)));
     window.dispatchEvent(new CustomEvent("favorites:changed", { detail: { changedId: id, isFav: false } }));
   };
@@ -67,32 +68,32 @@ export const Favorites = () => {
   return (
     <div className="dropdown mt-2">
       <button
-        className="btn btn-outline-dark dropdown-toggle border-light d-inline-flex align-items-center"
+        className="btn dropdown-toggle d-inline-flex align-items-center favorites-btn"
         type="button"
         id="favoritesDropdown"
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        <i className="bi bi-heart text-light" style={{ fontSize: 20, lineHeight: 1 }} />
-        <p className="m-0 ms-2 d-none d-md-inline text-light">Favoritos</p>
-        <p className="m-0 ms-2 fw-bold text-light">{favIds.length}</p>
+        <i className="bi bi-heart me-2" />
+        <span className="d-none d-md-inline">Favoritos</span>
+        <span className="fav-count ms-2">{favIds.length}</span>
       </button>
 
       <ul
-        className="dropdown-menu dropdown-menu-end"
+        className="dropdown-menu dropdown-menu-end favorites-menu"
         aria-labelledby="favoritesDropdown"
-        style={{ minWidth: 320, maxWidth: 360 }}
+        style={{ minWidth: 340, maxWidth: 380 }}
       >
         {favItems.length === 0 ? (
           <li>
-            <p className="dropdown-item text-muted m-0">No hay favoritos aÃºn</p>
+            <p className="dropdown-item m-0 text-center text-muted">No hay favoritos aún</p>
           </li>
         ) : (
           favItems.slice(0, 8).map((p) => {
             const link = `/producto/${encodeURIComponent(p.slug || p.id)}`;
             return (
               <li key={p.id} className="px-2">
-                <div className="d-flex align-items-center gap-2">
+                <div className="d-flex align-items-center gap-2 favorites-item">
                   <Link
                     to={link}
                     className="d-flex align-items-center text-decoration-none flex-grow-1 p-1 rounded"
@@ -101,22 +102,20 @@ export const Favorites = () => {
                     <img
                       src={p.url_image}
                       alt={p.name || "Producto"}
-                      width={40}
-                      height={40}
-                      style={{ objectFit: "cover", borderRadius: 6 }}
-                      onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/80?text=?"; }}
+                      width={44}
+                      height={44}
+                      style={{ objectFit: "cover", borderRadius: 8 }}
+                      onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/88?text=?"; }}
                     />
                     <div className="ms-2 d-flex flex-column flex-grow-1" style={{ minWidth: 0 }}>
-                      <p className="text-truncate mb-0" title={p.name}>
+                      <span className="title text-truncate" title={p.name}>
                         {p.name || `Producto #${p.id}`}
-                      </p>
-                      <p className="text-muted mb-0" style={{ fontSize: 12 }}>
-                        {euro.format(p.price || 0)}
-                      </p>
+                      </span>
+                      <span className="price">{euro.format(p.price || 0)}</span>
                     </div>
                   </Link>
                   <button
-                    className="btn btn-sm btn-outline-danger"
+                    className="btn btn-sm btn-outline-danger remove-btn"
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRemove(p.id); }}
                     aria-label="Quitar de favoritos"
                   >
