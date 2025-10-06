@@ -47,28 +47,35 @@ export const Gallery = () => {
 
 
     return (
-        <div className="container-fliud page-background-color">
-            <div className="row">
-                <div className="col-md-12 d-flex flex-column align-items-center">
-                    <img src="https://i.pinimg.com/736x/87/66/02/876602ad3dd4a0b612d5086c4daf2a7f.jpg" alt="El alfa"
-                        className="img-fluid rounded" />
-                        <h1 className="fw-light fst-italic">Destellos con historia</h1>
-                        <p>El oro y las gemas cuentan historias infinitas sobre la piel.</p>
+        <div className="container-fluid page-background-color py-5">
+            {/* Encabezado */}
+            <div className="row mb-5">
+                <div className="col-lg-8 mx-auto text-center text-light">
+                    <img
+                        src="https://i.pinimg.com/736x/87/66/02/876602ad3dd4a0b612d5086c4daf2a7f.jpg"
+                        alt="El alfa"
+                        className="img-fluid rounded shadow mb-4"
+                        style={{ maxHeight: "400px", objectFit: "cover" }}
+                    />
+                    <h1 className="display-5 fw-light fst-italic text-dark">Destellos con historia</h1>
+                    <p className="lead text-dark">El oro y las gemas cuentan historias infinitas sobre la piel.</p>
                 </div>
             </div>
-            <div className="row">
-                {carousels.map((carousel, index) => (
-                    <div className="col-md-4 mt-3" key={carousel.id}>
-                        <div id={carousel.id} className="carousel slide">
+
+            {/* Carruseles individuales */}
+            <div className="row g-4">
+                {carousels.map((carousel) => (
+                    <div className="col-md-6 col-lg-4" key={carousel.id}>
+                        <div id={carousel.id} className="carousel slide shadow rounded overflow-hidden">
                             <div className="carousel-inner">
                                 {carousel.images.map((img, i) => (
-                                    <div
-                                        key={i}
-                                        className={`carousel-item ${i === 0 ? "active" : ""}`}
-                                    >
-                                        <img src={img} className="d-block w-100 rounded" alt={`Slide ${i + 1}`}
-                                            style={{ width: "100%", height: "400px", objectFit: "cover" }} />
-
+                                    <div key={i} className={`carousel-item ${i === 0 ? "active" : ""}`}>
+                                        <img
+                                            src={img}
+                                            className="d-block w-100"
+                                            alt={`Slide ${i + 1}`}
+                                            style={{ height: "300px", objectFit: "cover" }}
+                                        />
                                     </div>
                                 ))}
                             </div>
@@ -79,7 +86,7 @@ export const Gallery = () => {
                                 data-bs-slide="prev"
                             >
                                 <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span className="visually-hidden">Previous</span>
+                                <span className="visually-hidden">Anterior</span>
                             </button>
                             <button
                                 className="carousel-control-next"
@@ -88,36 +95,50 @@ export const Gallery = () => {
                                 data-bs-slide="next"
                             >
                                 <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span className="visually-hidden">Next</span>
+                                <span className="visually-hidden">Siguiente</span>
                             </button>
                         </div>
                     </div>
                 ))}
             </div>
-            <div className="row">
-                <div className="col-md-12 mt-5 mb-5">
-                    <div id="carouselExample" className="carousel slide">
+
+            {/* Carrusel general */}
+            <div className="row mt-5">
+                <div className="col-lg-10 mx-auto">
+                    <div id="carouselExample" className="carousel slide shadow rounded overflow-hidden">
                         <div className="carousel-inner">
-                            <div className="carousel-item active">
-                                <img src="https://i.pinimg.com/1200x/68/59/49/685949c94bbc543360a4deb56c4c5638.jpg" className="d-block w-100" alt="..."
-                                    style={{ width: "100%", height: "400px", objectFit: "cover" }} />
-                            </div>
-                            <div className="carousel-item">
-                                <img src="https://i.pinimg.com/1200x/75/c8/c3/75c8c3223c8ac911787dcc926ec1dafc.jpg" className="d-block w-100" alt="..."
-                                    style={{ width: "100%", height: "400px", objectFit: "cover" }} />
-                            </div>
-                            <div className="carousel-item">
-                                <img src="https://i.pinimg.com/1200x/be/a8/73/bea8733ad786e088e9f16bae693612e7.jpg" className="d-block w-100" alt="..."
-                                    style={{ width: "100%", height: "400px", objectFit: "cover" }} />
-                            </div>
+                            {[
+                                "https://i.pinimg.com/1200x/68/59/49/685949c94bbc543360a4deb56c4c5638.jpg",
+                                "https://i.pinimg.com/1200x/75/c8/c3/75c8c3223c8ac911787dcc926ec1dafc.jpg",
+                                "https://i.pinimg.com/1200x/be/a8/73/bea8733ad786e088e9f16bae693612e7.jpg",
+                            ].map((img, i) => (
+                                <div key={i} className={`carousel-item ${i === 0 ? "active" : ""}`}>
+                                    <img
+                                        src={img}
+                                        className="d-block w-100"
+                                        alt={`Slide ${i + 1}`}
+                                        style={{ height: "400px", objectFit: "cover" }}
+                                    />
+                                </div>
+                            ))}
                         </div>
-                        <button className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                        <button
+                            className="carousel-control-prev"
+                            type="button"
+                            data-bs-target="#carouselExample"
+                            data-bs-slide="prev"
+                        >
                             <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span className="visually-hidden">Previous</span>
+                            <span className="visually-hidden">Anterior</span>
                         </button>
-                        <button className="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                        <button
+                            className="carousel-control-next"
+                            type="button"
+                            data-bs-target="#carouselExample"
+                            data-bs-slide="next"
+                        >
                             <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span className="visually-hidden">Next</span>
+                            <span className="visually-hidden">Siguiente</span>
                         </button>
                     </div>
                 </div>

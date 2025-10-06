@@ -32,12 +32,13 @@ export const AboutUs = () => {
             borderRadius: '12px',
             padding: '20px',
           }}
+          className='d-flex justify-content-center align-items-center'
         >
           <img
-            src="https://media.discordapp.net/attachments/1409165086697848872/1410329949277130782/Logo_grande.PNG?ex=68de1b5e&is=68dcc9de&hm=e7724923f45fd1ee6ca4a7cd3b0afd309746a383bdcbc1c89feb0103a755ee4f&=&format=webp&quality=lossless&width=1063&height=576"
-            className="card-img-top mb-3"
+            src="/logo4k.png"
+            className="card-img-top mb-3 "
             alt="CuatroK"
-            style={{ width: "100%", height: "500px", borderRadius: '8px', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+            style={{ width: "500px", height: "500px", borderRadius: '8px', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
           />
           <div className="card-body">
             <h5 className="card-title">Bienvenido al universo del brillo y la elegancia.</h5>
