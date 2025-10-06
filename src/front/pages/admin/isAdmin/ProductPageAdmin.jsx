@@ -71,7 +71,6 @@ export const ProductPageAdmin = () => {
         getJoyas()
     }, [idOrSlug]);
 
-    console.log(formData);
 
 
     const handleChange = (e) => {

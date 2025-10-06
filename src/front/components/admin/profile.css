@@ -85,17 +85,11 @@
 
 /* Mensajes de error */
 .profile-form .error-tooltip {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 10;
-  white-space: nowrap;
   background-color: #e05c5c;
   color: #fff;
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
   font-size: 0.85rem;
-  margin-top: 0.2rem;
 }
 
 /* Selects */

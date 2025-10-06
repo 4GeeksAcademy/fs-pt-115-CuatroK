@@ -7,7 +7,6 @@ import { useState } from "react";
 export const ForgotPassword = () => {
     const [emailInput, setEmailInput] = useState("")
     const [alert, setAlert] = useState("")
-    console.log(emailInput)
     const SendEmail = async (e) => {
         e.preventDefault()
         setAlert("")

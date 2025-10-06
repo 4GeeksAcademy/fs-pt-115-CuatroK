@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }) => {
 
     const loginSync = async () => {
         if (!userAuth0) return
-        console.log(userAuth0)
 
         setLoading(true)
         try {

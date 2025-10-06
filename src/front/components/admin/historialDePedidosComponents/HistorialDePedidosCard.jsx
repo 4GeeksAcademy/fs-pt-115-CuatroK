@@ -23,7 +23,6 @@ export const HistorialDePedidosCard = ({
         style: "currency",
         currency: "EUR",
     }).format(total)
-    console.log(user)
     return (
         <Link
             to={!user.is_admin ? `/sale/${id}` : `/sale-detail/${id}`}

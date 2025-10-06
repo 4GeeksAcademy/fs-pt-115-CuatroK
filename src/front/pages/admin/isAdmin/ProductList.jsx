@@ -46,7 +46,6 @@ export const ProductList = () => {
     try { tituloCategoria = decodeURIComponent(tituloCategoria); } catch { }
 
     const abrirProducto = (productoItem) => {
-        console.log(productoItem.id)
         if (!productoItem?.id) return;
         navigate(`/product-detail/${productoItem.id}`);
     };

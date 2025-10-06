@@ -10,8 +10,14 @@ import { CarruselIzquierda } from "../../components/Carruseles/CarruselIzquierda
 function VPTitle({ text, as: Tag = "h1", className = "text-center my-4" }) {
   const containerRef = useRef(null);
   return (
-    <div ref={containerRef}>
-      <Tag className={className} style={{ color: '#c2a15d' }}>
+    <div ref={containerRef}
+      style={{
+        padding: "5px",
+        margin: "25px",
+        borderBottom: "4px double #d4b97a",
+        backgroundColor: "#f5f0e6"
+      }}>
+      <Tag className={className} style={{ color: '#7a1f3d' }}>
         <VariableProximity
           label={text}
           className="display-6"
@@ -22,7 +28,7 @@ function VPTitle({ text, as: Tag = "h1", className = "text-center my-4" }) {
           toFontVariationSettings='"wght" 900, "opsz" 36'
         />
       </Tag>
-    </div>
+    </div >
   );
 }
 

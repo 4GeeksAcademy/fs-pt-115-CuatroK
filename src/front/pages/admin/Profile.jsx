@@ -3,7 +3,6 @@ import { DatosPersonales } from "../../components/admin/DatosPersonales";
 import { Seguridad } from "../../components/admin/Seguridad";
 import "../../index.css";
 import "./profile.css";
-import "../../components/admin/profile.css"
 import { getUser } from "../../services/serviceApi";
 import { useAuth } from "../../hooks/useAuth";
 import LoadingSpinner from "../../components/public/LoadingSpinner";
@@ -32,7 +31,6 @@ export const Profile = ({ textOption }) => {
         if (!token && !loading) {
             return navigate("/")
         }
-        console.log(user)
     }, [token]);
 
     if (!user) {
@@ -40,7 +38,7 @@ export const Profile = ({ textOption }) => {
     }
 
     return (
-        <div className="vh-100 container-fluid">
+        <div className="container-fluid">
 
             <div className="row justify-content-between ">
                 <div className="sidebar col-3 d-flex flex-column justify-content-center align-items-start p-4 shadow-sm h-100 ms-5 mt-5">

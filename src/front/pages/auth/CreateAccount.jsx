@@ -36,13 +36,17 @@ export const CreateAccount = () => {
         setError("")
     }, [])
 
-    console.log(inputValue)
-
     return (
         <div className="min-vh-100 d-flex align-items-center justify-content-center">
             <div className="container products-card">
+                <button
+                    className="btn btn-link border-0 h-50 text-light mt-2"
+                    onClick={() => navigate("/login")}
+                >
+                    <i className="fa-solid fa-circle-arrow-left fa-3x"></i>
+                </button>
                 <div className="row">
-                    <div className="col-md-12 text-center mt-5">
+                    <div className="col-md-12 text-center mt-2">
                         <h1>Crear una cuenta</h1>
                     </div>
                 </div>
@@ -53,7 +57,7 @@ export const CreateAccount = () => {
                     </div>
                 </div>
 
-                <div className="row">
+                <div className="row mt-4">
                     <div className="col-md-4"></div>
                     <div className="col-md-4">
                         <form onSubmit={handleSubmit}>
@@ -154,8 +158,8 @@ export const CreateAccount = () => {
                                 </div>
                             }
 
-                            <div className="text-center">
-                                <button type="submit" className="btn btn-primary">
+                            <div className="text-center pb-4" style={{ borderBottom: "4px solid #ffffffff" }}>
+                                <button type="submit" className="btn btn-warning">
                                     {loading ? "Cargando..." : "Registrarse"}
                                 </button>
                             </div>

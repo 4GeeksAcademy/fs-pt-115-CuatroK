@@ -15,7 +15,6 @@ export const Navbar = () => {
   const { user, token } = useAuth();
   const usuarioAutenticado = token;
 
-  console.log(user)
   return (
     <div>
       <nav className="navbar" style={{ backgroundColor: "#4a4a4a" }}>

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { addFavorite, getFavorite, removeFavorite } from "../../services/serviceApi";
 import { useAuth } from "../../hooks/useAuth";
 import { ProductCard } from "./favoritosComponents/ProductCard";
+import "../../index.css"
+import "./profile.css"
 
 export const Favoritos = () => {
     const navigate = useNavigate()
@@ -42,13 +44,11 @@ export const Favoritos = () => {
     useEffect(() => {
         getFavoritesAsync()
     }, [])
-    console.log(favorites)
     return (
         <div>
-            <h1>Favoritos</h1>
             {
                 favorites.length === 0 ? (
-                    <h3 className="products-card text-center py-5 my-3">
+                    <h3 className="profile-form text-center py-5 my-3">
                         No tienes productos favoritos...
                     </h3>
                 ) : (

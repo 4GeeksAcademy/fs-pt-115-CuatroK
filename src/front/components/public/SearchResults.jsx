@@ -16,7 +16,6 @@ export const SearchResults = () => {
   useEffect(() => {
     const cargarJoyas = async () => {
       const data = await getJoyasSearch();
-      console.log(data);
 
       if (data) {
         const filtradas = data.items.filter(joya => {

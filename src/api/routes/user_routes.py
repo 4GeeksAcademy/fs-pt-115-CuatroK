@@ -361,12 +361,15 @@ def create_user_google():
         username=new_user.username,
         reset_link=frontend_url,
         now=datetime.utcnow())
-    message = Message(
-        subject="Bienvenido a CuatroK",
-        recipients=[data.get("email")],
-        html=body_message
-    )
-    mail.send(message)
+    try:
+        send_email(
+            subject="Bienvenido joven",
+            to_email=data.get("email"),
+            html=body_message
+        )
+    except EmailError as e:
+        print(f'[email] error enviando bienvenida: {e}')
+
     token = create_access_token(str(new_user.id),
                                 additional_claims={"type": "access"})
 

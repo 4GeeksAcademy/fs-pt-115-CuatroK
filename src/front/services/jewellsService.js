@@ -8,7 +8,6 @@ export async function getJoyasSearch() {
         Accept: "application/json",
       },
     });
-    console.log(res);
 
     if (!res.ok) {
       throw new Error(`Error HTTP: ${res.status}`);
@@ -30,7 +29,6 @@ export async function getJoyasSearch() {
       }
     }
 
-    console.log("[getJoyasSearch] items cargados:", items.length || 0);
 
     return Array.isArray(items) ? items : [];
   } catch (err) {
