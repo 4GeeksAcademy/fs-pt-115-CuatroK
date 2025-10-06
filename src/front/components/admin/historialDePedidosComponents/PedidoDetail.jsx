@@ -26,7 +26,6 @@ export const PedidoDetail = () => {
     }
 
     const pedido = historyData.find((p) => p.id === parseInt(id));
-    console.log(pedido.items)
 
     const fecha = new Date(pedido.date).toLocaleString("es-ES", {
         year: "numeric",

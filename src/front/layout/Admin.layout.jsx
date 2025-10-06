@@ -10,7 +10,6 @@ export function AdminLayout() {
         getUserApi()
     }, [])
 
-    console.log(user)
     if (!user) {
         return <LoadingSpinner />
     }

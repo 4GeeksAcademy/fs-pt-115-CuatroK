@@ -17,7 +17,7 @@ function VPTitle({ text, as: Tag = "h1", className = "text-center my-4" }) {
         borderBottom: "4px double #d4b97a",
         backgroundColor: "#f5f0e6"
       }}>
-      <Tag className={className} style={{ color: '#c2a15d' }}>
+      <Tag className={className} style={{ color: '#7a1f3d' }}>
         <VariableProximity
           label={text}
           className="display-6"

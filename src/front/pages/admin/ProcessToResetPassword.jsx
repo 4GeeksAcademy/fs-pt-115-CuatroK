@@ -6,7 +6,6 @@ export const ProccessToResetPassword = () => {
     const { user } = useAuth();
 
     const handleSendEmail = async () => {
-        console.log("Enviar correo de cambio de contraseña a:", user.email);
         await ChangePassword(user.email)
     };
 

@@ -24,7 +24,6 @@ export const Payment = () => {
         .then(data => setClientSecret(data.clientSecret))
         .catch(err => console.error("Error al obtener clientSecret:", err));
     }
-    console.log(finalAmount)
   }, [finalAmount]);
 
   const appearance = {

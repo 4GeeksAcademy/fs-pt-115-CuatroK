@@ -5,7 +5,6 @@ import { resetPassword } from "../../services/serviceApi"
 export const ResetPassword = () => {
     const [searchParams] = useSearchParams()
     const token = searchParams.get("token")
-    console.log(token)
     const [passwordInputs, setPasswordInputs] = useState({
         password: "",
         confPassword: ""
@@ -30,7 +29,6 @@ export const ResetPassword = () => {
 
         resetPassword(token, passwordInputs.password)
 
-        console.log("exitoso")
     }
 
     return (

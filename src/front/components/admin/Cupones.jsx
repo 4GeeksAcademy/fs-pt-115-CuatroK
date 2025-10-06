@@ -11,7 +11,6 @@ export const Cupones = () => {
         const data = await getDiscount(token)
         setCouponInfo(data)
     }
-    console.log(couponInfo)
     useEffect(() => {
         getCouponData()
     }, [])
@@ -32,7 +31,7 @@ export const Cupones = () => {
                         </div>
                     </div>
                 ) : couponInfo.length <= 0 ? (
-                    <h3 className="products-card text-center py-5 my-3">
+                    <h3 className="profile-form text-center py-5 my-3">
                         ¡Sin cupones!
                     </h3>
                 ) :

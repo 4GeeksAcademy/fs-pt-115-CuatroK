@@ -18,13 +18,11 @@ export const getUser = async () => {
     sessionStorage.removeItem("token");
   }
 
-  console.log(data);
   return data;
 };
 
 export const updateUserData = async (dataUpdated, getUser) => {
   const token = sessionStorage.getItem("token");
-  console.log(dataUpdated);
   try {
     const response = await fetch(`${url}/user/client/user`, {
       method: "PATCH",
@@ -47,8 +45,6 @@ export const updateUserData = async (dataUpdated, getUser) => {
 
 export const updateUserState = async (dataUpdated, user_id, setLoading) => {
   const token = sessionStorage.getItem("token");
-  console.log(dataUpdated);
-  console.log(user_id);
   setLoading(true);
   try {
     const response = await fetch(`${url}/user/client/patch-account-state`, {
@@ -138,7 +134,6 @@ export const deleteAddress = async (id) => {
 };
 
 export const ChangePassword = async (userEmail, setAlert) => {
-  console.log(userEmail);
   try {
     await fetch(`${url}/user/client/email-change-password`, {
       method: "POST",
@@ -176,7 +171,6 @@ export const resetPassword = async (token, password) => {
     });
 
     const data = await response.json();
-    console.log(data);
   } catch (error) {
     console.error(error);
   }
@@ -190,7 +184,6 @@ export const getJoyasSearch = async () => {
       throw new Error(`Error HTTP: ${res.status}`);
     }
     const data = await res.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error(error);
@@ -209,7 +202,6 @@ export const getDiscount = async (token) => {
       throw new Error(`Error HTTP: ${res.status}`);
     }
     const data = await res.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error(error);
@@ -228,7 +220,6 @@ export const getHistory = async (token) => {
       throw new Error(`Error HTTP: ${res.status}`);
     }
     const data = await res.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error(error);
@@ -253,7 +244,6 @@ export const postSale = async (totalAmount, discount, token) => {
     }
     const data = await res.json();
     const historyData = await getHistory(token);
-    console.log(historyData);
     if (historyData.length === 1) {
       await createDiscount(20, "Bienvenida-", token);
     }
@@ -277,7 +267,6 @@ export const createDiscount = async (total, discount_code, token) => {
       throw new Error(`Error HTTP: ${res.status}`);
     }
     const data = await res.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error(error);
@@ -317,7 +306,6 @@ export const getFavorite = async (token) => {
       throw new Error(`Error HTTP: ${res.status}`);
     }
     const data = await res.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error(error);
@@ -338,7 +326,6 @@ export const removeFavorite = async (token, jewell_id) => {
       throw new Error(`Error HTTP: ${res.status}`);
     }
     const data = await res.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error(error);
@@ -357,7 +344,6 @@ export const getAllUsers = async (token) => {
       throw new Error(`Error HTTP: ${res.status}`);
     }
     const data = await res.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error(error);

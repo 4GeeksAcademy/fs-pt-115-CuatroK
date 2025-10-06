@@ -10,7 +10,6 @@ export const postCatalogo = async (catalogo) => {
       body: JSON.stringify({ catalogo }),
     });
     const data = await response.json();
-    console.log(data);
   } catch (error) {
     console.error(error);
   }

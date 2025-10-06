@@ -31,7 +31,6 @@ export const Profile = ({ textOption }) => {
         if (!token && !loading) {
             return navigate("/")
         }
-        console.log(user)
     }, [token]);
 
     if (!user) {

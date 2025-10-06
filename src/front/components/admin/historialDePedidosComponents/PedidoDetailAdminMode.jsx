@@ -14,7 +14,6 @@ export const PedidoDetailAdminMode = () => {
         const data = await getAllSales()
         setHistoryData(data)
     }
-    console.log(historyData)
 
     useEffect(() => {
         getSalesHistory()

@@ -22,8 +22,6 @@ export const Login = () => {
     const handleOnSubmit = (e) => {
         e.preventDefault()
         loginUser(inputValue, navigate)
-        console.log(inputValue)
-
     }
 
     useEffect(() => {
@@ -39,54 +37,88 @@ export const Login = () => {
     return (
         <div className="min-vh-100 d-flex align-items-center justify-content-center">
             <div className="container products-card">
-
                 <div className="row">
-                    <div className="col-md-12 text-center mt-5">
+                    <div className="col-md-12 text-start">
+                        <button
+                            className="btn btn-link border-0 h-50 text-light mt-2"
+                            onClick={() => navigate("/")}
+                        >
+                            <i className="fa-solid fa-circle-arrow-left fa-3x"></i>
+                        </button>
+                    </div>
+                    <div className="col-md-12 text-center mt-2">
                         <h1>Iniciar Sesión</h1>
                     </div>
-                    <div className="col-md-12 text-center">
-                        <h5>¿No te has creado una cuenta? <br /> <Link to="/register">Registrate</Link></h5>
+                    <div className="col-md-12 text-center mb-3">
+                        <h5>
+                            ¿No te has creado una cuenta? <br />
+                            <Link to="/register">Regístrate</Link>
+                        </h5>
                     </div>
                 </div>
-
 
                 <div className="row">
                     <div className="col-md-4"></div>
                     <div className="col-md-4">
                         <form onSubmit={handleOnSubmit}>
                             <div className="mb-3">
-                                <label htmlFor="email" className="form-label">Correo Electronico</label>
+                                <label htmlFor="email" className="form-label">
+                                    Correo Electrónico
+                                </label>
                                 <input
                                     type="email"
-                                    className={`form-control ${inputValue.email.trim().length < 6 && error ? "input-data-missing" : ""}`}
+                                    className={`form-control ${inputValue.email.trim().length < 6 && error ? "input-data-missing" : ""
+                                        }`}
                                     id="email"
                                     aria-describedby="emailHelp"
                                     name="email"
                                     value={inputValue.email}
-                                    onChange={handleOnChange} />
-                                <div id="emailHelp" className="form-text">Nunca compartiremos tu correo electrónico con nadie más.</div>
+                                    onChange={handleOnChange}
+                                />
+                                <div id="emailHelp" className="form-text">
+                                    Nunca compartiremos tu correo electrónico con nadie más.
+                                </div>
                             </div>
+
                             <div className="mb-3">
-                                <label htmlFor="password" className="form-label">Contraseña</label>
-                                <input type="password"
+                                <label htmlFor="password" className="form-label">
+                                    Contraseña
+                                </label>
+                                <input
+                                    type="password"
                                     className={`form-control ${!inputValue.password && error ? "input-data-missing" : ""}`}
                                     id="password"
                                     name="password"
                                     value={inputValue.password}
-                                    onChange={handleOnChange} />
+                                    onChange={handleOnChange}
+                                />
+
+                                {/* Nuevo enlace para recuperar contraseña */}
+                                <div className="text-end mt-2">
+                                    <Link to="/forgot-password" className="text-decoration-none" style={{ color: "#7a1f3d", fontWeight: "600" }}>
+                                        ¿Olvidaste tu contraseña?
+                                    </Link>
+                                </div>
                             </div>
-                            {
-                                error &&
+
+                            {error && (
                                 <div className="alert alert-danger text-center" role="alert">
                                     {error}
                                 </div>
-                            }
+                            )}
 
-                            <div className="text-center mb-5">
-                                <button type="submit" className="btn btn-warning color-buttons">{loading || token ? "Cargando..." : "Iniciar Sesión"}</button>
+                            <div className="text-center pb-4 mt-4" style={{ borderBottom: "4px solid #ffffffff" }}>
+                                <button
+                                    type="submit"
+                                    className="btn btn-warning color-buttons"
+                                >
+                                    {loading || token ? "Cargando..." : "Iniciar Sesión"}
+                                </button>
                             </div>
+
                             <div className="col-md-4"></div>
-                            <div className="text-center">
+
+                            <div className="text-center pt-2 mb-5">
                                 <div className="google-button">
                                     <svg
                                         stroke="currentColor"
@@ -129,7 +161,6 @@ export const Login = () => {
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
     )

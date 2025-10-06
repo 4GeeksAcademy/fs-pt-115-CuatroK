@@ -6,6 +6,8 @@ import { useAuth } from "../../hooks/useAuth";
 import { useCart } from "../../hooks/useFetch";
 import { removeCartItem } from "../../services/cartApi";
 import "./carritoComponents/carritoProfile.css"
+import "../../index.css"
+import "./profile.css"
 
 export const Carrito = () => {
     const { token, setDiscount, discount, setFinalAmount, finalAmount } = useAuth();
@@ -72,7 +74,7 @@ export const Carrito = () => {
         <div>
 
             {cartItems.length === 0 ? (
-                <h3 className="products-card text-center py-5 my-3 profile-card">
+                <h3 className="profile-form text-center py-5 my-3">
                     Tu carrito está vacío...
                 </h3>
             ) : (

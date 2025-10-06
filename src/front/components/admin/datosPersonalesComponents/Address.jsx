@@ -13,7 +13,6 @@ export const Address = ({ id, user, getUserApi }) => {
         province: user.address[id].province ?? "",
         phone: user.address[id].phone ?? "",
     })
-    console.log(user)
 
     const [isBeingDeleted, setIsBeingDeleted] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
@@ -76,11 +75,15 @@ export const Address = ({ id, user, getUserApi }) => {
             {/* 🔹 Overlay de cargando */}
             {isBeingDeleted && <DeleteText />}
 
-            <div className="d-flex justify-content-end mb-2">
-                <i
-                    className="fa-solid fa-pen-to-square fa-2x"
-                    onClick={() => HandleIconOnClick()}
-                ></i>
+            <div
+                className="d-flex justify-content-end mb-2 align-items-center"
+                onClick={HandleIconOnClick}   // clic en cualquier parte del div
+                style={{ cursor: "pointer" }} // cursor tipo mano
+            >
+                <span className="me-2 text-center mb-0 pt-1 text-decoration-underline">
+                    Editar
+                </span>
+                <i className="fa-solid fa-pen-to-square fa-2x"></i>
             </div>
 
             <form
@@ -184,7 +187,6 @@ export const Address = ({ id, user, getUserApi }) => {
                     {errorMsg && (
                         <div
                             className="error-tooltip text-center mt-2"
-                            role="alert"
                         >
                             {errorMsg}
                         </div>

@@ -12,7 +12,6 @@ export const UserList = () => {
 
     const getUsersAsync = async () => {
         const data = await getAllUsers(token)
-        console.log(data)
         setUsers(data)
     }
 
