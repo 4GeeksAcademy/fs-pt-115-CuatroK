@@ -33,6 +33,7 @@ export const SearchBar = () => {
         onChange={(e) => setBusqueda(e.target.value)}
         onKeyDown={handleKeyDown}
         autoFocus={showSearch}
+        maxLength={40}
       />
     </div>
   );

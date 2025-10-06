@@ -24,7 +24,7 @@ export const Profile = () => {
                     style={{ position: "absolute", right: 0 }}
                 >
                     <li><Link className="dropdown-item" to="/user">Perfil</Link></li>
-                    <li><a className="dropdown-item" href="#">Configuración</a></li>
+                    <li><a className="dropdown-item" href="#"></a></li>
                     <li><hr className="dropdown-divider" /></li>
                     <li><button className="dropdown-item" onClick={logoutUser}>Cerrar sesión</button></li>
                 </ul>

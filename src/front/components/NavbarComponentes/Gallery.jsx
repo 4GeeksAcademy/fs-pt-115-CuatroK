@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 export const Gallery = () => {
+    const navigate = useNavigate();
     const carousels = [
         {
             id: "carouselOne",
@@ -44,10 +47,18 @@ export const Gallery = () => {
         }
     ];
 
-
+   
 
     return (
         <div className="container-fluid page-background-color py-5">
+            <div className="col-md-12 text-start mb-3">
+          <button
+            className="btn btn-link border-0 w-25 h-50 text-secondary"
+            onClick={() => navigate(-1)}
+          >
+            <i className="fa-solid fa-circle-arrow-left fa-3x"></i>
+          </button>
+        </div>
             {/* Encabezado */}
             <div className="row mb-5">
                 <div className="col-lg-8 mx-auto text-center text-light">
