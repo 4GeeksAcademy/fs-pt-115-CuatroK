@@ -3,7 +3,7 @@ import { useAuth } from "../../hooks/useAuth"
 import "./profile.css"
 
 export const Seguridad = () => {
-    const { user } = useAuth()
+    const { user, token } = useAuth()
     return (
         <>
             <div className="profile-form container p-4">
@@ -19,7 +19,7 @@ export const Seguridad = () => {
                         <div class="input-group input-group-sm">
                             <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled value={"************"} />
                         </div>
-                        <Link to={"/reset-password"}>
+                        <Link to={`/reset-password-form?token=${token}`}>
                             <small
                                 className="text-primary"
                                 style={{ cursor: "pointer" }}

@@ -144,15 +144,14 @@ export const ChangePassword = async (userEmail, setAlert) => {
     });
     if (setAlert) {
       setAlert(
-        "Si tenemos un correo registrado le enviaremos un link para reestablecer su contraseña"
+        "Si tenemos un correo registrado le enviaremos un link para restablecer su contraseña"
       );
     }
-    console.log(userEmail);
   } catch (error) {
     console.error(error);
     if (setAlert) {
       setAlert(
-        "Si tenemos un correo registrado le enviaremos un link para reestablecer su contraseña"
+        "Si tenemos un correo registrado le enviaremos un link para restablecer su contraseña"
       );
     }
   }
@@ -170,8 +169,7 @@ export const resetPassword = async (token, password) => {
         password: password,
       }),
     });
-
-    const data = await response.json();
+    await response.json();
   } catch (error) {
     console.error(error);
   }

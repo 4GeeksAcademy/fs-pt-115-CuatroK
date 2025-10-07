@@ -31,7 +31,6 @@ export const UserList = () => {
     return (
         <div className=" min-vh-100">
             <h2 className="text-center my-3">Lista de usuario</h2>
-            {/* Overlay de carga */}
             {loading && (
                 <div className="loading-overlay d-flex justify-content-center align-items-center">
                     <div className="spinner-border text-light" role="status">

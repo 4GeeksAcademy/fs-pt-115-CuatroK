@@ -309,10 +309,6 @@ def email_change_password():
 @user_bp.route("/reset-password", methods=["POST"])
 @jwt_required()
 def reset_password():
-    claims = get_jwt()
-    if claims.get("type") != "pw_reset":
-        return jsonify({"msg": "Token inválido para este propósito"}), 403
-
     user_id = get_jwt_identity()
     user = db.session.get(User, int(user_id))
     if not user:
