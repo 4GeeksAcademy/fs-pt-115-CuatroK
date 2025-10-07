@@ -6,18 +6,17 @@ import {
 } from "react-icons/fa";
 import { FiPhone, FiMail, FiHeadphones } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { sendEmail } from "../../services/serviceApi";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
-  const [agree, setAgree] = useState(false);
   const [status, setStatus] = useState(null);
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    if (!agree) return setStatus("error");
+    await sendEmail(email)
     setStatus("ok");
     setEmail("");
-    setAgree(false);
     setTimeout(() => setStatus(null), 2500);
   };
 
@@ -67,7 +66,7 @@ export default function Footer() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <button type="submit" disabled={!email || !agree}>Suscribirse</button>
+              <button type="submit" disabled={!email}>Suscribirse</button>
             </form>
 
             {status === "ok" && <div className="nl-alert ok">¡Gracias por suscribirte!</div>}

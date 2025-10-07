@@ -51,13 +51,35 @@ export const Demagogo = () => {
                     Comenzar...
                 </button>
             ) : (
-                <>
-                    <h1
+                <div>
+                    <div
+                        style={{
+                            marginTop: "80px",
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            overflow: "hidden", // evita que el texto desborde
+                            fontSize: "8rem",
+                            color: "rgba(0, 0, 0, 0.08)", // más sutil
+                            zIndex: 0,
+                            pointerEvents: "none",
+                            userSelect: "none",
+                            whiteSpace: "pre-wrap", // permite saltos de línea si el texto lo tiene
+                            lineHeight: "1", // para que las líneas estén más juntas
+                            textAlign: "center", // opcional
+                        }}
+                    >
+                        Dema ga ge gi go gu Dema ga ge gi go gu Dema ga ge gi go gu Dema ga ge gi go gu Dema ga ge gi go gu Dema ga ge gi go gu Dema ga ge gi go gu Dema ga ge gi go gu Dema ga ge gi go gu Dema ga ge gi go gu Dema ga ge gi go gu Dema ga ge gi go gu Dema ga ge gi go gu
+                    </div>
+
+                    <h1 className="text-center"
                         style={{
                             color: "white",
                             fontSize: "2.5rem",
                             marginBottom: "20px",
-                            textShadow: "2px 2px 10px black",
+                            textShadow: "2px 2px 10px red",
                             animation: "fadeInText 2s ease forwards",
                         }}
                     >
@@ -74,7 +96,7 @@ export const Demagogo = () => {
                             allowFullScreen
                         ></iframe>
                     </div>
-                </>
+                </div>
             )}
 
             {/* 🎨 Animaciones */}
@@ -106,20 +128,29 @@ export const Demagogo = () => {
         }
 
         /* 🎶 Video que gira y palpita */
-        .video-wrapper {
-          display: inline-block;
-          animation: spinPulse 3s infinite linear;
-          transform-origin: center center;
-        }
+      .video-wrapper {
+  display: block;
+  width: 800px;
+  height: 450px;
+  transform-origin: center center;
+  animation: spinPulse 1.03s infinite linear;
+}
 
-        @keyframes spinPulse {
-          0%   { transform: rotate(0deg) scale(1); }
-          25%  { transform: rotate(90deg) scale(1.05); }
-          50%  { transform: rotate(180deg) scale(1); }
-          75%  { transform: rotate(270deg) scale(1.08); }
-          100% { transform: rotate(360deg) scale(1); }
-        }
-      `}</style>
+.video-wrapper iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Rotación + pulso juntos */
+@keyframes spinPulse {
+  0%   { transform: rotate(0deg) scale(1); }
+  25%  { transform: rotate(90deg) scale(1.5); }
+  50%  { transform: rotate(180deg) scale(1); }
+  75%  { transform: rotate(270deg) scale(0.8); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+`}</style>
         </div>
     );
 }

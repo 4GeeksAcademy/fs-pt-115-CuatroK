@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gracias por suscribirte</title>
+    <style>
+      :root {
+        --primary-color: #e0182d; /* rojo acento */
+        --bg-color: #fff;
+        --text-color: #111;
+        --secondary-color: #9096a1;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        text-align: center;
+        padding: 2rem;
+        border: 2px solid var(--primary-color);
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+      }
+
+      h1 {
+        color: var(--primary-color);
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        color: var(--secondary-color);
+        font-size: 1.1rem;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+      }
+
+      .highlight {
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+
+      .emoji {
+        font-size: 2rem;
+      }
+
+      .footer {
+        margin-top: 2rem;
+        font-size: 0.9rem;
+        color: var(--secondary-color);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="emoji">¡Gracias por suscribirte!</h1>
+      <p>
+        Nos alegra que formes parte de nuestra comunidad. Pronto recibirás
+        novedades sobre
+        <span class="highlight">productos con temática de Halloween</span> que
+        te encantarán.
+      </p>
+      <p>
+        Mantente atento a tu correo para no perderte nuestras exclusivas joyas y
+        ofertas.
+      </p>
+      <div class="footer">© 2025 CuatroK. Todos los derechos reservados.</div>
+    </div>
+  </body>
+</html>

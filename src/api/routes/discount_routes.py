@@ -76,7 +76,7 @@ def create_discount():
                 html=body_message
             )
         except EmailError as e:
-            print(f'[email] error enviando bienvenida: {e}')
+            print(f'[email] error enviando cupón: {e}')
 
     db.session.add(new_discount)
     db.session.commit()
@@ -90,9 +90,27 @@ def get_discounts():
     return jsonify([d.serialize() for d in discounts]), 201
 
 
-@discount_bp.route("/discount/user", methods=["get"])
-@jwt_required()
-def get_user_discounts():
-    user = get_jwt_identity()
-    discounts = Discount.query.filter_by(user_id=int(user)).all()
-    return jsonify([d.serialize() for d in discounts]), 201
+@discount_bp.route("/offers", methods=["POST"])
+def send_a_email():
+    data = request.get_json()
+    email = data.get("email") if data else None
+    if not email:
+        return jsonify({'msg': 'Correo no recibido'}), 400
+
+    frontend_url = os.getenv("VITE_STRIPE_RETURN_URL")
+    body_message = render_template(
+        "spam_mail.html",
+        reset_link=frontend_url,
+        now=datetime.utcnow()
+    )
+
+    try:
+        send_email(
+            subject="¡Te agradecemos estés interesado en nuestros productos!",
+            to_email=email,
+            html=body_message
+        )
+    except EmailError as e:
+        return jsonify({'msg': f'Error enviando correo: {e}'}), 500
+
+    return jsonify({'msg': 'Correo enviado'}), 201
