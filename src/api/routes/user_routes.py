@@ -286,7 +286,7 @@ def email_change_password():
             expires_delta=timedelta(minutes=15),
             additional_claims={'type': "pw_reset"}
         )
-        frontend_url = f'https://sample-service-name-jk84.onrender.com?token={reset_token}'
+        frontend_url = f'https://sample-service-name-jk84.onrender.com/reset-password-form?token={reset_token}'
         body_message = render_template(
             "email_change_password.html",
             username=user.username,

@@ -147,6 +147,7 @@ export const ChangePassword = async (userEmail, setAlert) => {
         "Si tenemos un correo registrado le enviaremos un link para reestablecer su contraseña"
       );
     }
+    console.log(userEmail);
   } catch (error) {
     console.error(error);
     if (setAlert) {
@@ -345,6 +346,18 @@ export const getAllUsers = async (token) => {
     }
     const data = await res.json();
     return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const sendEmail = async (email) => {
+  try {
+    await fetch(`${url}/offers`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email }),
+    });
   } catch (error) {
     console.error(error);
   }
