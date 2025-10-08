@@ -73,7 +73,13 @@ export const Address = ({ id, user, getUserApi }) => {
     return (
         <div className="mb-3 ">
             {/* 🔹 Overlay de cargando */}
-            {isBeingDeleted && <DeleteText />}
+            {isBeingDeleted && (
+                <div className="loading-overlay d-flex justify-content-center align-items-center">
+                    <div className="spinner-border text-light" role="status">
+                        <span className="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            )}
 
             <div
                 className="d-flex justify-content-end mb-2 align-items-center"
@@ -128,7 +134,7 @@ export const Address = ({ id, user, getUserApi }) => {
                         <h4>Código postal. *</h4>
                         <div className="input-group input-group-sm mb-3">
                             <input
-                                type="text"
+                                type="number"
                                 className={`form-control ${errorMsg && !addressInfo.postal_code ? "input-data-missing" : ""
                                     }`}
                                 name="postal_code"
@@ -173,7 +179,7 @@ export const Address = ({ id, user, getUserApi }) => {
                         <h4>Teléfono. *</h4>
                         <div className="input-group input-group-sm mb-3">
                             <input
-                                type="text"
+                                type="number"
                                 className={`form-control ${errorMsg && !addressInfo.phone ? "input-data-missing" : ""
                                     }`}
                                 name="phone"

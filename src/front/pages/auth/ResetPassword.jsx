@@ -10,6 +10,7 @@ export const ResetPassword = () => {
         confPassword: ""
     })
     const [error, setError] = useState(false)
+    const [alert, setAlert] = useState(false)
 
     const handleOnChange = (e) => {
         const { name, value } = e.target
@@ -18,16 +19,24 @@ export const ResetPassword = () => {
             [name]: value
         })
     }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (passwordInputs.password !== passwordInputs.confPassword) {
+        if (passwordInputs.password.trim().length < 5) {
             setError(true);
+            setAlert("Tu contraseña es demasiado corta")
             return;
         }
 
-        resetPassword(token, passwordInputs.password)
+
+        if (passwordInputs.password !== passwordInputs.confPassword) {
+            setError(true);
+            setAlert("Las contraseñas no coinciden")
+            return;
+        }
+
+
+        await resetPassword(token, passwordInputs.password)
+        setAlert("Se cambió su contraseña exitosamente")
 
     }
 
@@ -90,6 +99,51 @@ export const ResetPassword = () => {
                         }}
                     />
                 </div>
+                {alert == "Las contraseñas no coinciden" && (
+                    <div
+                        className="bg-danger  text-white p-2 rounded"
+                        style={{
+                            top: "100%", // justo debajo del input
+                            left: 0,
+                            zIndex: 10,
+                            whiteSpace: "nowrap",
+
+                        }}
+                    >
+                        <i className="fa-solid fa-circle-exclamation me-1"></i>
+                        {alert}
+                    </div>
+                )}
+                {alert == "Se cambió su contraseña exitosamente" && (
+                    <div
+                        className="bg-success  text-white p-2 rounded"
+                        style={{
+                            top: "100%", // justo debajo del input
+                            left: 0,
+                            zIndex: 10,
+                            whiteSpace: "nowrap",
+                            marginBottom: "20px"
+                        }}
+                    >
+                        <i className="fa-solid fa-circle-exclamation me-1"></i>
+                        {alert}
+                    </div>
+                )}
+                {alert == "Tu contraseña es demasiado corta" && (
+                    <div
+                        className="bg-danger  text-white p-2 rounded"
+                        style={{
+                            top: "100%", // justo debajo del input
+                            left: 0,
+                            zIndex: 10,
+                            whiteSpace: "nowrap",
+                            marginBottom: "20px"
+                        }}
+                    >
+                        <i className="fa-solid fa-circle-exclamation me-1"></i>
+                        {alert}
+                    </div>
+                )}
 
                 <button
                     type="submit"
