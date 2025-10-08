@@ -188,7 +188,8 @@ export const getJoyasSearch = async () => {
     console.error(error);
   }
 };
-export const getDiscount = async (token) => {
+export const getDiscount = async (token, setLoading) => {
+  setLoading(true);
   try {
     const res = await fetch(`${url}/discount/user`, {
       method: "GET",
@@ -204,6 +205,8 @@ export const getDiscount = async (token) => {
     return data;
   } catch (error) {
     console.error(error);
+  } finally {
+    setLoading(false);
   }
 };
 export const getHistory = async (token) => {
