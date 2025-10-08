@@ -6,9 +6,10 @@ import { CuponCard } from "./cuponesComponents/CuponCard"
 export const Cupones = () => {
     const { token } = useAuth()
     const [couponInfo, setCouponInfo] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     const getCouponData = async () => {
-        const data = await getDiscount(token)
+        const data = await getDiscount(token, setLoading)
         setCouponInfo(data)
     }
     useEffect(() => {
@@ -20,7 +21,7 @@ export const Cupones = () => {
 
         <div>
             {
-                !couponInfo ? (
+                loading ? (
                     <div className="d-flex justify-content-center align-items-center w-100 h-100">
                         <div
                             className="spinner-border text-warning"
@@ -30,7 +31,7 @@ export const Cupones = () => {
                             <span className="visually-hidden">Cargando...</span>
                         </div>
                     </div>
-                ) : couponInfo.length <= 0 ? (
+                ) : !couponInfo ? (
                     <h3 className="profile-form text-center py-5 my-3">
                         ¡Sin cupones!
                     </h3>
